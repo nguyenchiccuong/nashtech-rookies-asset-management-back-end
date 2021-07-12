@@ -1,0 +1,24 @@
+package com.nashtech.rootkies.dto.user.request;
+
+import com.nashtech.rootkies.model.ERole;
+import com.nashtech.rootkies.model.Role;
+import lombok.*;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class CreateUserDTO {
+    private String username;
+    private String password;
+    private String email;
+    private String phone;
+    private Set<RoleDTO> roles = new HashSet<>();
+    private String status;
+}
