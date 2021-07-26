@@ -9,6 +9,6 @@ public class DataNotFoundException extends Exception {
     private static final long serialVersionUID = 4L;
 
     public DataNotFoundException(String message){
-        super("Exception: " + message);
+        super( message);
     }
 }

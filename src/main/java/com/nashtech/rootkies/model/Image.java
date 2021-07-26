@@ -9,7 +9,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "images")
+@Table(name = "images",
+        indexes ={
+                @Index(name = "image_idx" , columnList = "id , name")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor

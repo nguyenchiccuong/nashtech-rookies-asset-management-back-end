@@ -1,6 +1,7 @@
 package com.nashtech.rootkies.controllers;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.converter.CategoryConverter;
 import com.nashtech.rootkies.dto.category.response.CategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
@@ -21,7 +22,7 @@ import java.util.Optional;
 public class CategoryController {
 
     @Autowired
-    ModelMapper modelMapper;
+    CategoryConverter categoryConverter;
 
     @Autowired
     CategoryService categoryService;
@@ -38,13 +39,9 @@ public class CategoryController {
     @GetMapping("/{cateId}")
     public ResponseEntity<ResponseDTO> getCategory(@PathVariable("cateId") Long cateId) throws DataNotFoundException {
         ResponseDTO response = new ResponseDTO();
-        try{
-            Optional<Category> category = categoryService.findCategory(cateId);
-            CategoryDTO cateDao = modelMapper.map(category.get() , CategoryDTO.class);
-            response.setData(cateDao);
-        }catch(Exception ex){
-            throw new DataNotFoundException(ErrorCode.ERR_CATEGORY_NOT_FOUND);
-        }
+        Optional<Category> category = categoryService.findCategory(cateId);
+        CategoryDTO cateDao = categoryConverter.convertEntityToDTO(category.get());
+        response.setData(cateDao);
         return ResponseEntity.ok().body(response);
     }
 }

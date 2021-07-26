@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,10 @@ import javax.validation.constraints.Size;
 @Table(	name = "users", 
 		uniqueConstraints = { 
 			@UniqueConstraint(columnNames = "username"),
-			@UniqueConstraint(columnNames = "email") 
+			@UniqueConstraint(columnNames = "email")
+		},
+		indexes ={
+			@Index(name = "idIndex" , columnList = "id , username , email")
 		})
 @Setter
 @Getter
@@ -72,7 +74,15 @@ public class User {
 		this.password = password;
 	}
 
+	public User(Long id , String username, String email, String password) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+	}
+
 	public User(){
 		this.createdDate = LocalDateTime.now();
+		this.isDeleted = false;
 	}
 }

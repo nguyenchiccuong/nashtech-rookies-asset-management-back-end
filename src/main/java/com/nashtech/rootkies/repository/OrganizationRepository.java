@@ -10,4 +10,5 @@ import java.util.Optional;
 @Component
 public interface OrganizationRepository extends JpaRepository<Organization , Long> {
     Optional<Organization> findByName(String apple);
+    boolean existsByName(String name);
 }

@@ -10,5 +10,5 @@ import java.util.Optional;
 @Component
 public interface BrandRepository extends JpaRepository<Brand, Long> {
     Optional<Brand> findByName(String apple);
-
+    Boolean existsByName(String name);
 }

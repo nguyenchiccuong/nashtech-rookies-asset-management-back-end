@@ -6,11 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "brands")
+@Table(name = "brands",
+       indexes = {
+            @Index(name = "brand_name_index" , columnList = "name")
+        }
+)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,6 +27,7 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank
     @Column(name = "name" , nullable = false , unique = true)
     private String name;
 
@@ -33,6 +40,12 @@ public class Brand {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organization_id")
     private Organization organization;
+
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
 
 }

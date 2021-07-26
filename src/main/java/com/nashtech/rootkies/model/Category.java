@@ -11,7 +11,11 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "categories",
+       indexes ={
+                @Index(name = "category_idx" , columnList = "id , name")
+        }
+)
 @Getter
 @Setter
 public class Category {
@@ -24,15 +28,8 @@ public class Category {
     @Column(name = "name" , unique = true , nullable = false)
     private String name;
 
-    @ManyToOne
+    @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    public Category parent;
-
-    @ManyToMany
-    @JoinTable(name = "subcategories",
-            joinColumns = { @JoinColumn(name = "parent_id") },
-            inverseJoinColumns = { @JoinColumn(name = "id")
-    })
     private Set<Category> subCategories = new HashSet<>();
 
     @Column(name = "description")
@@ -51,14 +48,18 @@ public class Category {
     @JoinColumn(name = "image_id")
     private Image image;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Product> products = new ArrayList<>();
-
     public Category(){
         this.createdDate = LocalDateTime.now();
     }
 
-    public Category(String name , Long parentIt,String description){
+    public Category(Long id , String name){
+        this.id = id;
+        this.name = name;
+    }
+
+    public Category(String name , String description){
+        this.name = name;
+        this.description = description;
         this.createdDate = LocalDateTime.now();
     }
 }

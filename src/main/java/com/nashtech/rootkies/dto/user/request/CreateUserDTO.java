@@ -15,10 +15,17 @@ import java.util.Set;
 @Getter
 @Setter
 public class CreateUserDTO {
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @Email
+    @NotBlank
     private String email;
+
     private String phone;
+    @NotBlank
     private Set<RoleDTO> roles = new HashSet<>();
+
     private String status;
 }

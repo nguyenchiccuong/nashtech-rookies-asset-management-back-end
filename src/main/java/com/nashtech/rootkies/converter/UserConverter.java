@@ -6,9 +6,7 @@ import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.RoleDTO;
 import com.nashtech.rootkies.enums.UserStatus;
-import com.nashtech.rootkies.exception.ConvertEntityException;
-import com.nashtech.rootkies.model.ERole;
-import com.nashtech.rootkies.model.Role;
+import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.RoleRepository;
 import org.modelmapper.ModelMapper;
@@ -35,9 +33,9 @@ public class UserConverter {
      *
      * @param signupDto
      * @return
-     * @throws ConvertEntityException
+     * @throws ConvertEntityDTOException
      */
-    public User convertToEntity(SignupDTO signupDto) throws ConvertEntityException {
+    public User convertToEntity(SignupDTO signupDto) throws ConvertEntityDTOException {
         User user;
         try{
             user = modelMapper.map(signupDto , User.class);
@@ -46,7 +44,7 @@ public class UserConverter {
             user.setDeleted(false);
             user.setStatus(UserStatus.INACTIVE.name());
         }catch(Exception ex){
-            throw new ConvertEntityException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
+            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
 
         return user;
@@ -56,9 +54,9 @@ public class UserConverter {
      *
      * @param dto
      * @return
-     * @throws ConvertEntityException
+     * @throws ConvertEntityDTOException
      */
-    public User convertToEntity(CreateUserDTO dto) throws ConvertEntityException {
+    public User convertToEntity(CreateUserDTO dto) throws ConvertEntityDTOException {
         try{
             User user = modelMapper.map(dto , User.class);
             dto.getRoles().stream().map(role -> roleRepository.findByName(role.getName()).get()).collect(Collectors.toSet());
@@ -68,8 +66,7 @@ public class UserConverter {
             user.setStatus(UserStatus.ACTIVE.name());
             return user;
         }catch(Exception ex){
-            ex.printStackTrace();
-            throw new ConvertEntityException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
+            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }
 
@@ -77,9 +74,9 @@ public class UserConverter {
      *
      * @param user
      * @return
-     * @throws ConvertEntityException
+     * @throws ConvertEntityDTOException
      */
-    public UserDTO convertToDTO(User user) throws ConvertEntityException {
+    public UserDTO convertToDTO(User user) throws ConvertEntityDTOException {
 
         try{
             UserDTO dto = modelMapper.map(user , UserDTO.class);
@@ -87,7 +84,7 @@ public class UserConverter {
                     .collect(Collectors.toSet()));
             return dto;
         }catch(Exception ex){
-            throw new ConvertEntityException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
+            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }
 }

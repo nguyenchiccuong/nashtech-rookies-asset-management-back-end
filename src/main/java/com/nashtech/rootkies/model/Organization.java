@@ -9,7 +9,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "organizations")
+@Table(name = "organizations",
+       indexes ={
+                @Index(name = "organization_idx" , columnList = "id , name")
+        }
+)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -35,5 +39,10 @@ public class Organization {
 
     public Organization(){
         this.createDate = LocalDateTime.now();
+    }
+
+    public Organization(String name , Address address){
+        this.name = name;
+        this.address = address;
     }
 }

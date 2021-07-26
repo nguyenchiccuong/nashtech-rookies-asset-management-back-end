@@ -3,6 +3,7 @@ package com.nashtech.rootkies.dto.category.response;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class CategoryDTO {
@@ -13,11 +14,7 @@ public class CategoryDTO {
 
     private Long parentId;
 
+    private List<CategoryDTO> subCategories;
+
     private String description;
-
-    private LocalDateTime createdDate;
-
-    private LocalDateTime updatedDate;
-
-    private boolean isDeleted;
 }

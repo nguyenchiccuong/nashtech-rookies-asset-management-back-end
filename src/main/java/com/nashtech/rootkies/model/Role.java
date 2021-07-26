@@ -8,7 +8,11 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "roles",
+		indexes ={
+				@Index(name = "role_idx" , columnList = "id , name")
+		}
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
