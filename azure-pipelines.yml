@@ -1,7 +1,3 @@
-
-
-
-
 - script: ./mvnw package -Pprod -DskipTests
     displayName: 'BUILD: creating production build'
     - task: CopyFiles@2
