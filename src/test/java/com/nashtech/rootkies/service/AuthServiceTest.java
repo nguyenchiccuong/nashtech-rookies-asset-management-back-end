@@ -35,20 +35,5 @@ public class AuthServiceTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testSignup() throws UserNotFoundException, UserSignupException {
-        User user = new User("nguyenna", "nguyenna@gmail.com" , "Aa1234qwer");
-        SignupDTO signupDto = new SignupDTO("nguyenna", "nguyenna@gmail.com" , "Aa1234qwer");
-        Mockito.when(authService.signup(signupDto)).thenReturn(true);
-        Assert.assertEquals(authService.signup(signupDto) , true);
-    }
 
-    @Test
-    public void testSignIn() throws UserAuthenticationException {
-        LoginDTO loginDto = new LoginDTO("nguyennna" , "Aa1234qwer");
-        JwtResponse jwtResponse = new JwtResponse("Aa1234!@#$qwer)(*&0987poiu" , "Bearer" ,1L ,
-                "nguyenna" , "nguyenna@gmail.com" , Arrays.asList(ERole.ROLE_USER.name()));
-        Mockito.when(authService.signin(loginDto)).thenReturn(jwtResponse);
-        Assert.assertEquals(jwtResponse , authService.signin(loginDto));
-    }
 }
