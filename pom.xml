@@ -26,7 +26,7 @@
 	<version>1.0</version>
 	<name>asset-management</name>
 	<description>Asset Management Backend Service Api</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
