@@ -124,11 +124,11 @@
           <resourceGroup>rootkies34_2021</resourceGroup>  
           <appName>asset-management</appName>  
           <pricingTier>B1</pricingTier>  
-          <region>westus</region>  
+          <region>southeastasia</region>
           <runtime> 
             <os>Linux</os>  
             <webContainer>Java SE</webContainer>  
-            <javaVersion>Java 11</javaVersion> 
+            <javaVersion>Java 8</javaVersion>
           </runtime>  
           <deployment> 
             <resources> 
