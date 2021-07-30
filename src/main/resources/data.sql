@@ -1,5 +1,3 @@
-CREATE DATABASE shop-service;
-
 INSERT INTO roles(id , name) VALUES(1001, 'ROLE_USER');
 INSERT INTO roles(id , name) VALUES(1002 , 'ROLE_SUPER_ADMINISTRATOR');
 INSERT INTO roles(id , name) VALUES(1003 , 'ROLE_ADMINISTRATOR');
@@ -81,3 +79,17 @@ INSERT INTO public.brands_categories
 (brand_id, category_id)
 VALUES(30, 8);
 
+INSERT INTO public.users
+(id, created_date, email, is_deleted, "password", phone, status, updated_date, username)
+VALUES(1, '2021-07-30 07:14:20.079', 'anhnguyencm@gmail.com', false, '$2a$10$yy5aQx41CL9mFAto15dD.OcOvUQgPV04iqtShs6RoStiSdEY2i5Jq', NULL, 'INACTIVE', NULL, 'anhnguyencm');
+INSERT INTO public.users
+(id, created_date, email, is_deleted, "password", phone, status, updated_date, username)
+VALUES(2, '2021-07-30 07:14:20.079', 'leonguyencm1984@gmail.com', false, '$2a$10$yy5aQx41CL9mFAto15dD.OcOvUQgPV04iqtShs6RoStiSdEY2i5Jq', NULL, 'INACTIVE', NULL, 'leonguyencm1984');
+
+
+INSERT INTO public.user_roles
+(user_id, role_id)
+VALUES(1, 1002);
+INSERT INTO public.user_roles
+(user_id, role_id)
+VALUES(2, 1003);
