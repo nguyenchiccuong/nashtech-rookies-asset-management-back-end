@@ -115,33 +115,33 @@
         <groupId>org.springframework.boot</groupId>  
         <artifactId>spring-boot-maven-plugin</artifactId> 
       </plugin>  
-      <plugin> 
-        <groupId>com.microsoft.azure</groupId>  
-        <artifactId>azure-webapp-maven-plugin</artifactId>  
-        <version>1.14.0</version>  
-        <configuration> 
+      <plugin>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-webapp-maven-plugin</artifactId>
+        <version>1.14.0</version>
+        <configuration>
           <subscriptionId>759d79a4-fece-4929-80de-dcc56fb9c212</subscriptionId>
-          <resourceGroup>rootkies34_2021</resourceGroup>  
-          <appName>asset-management</appName>  
-          <pricingTier>B1</pricingTier>  
+          <resourceGroup>rootkies34_2021</resourceGroup>
+          <appName>spring-boot-asset-management</appName>
+          <pricingTier>B1</pricingTier>
           <region>southeastasia</region>
-          <runtime> 
-            <os>Linux</os>  
-            <webContainer>Java SE</webContainer>  
+          <runtime>
+            <os>Linux</os>
+            <webContainer>Java SE</webContainer>
             <javaVersion>Java 8</javaVersion>
-          </runtime>  
-          <deployment> 
-            <resources> 
-              <resource> 
-                <directory>${project.basedir}/target</directory>  
-                <includes> 
-                  <include>*.jar</include> 
-                </includes> 
-              </resource> 
-            </resources> 
-          </deployment> 
-        </configuration> 
-      </plugin> 
-    </plugins> 
+          </runtime>
+          <deployment>
+            <resources>
+              <resource>
+                <directory>${project.basedir}/target</directory>
+                <includes>
+                  <include>*.jar</include>
+                </includes>
+              </resource>
+            </resources>
+          </deployment>
+        </configuration>
+      </plugin>
+    </plugins>
   </build> 
 </project>
