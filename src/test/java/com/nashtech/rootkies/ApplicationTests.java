@@ -28,8 +28,5 @@ public class ApplicationTests {
 		return Mockito.mock(UserService.class);
 	}
 
-	@Test
-	public void contextLoads() {}
-
 
 }

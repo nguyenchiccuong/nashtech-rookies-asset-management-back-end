@@ -26,9 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Value("${prop.swagger.enabled:false}")
-	private boolean enableSwagger;
-
 	@Autowired
     UserDetailsServiceImpl userDetailsService;
 
