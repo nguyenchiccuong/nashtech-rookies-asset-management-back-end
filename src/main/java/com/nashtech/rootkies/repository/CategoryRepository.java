@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CategoryRepository extends PagingAndSortingRepository<Category, Long> {
 
-    Optional<Category> findByName(String name);
-    Boolean existsByName(String name);
+    Optional<Category> findByCategoryName(String name);
+    Boolean existsByCategoryName(String name);
     Page<Category> findAll(Specification<Category> categories, Pageable pageRequest);
 }

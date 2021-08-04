@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api( tags = "Auth")
 public class AuthController {
 
-	@Autowired
+	/*@Autowired
 	AuthService authService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
@@ -48,6 +48,6 @@ public class AuthController {
 		response.setSuccessCode(SuccessCode.USER_LOGIN_SUCCESS);
 		return ResponseEntity.ok(response);
 	}
-
+*/
 
 }

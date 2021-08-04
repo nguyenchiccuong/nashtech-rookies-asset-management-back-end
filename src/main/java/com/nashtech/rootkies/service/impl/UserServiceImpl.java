@@ -12,15 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+    /*@Autowired
     UserRepository userRepository;
 
-    /**
-     *
-     * @param id
-     * @return User
-     * @throws UserNotFoundException
-     */
     @Override
     public User getUser(Long id) throws UserNotFoundException {
         if(!userRepository.existsById(id)){
@@ -38,5 +32,5 @@ public class UserServiceImpl implements UserService {
             throw new UpdateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
         }
 
-    }
+    }*/
 }

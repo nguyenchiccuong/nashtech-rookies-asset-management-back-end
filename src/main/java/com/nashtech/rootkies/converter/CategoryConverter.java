@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class CategoryConverter {
 
-    @Autowired
+    /*@Autowired
     ModelMapper modelMapper;
 
     @Autowired
@@ -41,5 +41,5 @@ public class CategoryConverter {
 
     public List<CategoryDTO> convertToListDTO(List<Category> cates) {
         return cates.stream().map(c -> convertEntityToDTO(c)).collect(Collectors.toList());
-    }
+    }*/
 }

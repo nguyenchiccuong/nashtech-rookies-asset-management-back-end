@@ -21,7 +21,7 @@ import java.util.Optional;
 @Api( tags = "Category")
 public class CategoryController {
 
-    @Autowired
+    /*@Autowired
     CategoryConverter categoryConverter;
 
     @Autowired
@@ -29,12 +29,6 @@ public class CategoryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
-    /**
-     *
-     * @param cateId
-     * @return
-     * @throws DataNotFoundException
-     */
     @ResponseBody
     @GetMapping("/{cateId}")
     public ResponseEntity<ResponseDTO> getCategory(@PathVariable("cateId") Long cateId) throws DataNotFoundException {
@@ -43,5 +37,5 @@ public class CategoryController {
         CategoryDTO cateDao = categoryConverter.convertEntityToDTO(category.get());
         response.setData(cateDao);
         return ResponseEntity.ok().body(response);
-    }
+    }*/
 }

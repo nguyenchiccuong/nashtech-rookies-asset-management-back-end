@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface CategoryService {
 
-    Boolean create(Category category) throws UpdateDataFailException;
+    /*Boolean create(Category category) throws UpdateDataFailException;
 
     Optional<Category> findCategory(Long cateId) throws DataNotFoundException;
 
@@ -24,5 +24,5 @@ public interface CategoryService {
     boolean checkExist(String name);
 
     boolean checkExistById(Long categoryId);
-    Page<CategoryDTO> search(SearchCategoryDTO searchRequest);
+    Page<CategoryDTO> search(SearchCategoryDTO searchRequest);*/
 }

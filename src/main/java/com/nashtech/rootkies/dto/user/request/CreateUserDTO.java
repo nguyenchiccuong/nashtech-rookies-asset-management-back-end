@@ -1,7 +1,5 @@
 package com.nashtech.rootkies.dto.user.request;
 
-import com.nashtech.rootkies.model.ERole;
-import com.nashtech.rootkies.model.Role;
 import lombok.*;
 
 import javax.validation.constraints.Email;

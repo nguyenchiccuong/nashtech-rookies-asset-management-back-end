@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    @Autowired
+    /*@Autowired
     CategoryConverter categoryConverter;
 
     @Autowired
@@ -93,5 +93,5 @@ public class CategoryServiceImpl implements CategoryService {
         Page<CategoryDTO> pages = new PageImpl<>(categoryConverter.convertToListDTO(catesPaged.getContent())
                 , pageRequest, catesPaged.getContent().size());
         return pages;
-    }
+    }*/
 }

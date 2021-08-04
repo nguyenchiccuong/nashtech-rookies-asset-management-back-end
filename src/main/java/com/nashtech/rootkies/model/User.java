@@ -1,88 +1,84 @@
 package com.nashtech.rootkies.model;
 
+import com.nashtech.rootkies.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
-@Table(	name = "users", 
+@Table(	name = "users",
 		uniqueConstraints = { 
-			@UniqueConstraint(columnNames = "username"),
-			@UniqueConstraint(columnNames = "email")
+			@UniqueConstraint(columnNames = "staffcode"),
+			@UniqueConstraint(columnNames = "username")
 		},
 		indexes ={
-			@Index(name = "idIndex" , columnList = "id , username , email")
+			@Index(name = "user_role_idx" , columnList = "roleid"),
+				@Index(name = "user_username_idx" , columnList = "username"),
+				@Index(name = "user_location_idx" , columnList = "locationid")
 		})
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Column(name = "staffcode")
+	private String staffCode;
 
 	@NotBlank
-	@Size(max = 20)
+	@Column(name = "username")
 	private String username;
 
 	@NotBlank
-	@Size(max = 50)
-	@Email
-	private String email;
-
-	@Size(max = 15)
-	private String phone;
-
-	@NotBlank
-	@Size(max = 120)
+	@Column(name = "password")
 	private String password;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles",
-				joinColumns = @JoinColumn(name = "user_id"),
-				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	@Column(name = "firstname")
+	private String firstName;
 
-	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+	@Column(name = "lastname")
+	private String lastName;
 
-	@Column(name = "updated_date")
-	private LocalDateTime updatedDate;
+	@Column(name = "dateofbirth")
+	private LocalDateTime dateOfBirth;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
+	@Column(name = "joineddate")
+	private LocalDateTime joinedDate;
 
-	@Column(name = "status")
-	private String status;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender")
+	private Gender gender;
 
-	@OneToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-	private List<Address> addresses;
+	@ManyToOne
+	@JoinColumn(name = "locationid")
+	private Location location;
 
-	public User(String username, String email, String password) {
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
+	@ManyToOne
+	@JoinColumn(name = "roleid", nullable = false)
+	private Role role;
 
-	public User(Long id , String username, String email, String password) {
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-	}
+	@Column(name = "firstlogin")
+	private Boolean firstLogin;
 
-	public User(){
-		this.createdDate = LocalDateTime.now();
-		this.isDeleted = false;
-	}
+	@Column(name = "isdeleted")
+	private Boolean isDeleted;
+
+	@OneToMany(mappedBy = "assignedTo")
+	private Collection<Assignment> assignmentAssignedTo;
+
+	@OneToMany(mappedBy = "assignedBy")
+	private Collection<Assignment> assignmentAssignedBy;
+
+	@OneToMany(mappedBy = "requestedBy")
+	private Collection<Request> requestRequestedBy;
+
+	@OneToMany(mappedBy = "acceptedBy")
+	private Collection<Request> requestAcceptedBy;
 }
