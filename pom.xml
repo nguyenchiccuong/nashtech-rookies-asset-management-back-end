@@ -121,7 +121,7 @@
         <version>1.14.0</version>
         <configuration>
           <subscriptionId>759d79a4-fece-4929-80de-dcc56fb9c212</subscriptionId>
-          <resourceGroup>rootkies34_2021</resourceGroup>
+          <resourceGroup>rootkies3</resourceGroup>
           <appName>spring-boot-asset-management</appName>
           <pricingTier>B1</pricingTier>
           <region>southeastasia</region>
