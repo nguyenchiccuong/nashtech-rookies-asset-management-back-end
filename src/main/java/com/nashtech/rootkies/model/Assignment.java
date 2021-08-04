@@ -40,7 +40,7 @@ public class Assignment {
     private LocalDateTime assignedDate;
 
     @Column(name = "state")
-    private String state;
+    private Short state;
 
     @Column(name = "note")
     private String note;
@@ -48,10 +48,6 @@ public class Assignment {
     @ManyToOne
     @JoinColumn(name = "assetcode", nullable = false)
     private Asset asset;
-
-    /*@ManyToOne
-    @JoinColumn(name = "staffcode", referencedColumnName = "staffcode")
-    private User staffCode;*/
 
     @Column(name = "isdeleted")
     private Boolean isDeleted;

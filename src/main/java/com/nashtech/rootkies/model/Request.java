@@ -39,7 +39,7 @@ public class Request {
     private LocalDateTime returnedDate;
 
     @Column(name = "state")
-    private String state;
+    private Short state;
 
     @ManyToOne
     @JoinColumn(name = "assignmentid", nullable = false)

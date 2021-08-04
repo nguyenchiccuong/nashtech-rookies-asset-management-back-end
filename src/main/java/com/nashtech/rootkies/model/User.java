@@ -76,9 +76,6 @@ public class User {
 	@OneToMany(mappedBy = "assignedBy")
 	private Collection<Assignment> assignmentAssignedBy;
 
-	/*@OneToMany(mappedBy = "staffCode")
-	private Collection<Assignment> assignmentstaffCode;*/
-
 	@OneToMany(mappedBy = "requestedBy")
 	private Collection<Request> requestRequestedBy;
 
