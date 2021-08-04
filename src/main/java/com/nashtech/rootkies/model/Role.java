@@ -1,16 +1,18 @@
 package com.nashtech.rootkies.model;
 
+import com.nashtech.rootkies.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "roles",
 		indexes ={
-				@Index(name = "role_idx" , columnList = "id , name")
+				@Index(name = "role_idx" , columnList = "rolename")
 		}
 )
 @NoArgsConstructor
@@ -19,14 +21,14 @@ import javax.persistence.*;
 @Setter
 public class Role {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
+	@Column(name = "roleid")
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length = 50)
-	private ERole name;
+	@Column(name = "rolename", length = 60, nullable = false)
+	private ERole roleName;
 
-	public Role(ERole name){
-		this.name = name;
-	}
+	@OneToMany(mappedBy = "role")
+	private Collection<User> users;
 }

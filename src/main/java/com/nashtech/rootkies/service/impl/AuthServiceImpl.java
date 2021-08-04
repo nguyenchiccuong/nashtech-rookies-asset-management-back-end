@@ -6,7 +6,7 @@ import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginDTO;
 import com.nashtech.rootkies.dto.auth.SignupDTO;
 import com.nashtech.rootkies.exception.*;
-import com.nashtech.rootkies.model.ERole;
+import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.RoleRepository;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
+    /*@Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -90,6 +90,6 @@ public class AuthServiceImpl implements AuthService {
        }catch(Exception ex){
             throw new UserAuthenticationException(ErrorCode.ERR_USER_LOGIN_FAIL);
        }
-    }
+    }*/
 
 }

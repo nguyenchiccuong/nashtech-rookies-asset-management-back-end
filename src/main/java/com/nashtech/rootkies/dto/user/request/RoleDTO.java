@@ -1,6 +1,6 @@
 package com.nashtech.rootkies.dto.user.request;
 
-import com.nashtech.rootkies.model.ERole;
+import com.nashtech.rootkies.enums.ERole;
 import lombok.*;
 
 @Data

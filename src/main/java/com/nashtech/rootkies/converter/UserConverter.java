@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Component
 public class UserConverter {
 
-    @Autowired
+    /*@Autowired
     ModelMapper modelMapper;
 
     @Autowired
@@ -29,12 +29,6 @@ public class UserConverter {
     @Autowired
     RoleRepository roleRepository;
 
-    /**
-     *
-     * @param signupDto
-     * @return
-     * @throws ConvertEntityDTOException
-     */
     public User convertToEntity(SignupDTO signupDto) throws ConvertEntityDTOException {
         User user;
         try{
@@ -50,12 +44,6 @@ public class UserConverter {
         return user;
     }
 
-    /**
-     *
-     * @param dto
-     * @return
-     * @throws ConvertEntityDTOException
-     */
     public User convertToEntity(CreateUserDTO dto) throws ConvertEntityDTOException {
         try{
             User user = modelMapper.map(dto , User.class);
@@ -70,12 +58,6 @@ public class UserConverter {
         }
     }
 
-    /**
-     *
-     * @param user
-     * @return
-     * @throws ConvertEntityDTOException
-     */
     public UserDTO convertToDTO(User user) throws ConvertEntityDTOException {
 
         try{
@@ -86,5 +68,5 @@ public class UserConverter {
         }catch(Exception ex){
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
-    }
+    }*/
 }

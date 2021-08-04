@@ -9,6 +9,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    User getUser(Long id) throws UserNotFoundException;
-    boolean createUser(User user) throws UpdateDataFailException;
+    //User getUser(Long id) throws UserNotFoundException;
+    //boolean createUser(User user) throws UpdateDataFailException;
 }

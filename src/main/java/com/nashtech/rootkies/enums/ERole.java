@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.model;
+package com.nashtech.rootkies.enums;
 
 public enum ERole {
 	ROLE_USER,

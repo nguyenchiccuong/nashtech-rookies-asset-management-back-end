@@ -30,7 +30,7 @@ import java.util.Optional;
 @Api( tags = "Admin")
 public class AdminController {
 
-    @Autowired
+    /*@Autowired
     ModelMapper modelMapper;
     @Autowired
     CategoryService categoryService;
@@ -47,18 +47,6 @@ public class AdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
-
-    /**********************************************************************
-     ********************** CATEGORY ***********************************
-     ***********************************************************
-     */
-
-    /**
-     *
-     * @param cateId
-     * @return
-     * @throws DataNotFoundException
-     */
     @ResponseBody
     @GetMapping("/categories/{cateId}")
     public ResponseEntity<ResponseDTO> getCategory(@PathVariable("cateId") Long cateId) throws DataNotFoundException {
@@ -69,11 +57,6 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     *
-     * @param cateDto
-     * @return
-     */
     @PostMapping("/categories")
     public ResponseEntity<ResponseDTO> createCategory(@Valid @RequestBody CreateCategoryDTO cateDto)
             throws UpdateDataFailException, DataNotFoundException, DuplicateDataException {
@@ -94,11 +77,6 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     *
-     * @param updateCateDto
-     * @return
-     */
     @PutMapping("/categories")
     public ResponseEntity<ResponseDTO> updateCategory(@Valid @RequestBody UpdateCategoryDTO updateCateDto)
             throws UpdateDataFailException {
@@ -108,11 +86,7 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**
-     *
-     * @param cateId
-     * @return
-     */
+
     @DeleteMapping("/categories/{cateId}")
     public ResponseEntity<ResponseDTO> deleteCate(@PathVariable("cateId") Long cateId) throws DeleteDataFailException {
         ResponseDTO response = new ResponseDTO();
@@ -130,15 +104,6 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**********************************************************************
-     ********************** BRAND ***********************************
-     ***********************************************************
-     */
-    /**
-     *
-     * @param dto
-     * @return
-     */
     @PostMapping("/brands")
     public ResponseEntity<ResponseDTO> createBrand(@Valid @RequestBody CreateBrandDTO dto)
                     throws DataNotFoundException, UpdateDataFailException, InvalidRequestDataException {
@@ -148,10 +113,6 @@ public class AdminController {
         return ResponseEntity.ok().body(response);
     }
 
-    /**********************************************************************
-     ********************** ORGANIZATION ***********************************
-     ***********************************************************
-     */
     @PostMapping("/organizations")
     public ResponseEntity<ResponseDTO> createOrganization(@Valid @RequestBody CreateOrganizationDTO dto)
                         throws DuplicateDataException, UpdateDataFailException {
@@ -159,5 +120,5 @@ public class AdminController {
         response.setData(organizationService.create(dto));
         response.setSuccessCode(SuccessCode.CREATE_ORGANIZATION_SUCCESS);
         return ResponseEntity.ok().body(response);
-    }
+    }*/
 }
