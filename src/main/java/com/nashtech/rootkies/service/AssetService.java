@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 
@@ -20,5 +21,6 @@ public interface AssetService {
 
     public ResponseDTO countAssetHavingFilterSearchSort();
 
-    public ResponseDTO retrieveAssetHavingFilterSearchSort();
+    public ResponseDTO retrieveAssetHavingFilterSearchSort(Integer pageNum, Integer numOfItems,
+            SearchFilterSortAssetDTO searchFilterSortAssetDTO, Long locationId) throws DataNotFoundException;
 }
