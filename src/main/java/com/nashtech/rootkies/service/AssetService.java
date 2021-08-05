@@ -16,9 +16,9 @@ public interface AssetService {
     public ResponseDTO retrieveAsset(Pageable page, Long locationId) throws DataNotFoundException;
     // -------------------------------------------------------------------------------------
 
-    public ResponseDTO retrieveAssetByAssetCode(String assetCode);
+    public ResponseDTO retrieveAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException;
 
-    public ResponseDTO countAssetHavingFilterAndSearch();
+    public ResponseDTO countAssetHavingFilterSearchSort();
 
-    public ResponseDTO retrieveAssetHavingFilterAndSearch();
+    public ResponseDTO retrieveAssetHavingFilterSearchSort();
 }

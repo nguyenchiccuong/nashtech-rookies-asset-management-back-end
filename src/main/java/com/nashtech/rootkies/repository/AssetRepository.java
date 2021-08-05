@@ -17,4 +17,7 @@ public interface AssetRepository extends JpaRepository<Asset, String> {
 
     @Query("SELECT COUNT (*) FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false and (a.state = 1 or a.state = 2 or a.state = 3)")
     public Long CountAllByLocationAndDefaultState(Long locationId);
+
+    @Query("FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false AND a.assetCode = ?2")
+    Optional<Asset> findByAssetCode(Long locationId, String assetCode);
 }

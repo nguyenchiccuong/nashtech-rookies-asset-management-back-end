@@ -55,12 +55,12 @@ public class AssetController {
     }
 
     @GetMapping("/{assetCode}")
-    public ResponseEntity<ResponseDTO> retrieveAssetById(@PathVariable("assetCode") String assetCode) {
-        ResponseDTO responseDto = assetService.retrieveAssetByAssetCode(assetCode);
+    public ResponseEntity<ResponseDTO> retrieveAssetById(@PathVariable("assetCode") String assetCode)
+            throws DataNotFoundException {
+        // visualize the admin using in in sai gon
+        Long locationId = (long) 101; // 101 mean sai gon
 
-        // DetailAssetDTO productByIdDto = productConverter.convertToDto((Asset)
-        // responseDto.getData());
-        // responseDto.setData(productByIdDto);
+        ResponseDTO responseDto = assetService.retrieveAssetByAssetCode(locationId, assetCode);
 
         return ResponseEntity.ok(responseDto);
 

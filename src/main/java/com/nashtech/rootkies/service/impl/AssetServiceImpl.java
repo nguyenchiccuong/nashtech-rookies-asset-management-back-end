@@ -11,6 +11,7 @@ import java.util.List;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
+import com.nashtech.rootkies.dto.asset.reponse.DetailAssetDTO;
 import com.nashtech.rootkies.dto.asset.reponse.NumberOfAssetDTO;
 import com.nashtech.rootkies.dto.asset.reponse.ViewAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
@@ -72,21 +73,51 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public ResponseDTO retrieveAssetByAssetCode(String assetCode) {
+    public ResponseDTO retrieveAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+            Asset asset;
+            try {
+                asset = assetRepository.findByAssetCode(locationId, assetCode)
+                        .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND));
+            } catch (Exception e) {
+                throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+            }
+            DetailAssetDTO detailAssetDTO = assetConverter.convertToDetailDTO(asset);
+
+            responseDto.setData(detailAssetDTO);
+            responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
+    }
+
+    @Override
+    public ResponseDTO countAssetHavingFilterSearchSort() {
 
         return null;
     }
 
     @Override
-    public ResponseDTO countAssetHavingFilterAndSearch() {
+    public ResponseDTO retrieveAssetHavingFilterSearchSort() {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+            Asset asset;
+            try {
+                asset = assetRepository.findByAssetCode(locationId, assetCode)
+                        .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND));
+            } catch (Exception e) {
+                throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+            }
+            DetailAssetDTO detailAssetDTO = assetConverter.convertToDetailDTO(asset);
 
-        return null;
-    }
-
-    @Override
-    public ResponseDTO retrieveAssetHavingFilterAndSearch() {
-
-        return null;
+            responseDto.setData(detailAssetDTO);
+            responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
     }
 
 }
