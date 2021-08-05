@@ -204,6 +204,94 @@ public class AssetServiceImpl implements AssetService {
                     e.printStackTrace();
                     throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
                 }
+
+                viewAssetsDTO = assetConverter.convertToListDTO(assets);
+            }
+
+            responseDto.setData(viewAssetsDTO);
+            responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO countAssetHavingFilterSearchSort(SearchFilterSortAssetDTO searchFilterSortAssetDTO,
+            Long locationId) throws DataNotFoundException {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            AssetSpecification assetState = null;
+            AssetSpecification assetCategoryCode = null;
+            AssetSpecification assetCode = null;
+            AssetSpecification assetName = null;
+            AssetSpecification assetLocation = new AssetSpecification();
+            assetLocation.add(new SearchCriteria("location", locationId, SearchOperation.EQUAL));
+            AssetSpecification assetIsDeleted = new AssetSpecification();
+            assetIsDeleted.add(new SearchCriteria("isDeleted", false, SearchOperation.EQUAL));
+
+            if (!searchFilterSortAssetDTO.getStates().isEmpty()) {
+                assetState = new AssetSpecification();
+                assetState.add(new SearchCriteria("state", searchFilterSortAssetDTO.getStates(), SearchOperation.IN));
+            }
+            if (!searchFilterSortAssetDTO.getCategoriesCode().isEmpty()) {
+                assetCategoryCode = new AssetSpecification();
+                assetCategoryCode.add(new SearchCriteria("category", searchFilterSortAssetDTO.getCategoriesCode(),
+                        SearchOperation.IN));
+            }
+            if (!searchFilterSortAssetDTO.getSearchKeyWord().isBlank()) {
+                assetCode = new AssetSpecification();
+                assetCode.add(new SearchCriteria("assetCode", searchFilterSortAssetDTO.getSearchKeyWord(),
+                        SearchOperation.MATCH));
+
+                assetName = new AssetSpecification();
+                assetName.add(new SearchCriteria("assetName", searchFilterSortAssetDTO.getSearchKeyWord(),
+                        SearchOperation.MATCH));
+            }
+
+            Specification spec = Specification.where(assetLocation).and(assetIsDeleted);
+
+            if (assetState != null) {
+                spec = spec.and(assetState);
+            }
+            if (assetCategoryCode != null) {
+                spec = spec.and(assetCategoryCode);
+            }
+            if (assetCode != null) {
+                spec = spec.and(assetCode);
+                spec = spec.or(assetName);
+            }
+
+            List<Asset> assets;
+            try {
+                assets = assetRepository.findAll(spec);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
+            }
+            List<ViewAssetDTO> viewAssetsDTO = assetConverter.convertToListDTO(assets);
+
+            if (viewAssetsDTO.size() <= 0) {
+                spec = Specification.where(assetLocation).and(assetIsDeleted);
+
+                if (assetState != null) {
+                    spec = spec.and(assetState);
+                }
+                if (assetCategoryCode != null) {
+                    spec = spec.and(assetCategoryCode);
+                }
+                if (assetCode != null) {
+                    spec = spec.and(assetName);
+                    spec = spec.or(assetCode);
+                }
+                try {
+                    assets = assetRepository.findAll(spec, page);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
+                }
             }
 
             responseDto.setData(viewAssetsDTO);
