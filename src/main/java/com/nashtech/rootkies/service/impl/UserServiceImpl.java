@@ -2,7 +2,6 @@ package com.nashtech.rootkies.service.impl;
 
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.exception.CreateDataFailException;
-import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.UserRepository;
@@ -50,6 +49,7 @@ public class UserServiceImpl implements UserService {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddmmyyyy");
             String password = username + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
+            //save
             userRepository.save(user);
             return true;
         } catch(Exception ex){

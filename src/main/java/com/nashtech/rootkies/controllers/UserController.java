@@ -21,6 +21,4 @@ public class UserController {
     UserConverter userConverter;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-
-
 }
