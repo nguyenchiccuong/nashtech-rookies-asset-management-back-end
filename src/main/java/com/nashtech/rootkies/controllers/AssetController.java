@@ -52,10 +52,7 @@ public class AssetController {
     public ResponseEntity<ResponseDTO> countAsset() throws DataNotFoundException {
         // visualize the admin using in in sai gon
         Long locationId = (long) 101; // 101 mean sai gon
-
-        ResponseDTO responseDto = assetService.countAsset(locationId);
-
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(assetService.countAsset(locationId));
     }
 
     @GetMapping("/{assetCode}")
@@ -63,9 +60,6 @@ public class AssetController {
             throws DataNotFoundException {
         // visualize the admin using in in sai gon
         Long locationId = (long) 101; // 101 mean sai gon
-
-        ResponseDTO responseDto = assetService.retrieveAssetByAssetCode(locationId, assetCode);
-
         return ResponseEntity.ok(assetService.retrieveAssetByAssetCode(locationId, assetCode));
 
     }
@@ -86,8 +80,7 @@ public class AssetController {
             @RequestBody SearchFilterSortAssetDTO searchFilterSortAssetDTO) throws DataNotFoundException {
         // visualize the admin using in in sai gon
         Long locationId = (long) 101; // 101 mean sai gon
-        return ResponseEntity.ok(assetService.retrieveAssetHavingFilterSearchSort(pageNum, numOfItems,
-                searchFilterSortAssetDTO, locationId));
+        return ResponseEntity.ok(assetService.countAssetHavingFilterSearchSort(searchFilterSortAssetDTO, locationId));
     }
 
     // remeber to research valid only work when input or output
