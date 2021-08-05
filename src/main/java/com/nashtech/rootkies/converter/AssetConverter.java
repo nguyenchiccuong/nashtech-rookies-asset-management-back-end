@@ -38,4 +38,14 @@ public class AssetConverter {
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }
+
+    public List<ViewAssetDTO> convertToListDTO(List<Asset> assets) throws ConvertEntityDTOException {
+        try {
+            return assets.stream().map(asset -> modelMapper.map(asset, ViewAssetDTO.class))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
+        }
+    }
 }

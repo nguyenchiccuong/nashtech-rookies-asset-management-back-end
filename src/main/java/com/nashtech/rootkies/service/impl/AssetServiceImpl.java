@@ -287,19 +287,24 @@ public class AssetServiceImpl implements AssetService {
                     spec = spec.or(assetCode);
                 }
                 try {
-                    assets = assetRepository.findAll(spec, page);
+                    assets = assetRepository.findAll(spec);
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
                 }
+                viewAssetsDTO = assetConverter.convertToListDTO(assets);
             }
 
-            responseDto.setData(viewAssetsDTO);
-            responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);
+            NumberOfAssetDTO numberOfAssetDto = new NumberOfAssetDTO();
+
+            numberOfAssetDto.setNumberOfEntity((long) viewAssetsDTO.size());
+
+            responseDto.setData(numberOfAssetDto);
+            responseDto.setSuccessCode(SuccessCode.ASSET_COUNT_SUCCESS);
             return responseDto;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
+            throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSET_FAIL);
         }
     }
 

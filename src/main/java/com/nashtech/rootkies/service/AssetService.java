@@ -23,4 +23,7 @@ public interface AssetService {
 
     public ResponseDTO retrieveAssetHavingFilterSearchSort(Integer pageNum, Integer numOfItems,
             SearchFilterSortAssetDTO searchFilterSortAssetDTO, Long locationId) throws DataNotFoundException;
+
+    public ResponseDTO countAssetHavingFilterSearchSort(SearchFilterSortAssetDTO searchFilterSortAssetDTO,
+            Long locationId) throws DataNotFoundException;
 }
