@@ -1,11 +1,10 @@
 package com.nashtech.rootkies.dto.user.request;
 
+import com.nashtech.rootkies.enums.Gender;
+import com.nashtech.rootkies.model.Location;
+import com.nashtech.rootkies.model.Role;
 import lombok.*;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,17 +12,17 @@ import java.util.Set;
 @Getter
 @Setter
 public class CreateUserDTO {
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String password;
-    @Email
-    @NotBlank
-    private String email;
+    private String firstName;
 
-    private String phone;
-    @NotBlank
-    private Set<RoleDTO> roles = new HashSet<>();
+    private String lastName;
 
-    private String status;
+    private LocalDateTime dateOfBirth;
+
+    private String gender;
+
+    private LocalDateTime joinedDate;
+
+    private String role;
+
+    private Long location;
 }

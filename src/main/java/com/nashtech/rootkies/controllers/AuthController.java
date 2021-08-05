@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api( tags = "Auth")
 public class AuthController {
 
-	/*@Autowired
+	@Autowired
 	AuthService authService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
@@ -35,7 +35,7 @@ public class AuthController {
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDTO> signup(@Valid @RequestBody SignupDTO signupDto) throws UserSignupException {
 		ResponseDTO response = new ResponseDTO();
-		response.setData(authService.signup(signupDto));
+		//response.setData(authService.signup(signupDto));
 		response.setSuccessCode(SuccessCode.USER_SIGNUP_SUCCESS);
 		return ResponseEntity.ok(response);
 	}
@@ -43,11 +43,10 @@ public class AuthController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDto) throws UserAuthenticationException {
 		ResponseDTO response = new ResponseDTO();
-		JwtResponse jwtRes = authService.signin(loginDto);
-		response.setData(jwtRes);
+		//JwtResponse jwtRes = authService.signin(loginDto);
+		//response.setData(jwtRes);
 		response.setSuccessCode(SuccessCode.USER_LOGIN_SUCCESS);
 		return ResponseEntity.ok(response);
 	}
-*/
-
 }
+
