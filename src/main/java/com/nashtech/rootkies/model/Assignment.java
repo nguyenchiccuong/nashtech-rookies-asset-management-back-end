@@ -29,11 +29,11 @@ public class Assignment {
     private Long assignmentId;
 
     @ManyToOne
-    @JoinColumn(name = "assignedto", referencedColumnName = "username", nullable = false)
+    @JoinColumn(name = "assignedto", referencedColumnName = "staffcode", nullable = false)
     private User assignedTo;
 
     @ManyToOne
-    @JoinColumn(name = "assignedby", referencedColumnName = "username", nullable = false)
+    @JoinColumn(name = "assignedby", referencedColumnName = "staffcode", nullable = false)
     private User assignedBy;
 
     @Column(name = "assigneddate")
