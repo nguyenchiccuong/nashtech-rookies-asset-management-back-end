@@ -10,5 +10,5 @@ import com.nashtech.rootkies.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-	Optional<Role> findByRoleName(ERole name);
+	Optional<Role> findByRoleName(ERole roleName);
 }
