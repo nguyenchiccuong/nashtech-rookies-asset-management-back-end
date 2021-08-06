@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Service
@@ -34,6 +37,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean createUser(User user) throws CreateDataFailException {
         try{
+            //validation
+            /*if (LocalDateTime.now().until(user.getDateOfBirth(), ChronoUnit.YEARS) < 18)
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
+            if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
+            DayOfWeek day = user.getJoinedDate().getDayOfWeek();
+            if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD);*/
             //auto-generated username
             String username = user.getFirstName().toLowerCase(Locale.ROOT);
             String[] words = user.getLastName().split(" ");

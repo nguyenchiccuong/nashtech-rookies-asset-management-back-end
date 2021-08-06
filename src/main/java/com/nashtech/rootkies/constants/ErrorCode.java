@@ -34,6 +34,9 @@ public  class ErrorCode {
     public static final String ERR_USER_SIGNUP_FAIL         = "ERR_USER_SIGNUP_FAIL";
     public static final String ERR_USER_EXISTED             = "ERR_USER_EXISTED";
     public static final String ERR_CREATE_USER_FAIL         = "ERR_CREATE_USER_FAIL";
+    public static final String ERR_CREATE_USER_DOB          = "ERR_CREATE_USER_DOB";
+    public static final String ERR_CREATE_USER_JD           = "ERR_CREATE_USER_JD";
+    public static final String ERR_CREATE_USER_JD_DOB       = "ERR_CREATE_USER_JD_DOB";
 
 
     /** CONVERTER **/
