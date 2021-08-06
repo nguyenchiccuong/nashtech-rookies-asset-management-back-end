@@ -2,9 +2,11 @@ package com.nashtech.rootkies.repository;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import com.nashtech.rootkies.model.Asset;
+import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.model.Location;
 
 import org.junit.Test;
@@ -33,6 +35,19 @@ public class AsssetRepositoryTest {
 
         assertNotNull(locationRepository.save(location));
 
+        Category category = new Category();
+        category.setCategoryCode("test");
+        category.setCategoryName("test");
+
+        assertNotNull(categoryRepository.save(category));
+
+        locationRepository.deleteById(location.getLocationId());
+
+        assertTrue(!locationRepository.findById(location.getLocationId()).isPresent());
+
+        categoryRepository.deleteById("test");
+
+        assertTrue(!categoryRepository.findById("test").isPresent());
     }
 
     @Test
