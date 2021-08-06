@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
                 i++;
             }
             //auto-generated password
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddmmyyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
             String password = username + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
             //save

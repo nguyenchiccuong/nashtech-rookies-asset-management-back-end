@@ -4,6 +4,9 @@ import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import lombok.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,17 +15,22 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CreateUserDTO {
+    @NotBlank
     private String firstName;
 
+    @NotBlank
     private String lastName;
 
-    private LocalDateTime dateOfBirth;
+    @NotBlank
+    private String dateOfBirth;
 
     private String gender;
 
-    private LocalDateTime joinedDate;
+    private String joinedDate;
 
+    @NotBlank
     private String role;
 
+    @NotNull
     private Long location;
 }

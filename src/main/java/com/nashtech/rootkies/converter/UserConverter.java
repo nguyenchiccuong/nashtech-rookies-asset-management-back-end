@@ -9,6 +9,7 @@ import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.enums.UserStatus;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
@@ -18,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -78,8 +82,16 @@ public class UserConverter {
     public User convertCreateUserDTOtoEntity(CreateUserDTO createUserDTO) throws ConvertEntityDTOException {
         try{
             User user = modelMapper.map(createUserDTO , User.class);
+            //gender
             user.setGender(Gender.valueOf(createUserDTO.getGender()));
-            user.setRole(roleRepository.findByRoleName(ERole.valueOf(createUserDTO.getRole())).get());
+            //role
+            ERole eRole = ERole.valueOf(createUserDTO.getRole());
+            user.setRole(roleRepository.findByRoleName(eRole).get());
+            //convert string to datetime
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            user.setDateOfBirth(LocalDateTime.parse(createUserDTO.getDateOfBirth(), formatter));
+            user.setJoinedDate(LocalDateTime.parse(createUserDTO.getJoinedDate(), formatter));
+            //location
             user.setLocation(locationRepository.findById(createUserDTO.getLocation()).get());
             return user;
         } catch(Exception ex){
