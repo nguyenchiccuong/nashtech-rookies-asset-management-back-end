@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
@@ -83,14 +84,14 @@ public class AssetServiceImpl implements AssetService {
     public ResponseDTO retrieveAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException {
         try {
             ResponseDTO responseDto = new ResponseDTO();
-            Asset asset;
-            try {
-                asset = assetRepository.findByAssetCode(locationId, assetCode)
-                        .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND));
-            } catch (Exception e) {
+            Optional<Asset> asset;
+
+            asset = assetRepository.findByAssetCode(locationId, assetCode);
+            if (!asset.isPresent()) {
                 throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
             }
-            DetailAssetDTO detailAssetDTO = assetConverter.convertToDetailDTO(asset);
+
+            DetailAssetDTO detailAssetDTO = assetConverter.convertToDetailDTO(asset.get());
 
             responseDto.setData(detailAssetDTO);
             responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);

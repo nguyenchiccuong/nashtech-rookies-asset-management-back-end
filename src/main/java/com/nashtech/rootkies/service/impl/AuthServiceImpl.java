@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    /*@Autowired
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -48,25 +48,23 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    public boolean signup(SignupDTO signupDto) throws UserSignupException {
+    /*public boolean signup(SignupDTO signupDto) throws UserSignupException {
         try{
             if (userRepository.existsByUsername(signupDto.getUsername())) {
                 throw new UserExistedException(ErrorCode.ERR_USER_EXISTED);
             }
             User user = userConverter.convertToEntity(signupDto);
-            Set<Role> roles = new HashSet<>();
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
-            roles.add(userRole);
-            user.setRoles(roles);
+            Role userRole = roleRepository.findByRoleName(ERole.ROLE_USER).get();
+            user.setRole(userRole);
             userRepository.save(user);
             return true;
         }catch(Exception ex){
             throw new UserSignupException(ErrorCode.ERR_USER_SIGNUP_FAIL);
         }
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public JwtResponse signin(LoginDTO loginDto) throws UserAuthenticationException {
 
        try{

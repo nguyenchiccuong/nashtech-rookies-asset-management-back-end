@@ -8,8 +8,8 @@ import com.nashtech.rootkies.exception.UserSignupException;
 
 public interface AuthService {
 
-    /*public boolean signup(SignupDTO dto) throws UserSignupException;
+    //public boolean signup(SignupDTO dto) throws UserSignupException;
 
-    public JwtResponse signin(LoginDTO loginDto) throws UserAuthenticationException;*/
+    //public JwtResponse signin(LoginDTO loginDto) throws UserAuthenticationException;
 
 }
