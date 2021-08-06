@@ -6,8 +6,6 @@ import com.nashtech.rootkies.converter.CategoryConverter;
 import com.nashtech.rootkies.dto.category.response.BasicCategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
-import com.nashtech.rootkies.exception.DeleteDataFailException;
-import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.repository.CategoryRepository;
 import com.nashtech.rootkies.service.CategoryService;
@@ -15,10 +13,7 @@ import com.nashtech.rootkies.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
