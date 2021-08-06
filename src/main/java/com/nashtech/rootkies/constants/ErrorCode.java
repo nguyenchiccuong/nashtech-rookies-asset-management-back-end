@@ -12,6 +12,8 @@ public class ErrorCode {
     public static final String ERR_PARENT_CATEGORY_NOT_EXISTS = "ERR_PARENT_CATEGORY_NOT_EXISTS";
     public static final String ERR_CATEGORY_IDS_NOT_CORRECT = "ERR_CATEGORY_IDS_NOT_CORRECT";
     public static final String ERR_RETRIEVE_CATEGORY_FAIL = "ERR_RETRIEVE_CATEGORY_FAIL";
+    public static final String ERR_CATEGORY_NAME_EXISTED = "ERR_CATEGORY_NAME_EXISTED";
+    public static final String ERR_CATEGORY_CODE_EXISTED = "ERR_CATEGORY_CODE_EXISTED";
 
     /** USER **/
     public static final String ERR_USER_NOT_FOUND = "ERR_USER_NOT_FOUND";
