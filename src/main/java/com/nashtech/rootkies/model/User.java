@@ -36,7 +36,7 @@ public class User {
 		name = "staffcode_generator",
 		strategy = "com.nashtech.rootkies.generator.StaffCodeGenerator",
 		parameters = {
-				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "50"),
+				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "0"),
 				@Parameter(name = StaffCodeGenerator.VALUE_PREFIX_PARAMETER, value = "SD"),
 				@Parameter(name = StaffCodeGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
 	@Column(name = "staffcode")
