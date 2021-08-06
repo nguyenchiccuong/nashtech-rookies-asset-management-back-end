@@ -36,7 +36,7 @@ public class AsssetRepositoryTest {
         assertNotNull(locationRepository.save(location));
 
         Category category = new Category();
-        category.setCategoryCode("test");
+        category.setCategoryCode("TE");
         category.setCategoryName("test");
 
         assertNotNull(categoryRepository.save(category));
@@ -45,9 +45,9 @@ public class AsssetRepositoryTest {
 
         assertTrue(!locationRepository.findById(location.getLocationId()).isPresent());
 
-        categoryRepository.deleteById("test");
+        categoryRepository.deleteById("TE");
 
-        assertTrue(!categoryRepository.findById("test").isPresent());
+        assertTrue(!categoryRepository.findById("TE").isPresent());
     }
 
     @Test

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
+import com.nashtech.rootkies.constants.ErrorCode;
 
 import java.util.*;
 
@@ -20,6 +23,7 @@ import java.util.*;
 @NoArgsConstructor
 public class Category {
     @Id
+    @Pattern(regexp = "(^[A-Z]{2,3}$)", message = ErrorCode.ERR_CATEGORY_IDS_NOT_CORRECT)
     @Column(name = "categorycode")
     private String categoryCode;
 
