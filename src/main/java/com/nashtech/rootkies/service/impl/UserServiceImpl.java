@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageDTO findAllUser(Pageable pageable, Specification specification) {
         try{
-            List<User> users = findAll();
             Page<User> page =  repository.findAll(specification , pageable);
             PageDTO pageDTO= converter.pageToPageDto(page);
             return  pageDTO;
