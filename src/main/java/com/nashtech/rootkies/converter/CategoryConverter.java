@@ -4,6 +4,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
 import com.nashtech.rootkies.dto.category.response.BasicCategoryDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.exception.DuplicateDataException;
 import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -52,8 +54,17 @@ public class CategoryConverter {
     }
 
     public Category convertCreateCategoryDTOToEntity(CreateCategoryDTO createCategoryDTO)
-            throws ConvertEntityDTOException {
+            throws ConvertEntityDTOException, DuplicateDataException {
+        Optional<Category> categoryByCategoryName = categoryRepository
+                .findByCategoryName(createCategoryDTO.getCategoryName());
+        if (categoryByCategoryName.isPresent()) {
+            throw new DuplicateDataException(ErrorCode.ERR_CATEGORY_NAME_EXISTED);
+        }
 
+        Optional<Category> categoryByCategoryCode = categoryRepository.findById(createCategoryDTO.getCategoryCode());
+        if (categoryByCategoryCode.isPresent()) {
+            throw new DuplicateDataException(ErrorCode.ERR_CATEGORY_CODE_EXISTED);
+        }
         try {
             return modelMapper.map(createCategoryDTO, Category.class);
         } catch (Exception e) {

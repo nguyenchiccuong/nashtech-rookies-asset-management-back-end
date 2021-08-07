@@ -33,14 +33,11 @@ public class CategoryController {
 
     CategoryConverter categoryConverter;
 
-    CategoryRepository categoryRepository;
-
     @Autowired
     public CategoryController(CategoryService categoryService, CategoryConverter categoryConverter,
             CategoryRepository categoryRepository) {
         this.categoryService = categoryService;
         this.categoryConverter = categoryConverter;
-        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping
@@ -51,16 +48,6 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<ResponseDTO> saveCategory(@Valid @RequestBody CreateCategoryDTO createCategoryDTO)
             throws ConvertEntityDTOException, CreateDataFailException, DuplicateDataException {
-        Optional<Category> categoryByCategoryName = categoryRepository
-                .findByCategoryName(createCategoryDTO.getCategoryName());
-        if (categoryByCategoryName.isPresent()) {
-            throw new DuplicateDataException(ErrorCode.ERR_CATEGORY_NAME_EXISTED);
-        }
-
-        Optional<Category> categoryByCategoryCode = categoryRepository.findById(createCategoryDTO.getCategoryCode());
-        if (categoryByCategoryCode.isPresent()) {
-            throw new DuplicateDataException(ErrorCode.ERR_CATEGORY_CODE_EXISTED);
-        }
 
         Category category = categoryConverter.convertCreateCategoryDTOToEntity(createCategoryDTO);
         return ResponseEntity.ok(categoryService.saveCategory(category));
