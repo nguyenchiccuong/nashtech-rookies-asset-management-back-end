@@ -316,8 +316,6 @@ public class AssetServiceImpl implements AssetService {
 
             Asset assetSave;
 
-            asset.setAssetCode("assetCode");
-
             assetSave = assetRepository.save(asset);
 
             responseDto.setData(assetConverter.convertToCreateResponseDTO(assetSave));
