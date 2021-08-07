@@ -38,13 +38,15 @@ public class UserServiceImpl implements UserService {
     public boolean createUser(User user) throws CreateDataFailException {
         try{
             //validation
-            /*if (LocalDateTime.now().until(user.getDateOfBirth(), ChronoUnit.YEARS) < 18)
+            /*if (user.getDateOfBirth().until(LocalDateTime.now(), ChronoUnit.YEARS) < 18)
                 throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
             if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
                 throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
             DayOfWeek day = user.getJoinedDate().getDayOfWeek();
             if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
                 throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD);*/
+            user.setIsDeleted(false);
+            user.setFirstLogin(false);
             //auto-generated username
             String username = user.getFirstName().toLowerCase(Locale.ROOT);
             String[] words = user.getLastName().split(" ");
