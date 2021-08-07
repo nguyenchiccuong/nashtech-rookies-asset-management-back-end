@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
+import java.time.LocalDateTime;
+
+import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.model.Location;
@@ -40,6 +43,23 @@ public class AsssetRepositoryTest {
         category.setCategoryName("test");
 
         assertNotNull(categoryRepository.save(category));
+
+        Asset asset = new Asset();
+        asset.setAssetName("test");
+        asset.setCategory(category);
+        asset.setInstallDate(LocalDateTime.now());
+        asset.setIsDeleted(false);
+        asset.setLocation(location);
+        asset.setSpecification("hahah");
+        asset.setState(State.AVAILABLE);
+
+        Asset assetSave = assetRepository.save(asset);
+
+        assertNotNull(assetSave);
+
+        assetRepository.deleteById(assetSave.getAssetCode());
+
+        assertTrue(!assetRepository.findById(assetSave.getAssetCode()).isPresent());
 
         locationRepository.deleteById(location.getLocationId());
 
