@@ -56,11 +56,11 @@ public class User {
 	@Column(name = "gender")
 	private Gender gender;
 
-	@ManyToOne
-	@JoinColumn(name = "locationid")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "locationid" )
 	private Location location;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roleid", nullable = false)
 	private Role role;
 
@@ -70,15 +70,15 @@ public class User {
 	@Column(name = "isdeleted")
 	private Boolean isDeleted;
 
-	@OneToMany(mappedBy = "assignedTo")
+	@OneToMany(mappedBy = "assignedTo" , fetch = FetchType.LAZY)
 	private Collection<Assignment> assignmentAssignedTo;
 
-	@OneToMany(mappedBy = "assignedBy")
+	@OneToMany(mappedBy = "assignedBy" , fetch = FetchType.LAZY)
 	private Collection<Assignment> assignmentAssignedBy;
 
-	@OneToMany(mappedBy = "requestedBy")
+	@OneToMany(mappedBy = "requestedBy" , fetch = FetchType.LAZY)
 	private Collection<Request> requestRequestedBy;
 
-	@OneToMany(mappedBy = "acceptedBy")
+	@OneToMany(mappedBy = "acceptedBy" , fetch = FetchType.LAZY)
 	private Collection<Request> requestAcceptedBy;
 }

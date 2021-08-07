@@ -23,4 +23,10 @@ public class SuccessCode {
     /** BRAND **/
     public static final String CREATE_BRAND_SUCCESS       = "CREATE_BRAND_SUCCESS";
 
+    /** USER **/
+    public static final String GET_USER_SUCCESS       = "GET_USER_SUCCESS";
+
+    /** ROLE **/
+    public static final String GET_ALL_ROLE_SUCCESS       = "GET_ALL_ROLE_SUCCESS";
+
 }

@@ -31,8 +31,8 @@ public class Asset {
         @Column(name = "installdate")
         private LocalDateTime installDate;
 
-        @ManyToOne
-        @JoinColumn(name = "locationid")
+        @ManyToOne(fetch = FetchType.LAZY)
+        @JoinColumn(name = "locationid" )
         private Location location;
 
         @Column(name = "specification")
@@ -45,6 +45,6 @@ public class Asset {
         @JoinColumn(name = "categorycode")
         private Category category;
 
-        @OneToMany(mappedBy = "asset")
+        @OneToMany(mappedBy = "asset" ,fetch = FetchType.LAZY)
         private Collection<Assignment> assignments;
 }

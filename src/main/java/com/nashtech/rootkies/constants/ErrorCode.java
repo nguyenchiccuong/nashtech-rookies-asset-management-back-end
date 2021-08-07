@@ -34,6 +34,8 @@ public  class ErrorCode {
     public static final String ERR_USER_SIGNUP_FAIL         = "ERR_USER_SIGNUP_FAIL";
     public static final String ERR_USER_EXISTED             = "ERR_USER_EXISTED";
     public static final String ERR_CREATE_USER_FAIL         = "ERR_CREATE_USER_FAIL";
+    public static final String GET_USER_FAIL         = "GET_USER_FAIL";
+    public static final String ERR_CONVERT_ENTITY_DTO_FAIL         = "ERR_CONVERT_ENTITY_DTO_FAIL";
 
 
     /** CONVERTER **/
@@ -52,4 +54,8 @@ public  class ErrorCode {
     public static final String ERR_ORGANIZATION_EXISTED     = "ERR_ORGANIZATION_EXISTED";
     public static final String CREATE_ORGANIZATION_FAIL     = "CREATE_ORGANIZATION_FAIL";
     public static final String ERR_ORGANIZATION_NOT_FOUND   = "ERR_ORGANIZATION_NOT_FOUND";
+
+    /**ROLE**/
+    public static final String ERR_GET_ALL_ROLE   = "ERR_GET_ALL_ROLE";
+
 }
