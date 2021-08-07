@@ -14,12 +14,13 @@ import java.util.Optional;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
-import com.nashtech.rootkies.dto.asset.reponse.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.reponse.NumberOfAssetDTO;
-import com.nashtech.rootkies.dto.asset.reponse.ViewAssetDTO;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.NumberOfAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.repository.AssetRepository;
@@ -305,6 +306,26 @@ public class AssetServiceImpl implements AssetService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSET_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO saveAsset(Asset asset) throws CreateDataFailException {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            Asset assetSave;
+
+            asset.setAssetCode("assetCode");
+
+            assetSave = assetRepository.save(asset);
+
+            responseDto.setData(assetConverter.convertToCreateResponseDTO(assetSave));
+            responseDto.setSuccessCode(SuccessCode.ASSET_CREATE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_ASSET_FAIL);
         }
     }
 

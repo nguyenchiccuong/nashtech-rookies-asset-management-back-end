@@ -1,17 +1,17 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.dto.asset.response;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class DetailAssetDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateAssetResponseDTO {
     private String assetCode;
 
     private String assetName;
@@ -25,6 +25,4 @@ public class DetailAssetDTO {
     private String specification;
 
     private CategoryDTO category;
-
-    private Collection<AssignmentDTO> assignments;
 }
