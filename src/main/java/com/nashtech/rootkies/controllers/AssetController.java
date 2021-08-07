@@ -1,12 +1,8 @@
 package com.nashtech.rootkies.controllers;
 
-import javax.validation.Valid;
-
 import com.nashtech.rootkies.converter.AssetConverter;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.NumberOfAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
@@ -29,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
