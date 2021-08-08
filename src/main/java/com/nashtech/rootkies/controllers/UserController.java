@@ -42,7 +42,13 @@ public class UserController {
                                                   @RequestParam String search) {
         ResponseDTO response = new ResponseDTO();
         try {
-            Pageable pageable= PageRequest.of(page , size  , Sort.by(sort) );
+            Pageable pageable = null;
+            if(sort.contains("ASC")){
+              pageable  = PageRequest.of(page , size  , Sort.by(sort.replace("ASC" , "")).ascending() );
+            }else{
+                 pageable= PageRequest.of(page , size  , Sort.by(sort.replace("DES" , "")).descending() );
+            }
+
 
 
             UserSpecificationBuilder builder = new UserSpecificationBuilder();
