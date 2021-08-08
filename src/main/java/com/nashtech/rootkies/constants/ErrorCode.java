@@ -32,8 +32,9 @@ public class ErrorCode {
     public static final String ERR_COUNT_ASSET_FAIL = "ERR_RETRIEVE_ASSET_FAIL";
     public static final String ERR_ASSETCODE_NOT_FOUND = "ERR_ASSETCODE_NOT_FOUND";
     public static final String ERR_ASSET_STATE_NOT_CORRECT = "ERR_ASSET_STATE_NOT_CORRECT";
+    public static final String ERR_CREATE_ASSET_FAIL = "ERR_CREATE_ASSET_FAIL";
 
     /** LOCATION **/
     public static final String ERR_LOCATION_NOT_FAIL = "ERR_LOCATION_NOT_FAIL";
-    public static final String ERR_CREATE_ASSET_FAIL = "ERR_CREATE_ASSET_FAIL";
+    
 }
