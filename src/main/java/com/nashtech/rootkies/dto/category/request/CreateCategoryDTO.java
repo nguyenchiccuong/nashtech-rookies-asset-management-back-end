@@ -7,10 +7,6 @@ import com.nashtech.rootkies.constants.ErrorCode;
 
 import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class CreateCategoryDTO {
 

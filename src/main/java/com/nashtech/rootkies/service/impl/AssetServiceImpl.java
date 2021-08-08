@@ -319,7 +319,7 @@ public class AssetServiceImpl implements AssetService {
             assetSave = assetRepository.save(asset);
 
             responseDto.setData(assetConverter.convertToCreateResponseDTO(assetSave));
-            responseDto.setSuccessCode(SuccessCode.ASSET_CREATE_SUCCESS);
+            responseDto.setSuccessCode(SuccessCode.ASSET_CREATED_SUCCESS);
             return responseDto;
         } catch (Exception e) {
             e.printStackTrace();

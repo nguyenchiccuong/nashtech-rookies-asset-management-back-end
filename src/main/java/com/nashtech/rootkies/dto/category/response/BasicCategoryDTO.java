@@ -1,6 +1,6 @@
 package com.nashtech.rootkies.dto.category.response;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
 public class BasicCategoryDTO {

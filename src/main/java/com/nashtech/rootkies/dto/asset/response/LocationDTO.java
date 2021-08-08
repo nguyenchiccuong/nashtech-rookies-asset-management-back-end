@@ -1,14 +1,8 @@
 package com.nashtech.rootkies.dto.asset.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class LocationDTO {
     private Long locationId;
 
