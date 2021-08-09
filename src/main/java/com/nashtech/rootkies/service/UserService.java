@@ -1,14 +1,11 @@
 package com.nashtech.rootkies.service;
 
-import com.nashtech.rootkies.dto.common.ResponseDTO;
-import com.nashtech.rootkies.dto.user.UserDTO;
-import com.nashtech.rootkies.exception.UpdateDataFailException;
-import com.nashtech.rootkies.exception.UserNotFoundException;
-import com.nashtech.rootkies.model.User;
-import org.springframework.http.ResponseEntity;
+import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 
-public interface UserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-    //User getUser(Long id) throws UserNotFoundException;
-    //boolean createUser(User user) throws UpdateDataFailException;
+public interface UserService extends UserDetailsService{
+
+    public String changePasswordFirstLogin(PasswordRequest passwordRequest);
+
 }

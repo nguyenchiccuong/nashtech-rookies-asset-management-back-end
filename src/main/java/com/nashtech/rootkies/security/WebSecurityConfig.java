@@ -2,9 +2,9 @@ package com.nashtech.rootkies.security;
 
 import com.nashtech.rootkies.security.jwt.AuthEntryPointJwt;
 import com.nashtech.rootkies.security.jwt.AuthTokenFilter;
-import com.nashtech.rootkies.security.services.UserDetailsServiceImpl;
+import com.nashtech.rootkies.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserService userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -53,19 +53,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 
-
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable()
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/user/signin", "/user/signup", "/user/home").permitAll()
 				.anyRequest().authenticated();
 
-		http.headers().frameOptions().disable();
-
+		// http.headers().frameOptions().disable();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 

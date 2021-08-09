@@ -2,6 +2,10 @@ package com.nashtech.rootkies.constants;
 
 public class SuccessCode {
 
+    public static final String CHANGE_PASSWORD_SUCCESS = "CHANGE_PASSWORD_SUCCESS";
+    public static final String LOAD_ASSET_SUCCESS = "LOAD_ASSET_SUCCESS";
+    public static final String EDIT_ASSET_SUCCESS = "EDIT_ASSET_SUCCESS";
+
     /** USER AUTH **/
     public static final String USER_SIGNUP_SUCCESS      = "USER_SIGNUP_SUCCESS";
     public static final String USER_LOGIN_SUCCESS       = "USER_LOGIN_SUCCESS";

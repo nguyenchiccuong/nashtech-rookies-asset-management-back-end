@@ -1,36 +1,87 @@
 package com.nashtech.rootkies.service.impl;
 
+import java.util.Optional;
+
 import com.nashtech.rootkies.constants.ErrorCode;
-import com.nashtech.rootkies.exception.UpdateDataFailException;
-import com.nashtech.rootkies.exception.UserNotFoundException;
+import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    /*@Autowired
-    UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Override
-    public User getUser(Long id) throws UserNotFoundException {
-        if(!userRepository.existsById(id)){
-            throw new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> option = userRepository.findByUsername(username);
+        if(option.isPresent() == false) {
+            throw new UsernameNotFoundException("Username not found");
         }
-        return userRepository.findById(id).get();
+        return option.get();
     }
 
     @Override
-    public boolean createUser(User user) throws UpdateDataFailException {
-        try{
-            userRepository.save(user);
-            return true;
-        }catch(Exception ex){
-            throw new UpdateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
+    public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
+        String id = passwordRequest.getStaffCode();
+        String newPassword = passwordRequest.getNewPassword();
+
+        User user = userRepository.findById(id).orElseThrow(
+            () -> new ApiRequestException(ErrorCode.USER_NOT_FOUND)
+        );
+
+        if(user.getIsDeleted()){
+            throw new ApiRequestException(ErrorCode.USER_IS_DISABLED);
         }
 
-    }*/
+        if(newPassword == null || newPassword.trim().length() == 0){
+            throw new ApiRequestException(ErrorCode.PASSWORD_IS_EMPTY);
+        }
+
+        if(checkOldPassword(user.getUsername(), newPassword)){
+            throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
+        }
+
+        try{
+            user.setPassword(encoder.encode(newPassword));
+            user.setFirstLogin(true);
+            userRepository.save(user);
+            return "Success to change password.";
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
+        }
+    }
+
+    public Boolean checkOldPassword(String username, String password){
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        catch(Exception e){
+            return false;
+        }
+        return true;
+    }
+
+
 }

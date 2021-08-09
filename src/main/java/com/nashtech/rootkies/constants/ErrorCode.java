@@ -2,6 +2,24 @@ package com.nashtech.rootkies.constants;
 
 public  class ErrorCode {
 
+    //Asset
+    public static final String ASSET_NOT_FOUND = "ASSET_NOT_FOUND";
+    public static final String ASSET_IS_DELETED = "ASSET_IS_DELETED";
+    public static final String ASSET_ALREADY_ASSIGNED = "ASSET_ALREADY_ASSIGNED";
+    public static final String NAME_IS_EMPTY = "NAME_IS_EMPTY";
+    public static final String SPEC_IS_EMPTY = "SPEC_IS_EMPTY";
+    public static final String DATE_INCORRECT_FORMAT = "DATE_INCORRECT_FORMAT";
+    public static final String STATE_INCORRECT_FORMAT = "STATE_INCORRECT_FORMAT";
+    public static final String ERR_EDIT_ASSET = "ERR_EDIT_ASSET";
+
+    //User
+    public static final String SAME_PASSWORD = "SAME_PASSWORD";
+    public static final String PASSWORD_NOT_CORRECT = "PASSWORD_NOT_CORRECT";
+    public static final String PASSWORD_IS_EMPTY = "PASSWORD_IS_EMPTY";
+    public static final String USER_IS_DISABLED = "USER_IS_DISABLED";
+    public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
+    public static final String ERR_CHANGE_PASSWORD = "ERR_CHANGE_PASSWORD";
+
     /** CATEGORY **/
     public static final String ERR_CATEGORY_NOT_FOUND   = "ERR_CATEGORY_NOT_FOUND";
     public static final String ERR_CATEGORY_EXISTED     = "ERR_CATEGORY_EXISTED";

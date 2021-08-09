@@ -1,6 +1,11 @@
 package com.nashtech.rootkies.model;
 
 import com.nashtech.rootkies.enums.Gender;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +13,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -27,7 +33,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails{
 	@Id
 	@Column(name = "staffcode")
 	private String staffCode;
@@ -81,4 +87,47 @@ public class User {
 
 	@OneToMany(mappedBy = "acceptedBy")
 	private Collection<Request> requestAcceptedBy;
+
+	public User(String staffCode, @NotBlank String username, @NotBlank String password, String firstName,
+			String lastName, LocalDateTime dateOfBirth, LocalDateTime joinedDate, Gender gender, Location location,
+			Role role, Boolean firstLogin, Boolean isDeleted) {
+		this.staffCode = staffCode;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.joinedDate = joinedDate;
+		this.gender = gender;
+		this.location = location;
+		this.role = role;
+		this.firstLogin = firstLogin;
+		this.isDeleted = isDeleted;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName().name());
+		return Collections.singletonList(authority);
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return !isDeleted;
+	}
 }

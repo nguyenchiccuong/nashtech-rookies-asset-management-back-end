@@ -26,7 +26,7 @@ public class Role {
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "rolename", length = 60, nullable = false)
+	@Column(name = "rolename", nullable = false)
 	private ERole roleName;
 
 	@OneToMany(mappedBy = "role")

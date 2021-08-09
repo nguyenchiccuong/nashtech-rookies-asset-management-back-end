@@ -1,7 +1,6 @@
 package com.nashtech.rootkies.converter;
 
 import com.nashtech.rootkies.constants.ErrorCode;
-import com.nashtech.rootkies.dto.auth.SignupDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.RoleDTO;

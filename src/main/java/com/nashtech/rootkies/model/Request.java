@@ -28,11 +28,11 @@ public class Request {
     private Long requestId;
 
     @ManyToOne
-    @JoinColumn(name = "requestedby", referencedColumnName = "username", nullable = false)
+    @JoinColumn(name = "requestedby", referencedColumnName = "staffcode", nullable = false)
     private User requestedBy;
 
     @ManyToOne
-    @JoinColumn(name = "acceptedby", referencedColumnName = "username")
+    @JoinColumn(name = "acceptedby", referencedColumnName = "staffcode")
     private User acceptedBy;
 
     @Column(name = "returneddate")

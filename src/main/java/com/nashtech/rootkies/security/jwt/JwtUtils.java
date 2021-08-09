@@ -2,7 +2,7 @@ package com.nashtech.rootkies.security.jwt;
 
 import java.util.Date;
 
-import com.nashtech.rootkies.security.services.UserDetailsImpl;
+import com.nashtech.rootkies.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,23 +15,22 @@ import io.jsonwebtoken.*;
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-	@Value("${shop.app.jwtSecret}")
+	@Value("${bezkoder.app.jwtSecret}")
 	private String jwtSecret;
 
-	@Value("${shop.app.jwtExpirationMs}")
+	@Value("${bezkoder.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
 	public String generateJwtToken(Authentication authentication) {
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+		User userPrincipal = (User) authentication.getPrincipal();
 
-		/*return Jwts.builder()
+		return Jwts.builder()
 				.setSubject((userPrincipal.getUsername()))
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
-				.compact();*/
-		return null;
+				.compact();
 	}
 
 	public String getUserNameFromJwtToken(String token) {
