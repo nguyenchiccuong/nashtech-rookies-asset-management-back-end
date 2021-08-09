@@ -1,9 +1,11 @@
 package com.nashtech.rootkies.service.impl;
 
+import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
 import com.nashtech.rootkies.dto.auth.SignUpRequest;
 import com.nashtech.rootkies.enums.Gender;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
@@ -11,6 +13,7 @@ import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.security.jwt.JwtUtils;
+import com.nashtech.rootkies.security.service.UserDetailsImpl;
 import com.nashtech.rootkies.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,12 +56,18 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        User userDetails = (User) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if(userDetails.getRole().equalsIgnoreCase("ROLE_ADMIN_LOCKED") || 
+            userDetails.getRole().equalsIgnoreCase("ROLE_USER_LOCKED"))
+        {
+            throw new ApiRequestException(ErrorCode.USER_BLOCKED);
+        }
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         
         return new JwtResponse(jwt, userDetails.getStaffCode(), 
-            userDetails.getUsername(), roles.get(0), userDetails.getFirstLogin());
+            userDetails.getUsername(), roles.get(0), userDetails.getFirstLogin(),
+            userDetails.getIdLocation());
     }
 
     @Override

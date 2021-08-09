@@ -33,7 +33,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails{
+public class User {
 	@Id
 	@Column(name = "staffcode")
 	private String staffCode;
@@ -103,31 +103,5 @@ public class User implements UserDetails{
 		this.role = role;
 		this.firstLogin = firstLogin;
 		this.isDeleted = isDeleted;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName().name());
-		return Collections.singletonList(authority);
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return !isDeleted;
 	}
 }

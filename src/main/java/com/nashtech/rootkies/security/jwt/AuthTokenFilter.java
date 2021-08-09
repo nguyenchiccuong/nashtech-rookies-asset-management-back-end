@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.nashtech.rootkies.security.service.UserDetailsServiceImpl;
 import com.nashtech.rootkies.service.UserService;
 
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	private JwtUtils jwtUtils;
 
 	@Autowired
-	private UserService userDetailsService;
+	private UserDetailsServiceImpl userDetailsService;
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

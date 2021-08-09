@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/user")
 // @Api( tags = "Auth")
 public class AuthController {
 
@@ -36,7 +35,7 @@ public class AuthController {
 		return ResponseEntity.ok().body(dto);
 	}
 
-	@PostMapping("/signup")
+	@PostMapping("/fakesignup")
 	public ResponseEntity<String> fakeSignUp(@RequestBody SignUpRequest request){
 		String message = authService.fakeSignUp(request);
 		return ResponseEntity.ok(message);

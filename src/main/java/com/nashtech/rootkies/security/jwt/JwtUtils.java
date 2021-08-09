@@ -3,6 +3,8 @@ package com.nashtech.rootkies.security.jwt;
 import java.util.Date;
 
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.security.service.UserDetailsImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +25,7 @@ public class JwtUtils {
 
 	public String generateJwtToken(Authentication authentication) {
 
-		User userPrincipal = (User) authentication.getPrincipal();
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		return Jwts.builder()
 				.setSubject((userPrincipal.getUsername()))

@@ -4,7 +4,7 @@ import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService{
+public interface UserService {
 
     public String changePasswordFirstLogin(PasswordRequest passwordRequest);
 

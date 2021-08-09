@@ -31,15 +31,6 @@ public class UserServiceImpl implements UserService {
     AuthenticationManager authenticationManager;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> option = userRepository.findByUsername(username);
-        if(option.isPresent() == false) {
-            throw new UsernameNotFoundException("Username not found");
-        }
-        return option.get();
-    }
-
-    @Override
     public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
         String id = passwordRequest.getStaffCode();
         String newPassword = passwordRequest.getNewPassword();
