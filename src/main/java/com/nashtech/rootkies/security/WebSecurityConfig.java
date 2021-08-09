@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-				.antMatchers("/signin", "/signup", "/home").permitAll()
+				.antMatchers("/signin", "/fakesignup", "/home").permitAll()
 				.anyRequest().authenticated();
 
 		// http.headers().frameOptions().disable();
