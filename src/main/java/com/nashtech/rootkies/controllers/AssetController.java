@@ -5,8 +5,6 @@ import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import com.nashtech.rootkies.converter.LocationConverter;
-import com.nashtech.rootkies.dto.asset.reponse.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.reponse.NumberOfAssetDTO;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
@@ -115,10 +113,13 @@ public class AssetController {
     }
 
     @PostMapping()
-    public ResponseEntity<ResponseDTO> saveAsset(@Valid @RequestBody CreateAssetRequestDTO createAssetRequestDTO)
-            throws ConvertEntityDTOException, CreateDataFailException, InvalidRequestDataException {
-        // visualize the admin using in in sai gon
-        Long locationId = (long) 101; // 101 mean sai gon
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> saveAsset(HttpServletRequest req,
+            @Valid @RequestBody CreateAssetRequestDTO createAssetRequestDTO) throws ConvertEntityDTOException,
+            CreateDataFailException, InvalidRequestDataException, DataNotFoundException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
 
         Asset asset = assetConverter.convertCreateAssetDTOToEntity(createAssetRequestDTO, locationId);
 

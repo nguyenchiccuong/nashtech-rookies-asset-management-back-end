@@ -44,6 +44,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> saveCategory(@Valid @RequestBody CreateCategoryDTO createCategoryDTO)
             throws ConvertEntityDTOException, CreateDataFailException, DuplicateDataException {
 
