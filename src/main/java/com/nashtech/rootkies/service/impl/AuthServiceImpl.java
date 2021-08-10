@@ -1,18 +1,19 @@
 package com.nashtech.rootkies.service.impl;
 
 import com.nashtech.rootkies.constants.ErrorCode;
-import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
-import com.nashtech.rootkies.dto.auth.LoginDTO;
-import com.nashtech.rootkies.dto.auth.SignupDTO;
-import com.nashtech.rootkies.exception.*;
-import com.nashtech.rootkies.enums.ERole;
+import com.nashtech.rootkies.dto.auth.LoginRequest;
+import com.nashtech.rootkies.dto.auth.SignUpRequest;
+import com.nashtech.rootkies.enums.Gender;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
+import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.security.jwt.JwtUtils;
-import com.nashtech.rootkies.security.services.UserDetailsImpl;
+import com.nashtech.rootkies.security.service.UserDetailsImpl;
 import com.nashtech.rootkies.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,19 +23,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    /*@Autowired
-    UserRepository userRepository;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     @Autowired
-    RoleRepository roleRepository;
+    UserRepository userRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -43,53 +43,70 @@ public class AuthServiceImpl implements AuthService {
     JwtUtils jwtUtils;
 
     @Autowired
-    UserConverter userConverter;
+    RoleRepository roleRepository;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    LocationRepository locationRepository;
 
-    public boolean signup(SignupDTO signupDto) throws UserSignupException {
-        try{
-            if (userRepository.existsByUsername(signupDto.getUsername())) {
-                throw new UserExistedException(ErrorCode.ERR_USER_EXISTED);
-            }
-            User user = userConverter.convertToEntity(signupDto);
-            Set<Role> roles = new HashSet<>();
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER).get();
-            roles.add(userRole);
-            user.setRoles(roles);
-            userRepository.save(user);
-            return true;
-        }catch(Exception ex){
-            throw new UserSignupException(ErrorCode.ERR_USER_SIGNUP_FAIL);
+    @Override
+    public JwtResponse signIn(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+        
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        if(userDetails.getRole().equalsIgnoreCase("ROLE_ADMIN_LOCKED") || 
+            userDetails.getRole().equalsIgnoreCase("ROLE_USER_LOCKED"))
+        {
+            throw new ApiRequestException(ErrorCode.USER_BLOCKED);
         }
-
+        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+                .collect(Collectors.toList());
+        
+        return new JwtResponse(jwt, userDetails.getStaffCode(), 
+            userDetails.getUsername(), roles.get(0), userDetails.getFirstLogin(),
+            userDetails.getIdLocation());
     }
 
     @Override
-    public JwtResponse signin(LoginDTO loginDto) throws UserAuthenticationException {
+    public String fakeSignUp(SignUpRequest signUpRequest) {
+        String staffCode = signUpRequest.getStaffcode();
+        String username = signUpRequest.getUsername();
+        String password = signUpRequest.getPassword();
+        String firstName = signUpRequest.getFirstname();
+        String lastName = signUpRequest.getLastname();
+        Long idRole = signUpRequest.getIdRole();
+        Long idLocation = signUpRequest.getIdLocation();
 
-       try{
-           Authentication authentication = authenticationManager.authenticate(
-                   new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        Role role = roleRepository.findById(idRole).get();
+        Location  location = locationRepository.findById(idLocation).get();
 
-           SecurityContextHolder.getContext().setAuthentication(authentication);
-           String jwt = jwtUtils.generateJwtToken(authentication);
-
-           UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-           List<String> roles = userDetails.getAuthorities().stream()
-                   .map(item -> item.getAuthority())
-                   .collect(Collectors.toList());
-
-           JwtResponse jwtRes = new JwtResponse(jwt,
-                   userDetails.getId(),
-                   userDetails.getUsername(),
-                   userDetails.getEmail(),
-                   roles);
-           return jwtRes;
-       }catch(Exception ex){
-            throw new UserAuthenticationException(ErrorCode.ERR_USER_LOGIN_FAIL);
-       }
-    }*/
+        // Optional<Role> role = roleRepository.findById(1L);
+        // Optional<Location>  location = locationRepository.findById(1L);
+        LocalDateTime current = LocalDateTime.now();
+        User user = new User();
+        user.setStaffCode(staffCode);
+        user.setUsername(username);
+        user.setPassword(encoder.encode(password));
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setGender(Gender.Male);
+        user.setDateOfBirth(current);
+        user.setJoinedDate(current);
+        user.setRole(role);
+        user.setLocation(location);
+        user.setFirstLogin(false);
+        user.setIsDeleted(false);
+        
+        user = userRepository.save(user);
+        if(user != null) {
+            return "OK";
+        }
+        else{
+            return "ERROR";
+        }
+    }
 
 }

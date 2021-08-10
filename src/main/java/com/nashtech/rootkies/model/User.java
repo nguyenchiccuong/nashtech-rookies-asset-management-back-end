@@ -1,16 +1,15 @@
 package com.nashtech.rootkies.model;
 
 import com.nashtech.rootkies.enums.Gender;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
+import com.nashtech.rootkies.generator.StaffCodeGenerator;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(	name = "users",
@@ -27,8 +26,17 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staffcode_generator")
+	@GenericGenerator(
+		name = "staffcode_generator",
+		strategy = "com.nashtech.rootkies.generator.StaffCodeGenerator",
+		parameters = {
+				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "0"),
+				@Parameter(name = StaffCodeGenerator.VALUE_PREFIX_PARAMETER, value = "SD"),
+				@Parameter(name = StaffCodeGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
 	@Column(name = "staffcode")
 	private String staffCode;
 
@@ -60,7 +68,7 @@ public class User {
 	@JoinColumn(name = "locationid" )
 	private Location location;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "roleid", nullable = false)
 	private Role role;
 
@@ -81,4 +89,21 @@ public class User {
 
 	@OneToMany(mappedBy = "acceptedBy" , fetch = FetchType.LAZY)
 	private Collection<Request> requestAcceptedBy;
+
+	public User(String staffCode, @NotBlank String username, @NotBlank String password, String firstName,
+			String lastName, LocalDateTime dateOfBirth, LocalDateTime joinedDate, Gender gender, Location location,
+			Role role, Boolean firstLogin, Boolean isDeleted) {
+		this.staffCode = staffCode;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.joinedDate = joinedDate;
+		this.gender = gender;
+		this.location = location;
+		this.role = role;
+		this.firstLogin = firstLogin;
+		this.isDeleted = isDeleted;
+	}
 }

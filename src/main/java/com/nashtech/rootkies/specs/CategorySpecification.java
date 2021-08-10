@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.repository.specs;
+package com.nashtech.rootkies.specs;
 
 import com.nashtech.rootkies.dto.category.request.SearchCategoryDTO;
 import com.nashtech.rootkies.model.Category;

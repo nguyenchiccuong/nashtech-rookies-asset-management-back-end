@@ -23,8 +23,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Shop Service Api",
-                "Shop service provides apis relate to : product, category, cart, item.",
+                "Asset Management Api",
+                "Asset Management service provides apis relate to : user, asset, asignment.",
                 "v1.0",
                 "Terms of service",
                 new Contact("Nguyen Nhan", "www.google.com", "leonguyencm1984@gmail.com"),

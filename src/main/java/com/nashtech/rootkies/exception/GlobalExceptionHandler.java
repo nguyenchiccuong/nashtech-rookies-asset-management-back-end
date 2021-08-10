@@ -11,8 +11,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+// @ControllerAdvice
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConverterUserException.class)
     	public ResponseEntity convertUserFail(ConverterUserException ex, WebRequest request) {

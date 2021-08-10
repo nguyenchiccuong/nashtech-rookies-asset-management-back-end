@@ -1,16 +1,6 @@
 package com.nashtech.rootkies.converter;
 
-import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
-import com.nashtech.rootkies.dto.category.response.CategoryDTO;
-import com.nashtech.rootkies.model.Category;
-import com.nashtech.rootkies.repository.CategoryRepository;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CategoryConverter {
