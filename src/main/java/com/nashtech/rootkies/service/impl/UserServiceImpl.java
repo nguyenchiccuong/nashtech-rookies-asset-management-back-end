@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 username += word.toLowerCase(Locale.ROOT).charAt(0);
             user.setUsername(username);
             int i = 1;
-            while (userRepository.existsByUsername(username)) {
+            while (userRepository.existsByUsername(user.getUsername())) {
                 user.setUsername(username + i);
                 i++;
             }
