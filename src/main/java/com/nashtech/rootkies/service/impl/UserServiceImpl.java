@@ -7,6 +7,8 @@ import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
+import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
@@ -20,6 +22,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -82,4 +90,48 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    /*@Override
+    public User getUser(Long id) throws UserNotFoundException {
+        if(!userRepository.existsById(id)){
+            throw new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
+        }
+        return userRepository.findById(id).get();
+    }*/
+
+    @Override
+    public boolean createUser(User user) throws CreateDataFailException {
+        try{
+            //validation
+            /*if (user.getDateOfBirth().until(LocalDateTime.now(), ChronoUnit.YEARS) < 18)
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
+            if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
+            DayOfWeek day = user.getJoinedDate().getDayOfWeek();
+            if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD);*/
+            user.setIsDeleted(false);
+            user.setFirstLogin(false);
+            //auto-generated username
+            String username = user.getFirstName().toLowerCase(Locale.ROOT);
+            String[] words = user.getLastName().split(" ");
+            for (String word : words)
+                username += word.toLowerCase(Locale.ROOT).charAt(0);
+            user.setUsername(username);
+            int i = 1;
+            while (userRepository.existsByUsername(username)) {
+                user.setUsername(username + i);
+                i++;
+            }
+            //auto-generated password
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+            String password = username + '@' + user.getDateOfBirth().format(formatter);
+            user.setPassword(encoder.encode(password));
+            //save
+            userRepository.save(user);
+            return true;
+        } catch(Exception ex){
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
+        }
+    }
+  
 }
