@@ -13,5 +13,5 @@ public interface UserService {
 
     public String changePasswordFirstLogin(PasswordRequest passwordRequest);
     public String changePassword(String username, ChangePasswordRequest changePasswordRequest);
-
+    public boolean createUser(User user) throws CreateDataFailException;
 }

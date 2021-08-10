@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private AuthService authService;
 
     @Override
-    public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest) {
+    public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
         String id = passwordRequest.getStaffCode();
         String newPassword = passwordRequest.getNewPassword();
 
