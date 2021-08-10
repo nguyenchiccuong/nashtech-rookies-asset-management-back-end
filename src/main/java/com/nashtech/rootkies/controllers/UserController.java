@@ -4,6 +4,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
 import com.nashtech.rootkies.constants.SuccessCode;
@@ -62,7 +63,7 @@ public class UserController {
     public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
                                                   @RequestParam Integer size,
                                                   @RequestParam String sort,
-                                                  @RequestParam String search) {
+                                                  @RequestParam String search)throws DataNotFoundException {
         ResponseDTO response = new ResponseDTO();
         try {
             Pageable pageable = null;

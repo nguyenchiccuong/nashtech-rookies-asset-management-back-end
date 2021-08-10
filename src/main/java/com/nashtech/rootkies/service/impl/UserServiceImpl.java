@@ -3,6 +3,7 @@ package com.nashtech.rootkies.service.impl;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.PageDTO;
+import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
@@ -58,14 +59,13 @@ public class UserServiceImpl implements UserService {
     private AuthService authService;
 
     @Override
-    public PageDTO findAllUser(Pageable pageable, Specification specification) {
+    public PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException {
         try{
             Page<User> page =  repository.findAll(specification , pageable);
             PageDTO pageDTO= converter.pageToPageDto(page);
             return  pageDTO;
         }catch (Exception exception){
-            System.out.println(exception.getMessage());
-            return null;
+            throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
         }
 
 

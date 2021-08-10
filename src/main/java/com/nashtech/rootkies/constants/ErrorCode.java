@@ -48,6 +48,7 @@ public  class ErrorCode {
     public static final String ERR_CREATE_USER_DOB          = "ERR_CREATE_USER_DOB";
     public static final String ERR_CREATE_USER_JD           = "ERR_CREATE_USER_JD";
     public static final String ERR_CREATE_USER_JD_DOB       = "ERR_CREATE_USER_JD_DOB";
+    public static final String ERR_GET_ALL_USER       = "ERR_GET_ALL_USER";
 
 
     /** CONVERTER **/
