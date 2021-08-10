@@ -2,6 +2,7 @@ package com.nashtech.rootkies.security;
 
 import com.nashtech.rootkies.security.jwt.AuthEntryPointJwt;
 import com.nashtech.rootkies.security.jwt.AuthTokenFilter;
+import com.nashtech.rootkies.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	UserDetailsService userDetailsService;
+	UserDetailsServiceImpl userDetailsService;
 
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
@@ -60,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-				.antMatchers("/api/users/**").access("hasRole('ROLE_USER')")
+				.antMatchers("/api/users/**").hasRole("ADMIN")
 				.anyRequest().authenticated();
 
 		http.headers().frameOptions().disable();
