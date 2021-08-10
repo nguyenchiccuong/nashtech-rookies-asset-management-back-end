@@ -10,6 +10,7 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Location;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -124,6 +126,16 @@ public class AssetController {
         Asset asset = assetConverter.convertCreateAssetDTOToEntity(createAssetRequestDTO, locationId);
 
         return ResponseEntity.ok(assetService.saveAsset(asset));
+    }
+
+    @DeleteMapping("/{assetCode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> deleteAssetById(HttpServletRequest req,
+            @PathVariable("assetCode") String assetCode) throws DataNotFoundException, DeleteDataFailException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        return ResponseEntity.ok(assetService.deleteAssetByAssetCode(locationId, assetCode));
     }
 
     // remeber to research valid only work when input or output

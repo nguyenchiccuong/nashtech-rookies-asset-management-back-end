@@ -2,7 +2,7 @@ package com.nashtech.rootkies.constants;
 
 public class ErrorCode {
 
-    //User
+    // User
     public static final String SAME_PASSWORD = "SAME_PASSWORD";
     public static final String PASSWORD_NOT_CORRECT = "PASSWORD_NOT_CORRECT";
     public static final String PASSWORD_IS_EMPTY = "PASSWORD_IS_EMPTY";
@@ -25,14 +25,13 @@ public class ErrorCode {
     public static final String ERR_CATEGORY_CODE_EXISTED = "ERR_CATEGORY_CODE_EXISTED";
 
     /** USER **/
-    public static final String ERR_USER_NOT_FOUND           = "ERR_USER_NOT_FOUND";
-    public static final String ERR_USER_SIGNUP_FAIL         = "ERR_USER_SIGNUP_FAIL";
-    public static final String ERR_USER_EXISTED             = "ERR_USER_EXISTED";
-    public static final String ERR_CREATE_USER_FAIL         = "ERR_CREATE_USER_FAIL";
-    public static final String ERR_CREATE_USER_DOB          = "ERR_CREATE_USER_DOB";
-    public static final String ERR_CREATE_USER_JD           = "ERR_CREATE_USER_JD";
-    public static final String ERR_CREATE_USER_JD_DOB       = "ERR_CREATE_USER_JD_DOB";
-
+    public static final String ERR_USER_NOT_FOUND = "ERR_USER_NOT_FOUND";
+    public static final String ERR_USER_SIGNUP_FAIL = "ERR_USER_SIGNUP_FAIL";
+    public static final String ERR_USER_EXISTED = "ERR_USER_EXISTED";
+    public static final String ERR_CREATE_USER_FAIL = "ERR_CREATE_USER_FAIL";
+    public static final String ERR_CREATE_USER_DOB = "ERR_CREATE_USER_DOB";
+    public static final String ERR_CREATE_USER_JD = "ERR_CREATE_USER_JD";
+    public static final String ERR_CREATE_USER_JD_DOB = "ERR_CREATE_USER_JD_DOB";
 
     /** CONVERTER **/
     public static final String ERR_CONVERT_DTO_ENTITY_FAIL = "ERR_CONVERT_DTO_ENTITY_FAIL";
@@ -46,8 +45,10 @@ public class ErrorCode {
     public static final String ERR_ASSETCODE_NOT_FOUND = "ERR_ASSETCODE_NOT_FOUND";
     public static final String ERR_ASSET_STATE_NOT_CORRECT = "ERR_ASSET_STATE_NOT_CORRECT";
     public static final String ERR_CREATE_ASSET_FAIL = "ERR_CREATE_ASSET_FAIL";
+    public static final String ERR_ASSET_ALREADY_HAVE_ASSIGNMENT = "ERR_ASSET_ALREADY_HAVE_ASSIGNMENT";
+    public static final String ERR_ASSET_DELETE_FAIL = "ERR_ASSET_DELETE_FAIL";
 
     /** LOCATION **/
     public static final String ERR_LOCATION_NOT_FAIL = "ERR_LOCATION_NOT_FAIL";
-    
+
 }

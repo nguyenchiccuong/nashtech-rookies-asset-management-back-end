@@ -14,6 +14,7 @@ public class SuccessCode {
     public static final String CATEGORY_CREATED_SUCCESS = "CATEGORY_CREATED_SUCCESS";
     public static final String CATEGORY_DELETED_SUCCESS = "CATEGORY_DELETED_SUCCESS";
     public static final String CATEGORIES_LOADED_SUCCESS = "CATEGORIES_LOADED_SUCCESS";
+    public static final String ASSET_DELETE_SUCCESS = "ASSET_DELETE_SUCCESS";
 
     /** ASSET **/
     public static final String ASSET_LOADED_SUCCESS = "ASSET_LOADED_SUCCESS";

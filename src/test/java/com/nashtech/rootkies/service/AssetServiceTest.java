@@ -7,7 +7,10 @@ import com.nashtech.rootkies.converter.AssetConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Asset;
+import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.repository.AssetRepository;
@@ -18,9 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -73,5 +79,30 @@ public class AssetServiceTest {
 
         // Then
         assertEquals(responseDTOexpect, responseDTO);
+    }
+
+    @Test
+    public void deleteAssetHaveAssignment() throws DataNotFoundException, DeleteDataFailException {
+        assertNotNull(assetRepository);
+
+        // Given
+        String assetCode = "test";
+        Assignment asignment1 = new Assignment();
+        Assignment asignment2 = new Assignment();
+        List<Assignment> assignments = new ArrayList<Assignment>();
+        assignments.add(asignment1);
+        assignments.add(asignment2);
+        Asset asset = new Asset();
+        asset.setAssignments(assignments);
+
+        when(assetRepository.findByAssetCode((long) 11, assetCode)).thenReturn(Optional.of(asset));
+
+        // When
+        Exception exception = assertThrows(Exception.class, () -> {
+            assetService.deleteAssetByAssetCode((long) 11, assetCode);
+        });
+
+        // Then
+        assertEquals(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT, exception.getMessage());
     }
 }
