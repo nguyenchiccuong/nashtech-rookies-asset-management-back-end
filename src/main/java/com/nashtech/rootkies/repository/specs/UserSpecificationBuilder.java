@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 public class UserSpecificationBuilder {
 
-    private final List<SearchCriteria> params;
+    private final List<SearchCriteria1> params;
 
     public UserSpecificationBuilder() {
-        params = new ArrayList<SearchCriteria>();
+        params = new ArrayList<SearchCriteria1>();
     }
 
     public UserSpecificationBuilder with(String key, String operation, Object value) {
-        params.add(new SearchCriteria(key, operation, value));
+        params.add(new SearchCriteria1(key, operation, value));
         return this;
     }
 

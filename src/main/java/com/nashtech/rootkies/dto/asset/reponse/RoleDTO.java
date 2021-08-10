@@ -1,4 +1,6 @@
-package com.nashtech.rootkies.repository.specs;
+package com.nashtech.rootkies.dto.asset.reponse;
+
+import com.nashtech.rootkies.enums.ERole;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SearchCriteria {
-    private String key;
-    private Object value;
-    private SearchOperation operation;
+public class RoleDTO {
+    private Long id;
+
+    private ERole roleName;
 }

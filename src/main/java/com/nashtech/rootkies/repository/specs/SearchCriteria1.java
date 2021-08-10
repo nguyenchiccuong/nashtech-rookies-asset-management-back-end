@@ -9,8 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SearchCriteria {
+public class SearchCriteria1 {
     private String key;
+    private String operation;
     private Object value;
-    private SearchOperation operation;
+
 }

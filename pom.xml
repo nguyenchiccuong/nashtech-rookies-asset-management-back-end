@@ -76,6 +76,8 @@
       <artifactId>modelmapper</artifactId>
       <version>2.3.5</version>
     </dependency>
+    <!-- jackson -->
+    <!-- 3 of this need in the same version -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -95,7 +97,8 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>2.12.0</version>
-  </dependency>
+    </dependency>
+    <!-- jackson -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -156,6 +159,13 @@
       <artifactId>hibernate-annotations</artifactId>
       <version>3.5.6-Final</version>
     </dependency>
+    <!-- dev tool for auto restart -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -190,6 +200,14 @@
           </deployment>
         </configuration>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>11</source>
+                <target>11</target>
+            </configuration>
+        </plugin>
     </plugins>
   </build>
 </project>

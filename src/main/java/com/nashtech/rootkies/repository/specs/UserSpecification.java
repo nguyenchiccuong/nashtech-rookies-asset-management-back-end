@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class UserSpecification implements Specification<User> {
-    private SearchCriteria criteria;
+    private SearchCriteria1 criteria;
 
     @Override
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder builder) {

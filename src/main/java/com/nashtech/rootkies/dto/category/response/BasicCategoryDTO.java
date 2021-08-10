@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.repository.specs;
+package com.nashtech.rootkies.dto.category.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SearchCriteria {
-    private String key;
-    private Object value;
-    private SearchOperation operation;
+public class BasicCategoryDTO {
+    private String categoryCode;
+
+    private String categoryName;
 }
