@@ -3,10 +3,13 @@ package com.nashtech.rootkies.service.impl;
 import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.auth.LoginRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.UserRepository;
+import com.nashtech.rootkies.service.AuthService;
 import com.nashtech.rootkies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,8 +33,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    private AuthService authService;
+
     @Override
-    public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
+    public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest) {
         String id = passwordRequest.getStaffCode();
         String newPassword = passwordRequest.getNewPassword();
 
@@ -54,8 +60,9 @@ public class UserServiceImpl implements UserService {
         try{
             user.setPassword(encoder.encode(newPassword));
             user.setFirstLogin(true);
-            userRepository.save(user);
-            return "Success to change password.";
+            user = userRepository.save(user);
+            LoginRequest loginRequest = new LoginRequest(user.getUsername(), newPassword);
+            return authService.signIn(loginRequest);
         }
         catch(Exception e){
             throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);

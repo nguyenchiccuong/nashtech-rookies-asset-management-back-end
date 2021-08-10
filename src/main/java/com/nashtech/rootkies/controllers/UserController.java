@@ -2,6 +2,7 @@ package com.nashtech.rootkies.controllers;
 
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.service.UserService;
@@ -36,9 +37,9 @@ public class UserController {
     @PutMapping("/password/first")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        String message = userService.changePasswordFirstLogin(passwordRequest);
+        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
-        dto.setData(message);
+        dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }

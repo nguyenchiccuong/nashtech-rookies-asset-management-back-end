@@ -3,6 +3,7 @@ package com.nashtech.rootkies.controllers;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.*;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.brand.request.CreateBrandDTO;
 import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
 import com.nashtech.rootkies.dto.category.request.SearchCategoryDTO;
@@ -46,9 +47,9 @@ public class AdminController {
     @PutMapping("/password/first")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        String message = userService.changePasswordFirstLogin(passwordRequest);
+        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
-        dto.setData(message);
+        dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
