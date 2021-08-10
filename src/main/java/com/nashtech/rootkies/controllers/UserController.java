@@ -24,13 +24,11 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/home")
-    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
     }
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         String message = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
