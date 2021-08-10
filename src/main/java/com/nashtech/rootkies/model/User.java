@@ -36,7 +36,7 @@ public class User {
 		name = "staffcode_generator",
 		strategy = "com.nashtech.rootkies.generator.StaffCodeGenerator",
 		parameters = {
-				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "50"),
+				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "0"),
 				@Parameter(name = StaffCodeGenerator.VALUE_PREFIX_PARAMETER, value = "SD"),
 				@Parameter(name = StaffCodeGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
 	@Column(name = "staffcode")
@@ -91,4 +91,21 @@ public class User {
 
 	@OneToMany(mappedBy = "acceptedBy")
 	private Collection<Request> requestAcceptedBy;
+
+	public User(String staffCode, @NotBlank String username, @NotBlank String password, String firstName,
+			String lastName, LocalDateTime dateOfBirth, LocalDateTime joinedDate, Gender gender, Location location,
+			Role role, Boolean firstLogin, Boolean isDeleted) {
+		this.staffCode = staffCode;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.joinedDate = joinedDate;
+		this.gender = gender;
+		this.location = location;
+		this.role = role;
+		this.firstLogin = firstLogin;
+		this.isDeleted = isDeleted;
+	}
 }
