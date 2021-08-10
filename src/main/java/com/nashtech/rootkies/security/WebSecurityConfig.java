@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-				.antMatchers("/api/users/**").hasRole("ADMIN")
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/signin", "/fakesignup", "/home").permitAll()
 				.anyRequest().authenticated();
 

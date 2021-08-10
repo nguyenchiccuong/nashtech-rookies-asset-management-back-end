@@ -1,14 +1,12 @@
 package com.nashtech.rootkies.converter;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.dto.auth.SignupDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
-import com.nashtech.rootkies.dto.user.request.RoleDTO;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
-import com.nashtech.rootkies.enums.UserStatus;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
-import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
@@ -19,13 +17,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class UserConverter {
-
     @Autowired
     ModelMapper modelMapper;
 
