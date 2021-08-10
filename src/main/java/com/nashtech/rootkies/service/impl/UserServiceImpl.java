@@ -1,14 +1,11 @@
 package com.nashtech.rootkies.service.impl;
 
-import java.util.Optional;
-
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
-import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
@@ -18,15 +15,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
 @Service
