@@ -1,12 +1,12 @@
-package com.nashtech.rootkies.repositorytest;
+package com.nashtech.rootkies.repository;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Optional;
 
 import com.nashtech.rootkies.model.Role;
-import com.nashtech.rootkies.repository.RoleRepository;
 
+import com.nashtech.rootkies.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
