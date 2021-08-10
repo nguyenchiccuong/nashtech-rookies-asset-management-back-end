@@ -1,22 +1,18 @@
 package com.nashtech.rootkies.model;
 
 import com.nashtech.rootkies.enums.Gender;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import com.nashtech.rootkies.generator.StaffCodeGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(	name = "users",
@@ -35,6 +31,14 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class User {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staffcode_generator")
+	@GenericGenerator(
+		name = "staffcode_generator",
+		strategy = "com.nashtech.rootkies.generator.StaffCodeGenerator",
+		parameters = {
+				@Parameter(name = StaffCodeGenerator.INCREMENT_PARAM, value = "0"),
+				@Parameter(name = StaffCodeGenerator.VALUE_PREFIX_PARAMETER, value = "SD"),
+				@Parameter(name = StaffCodeGenerator.NUMBER_FORMAT_PARAMETER, value = "%04d") })
 	@Column(name = "staffcode")
 	private String staffCode;
 

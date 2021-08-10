@@ -46,3 +46,4 @@ public class AuthController {
 		return "<h1>Home</h1>";
 	}
 }
+

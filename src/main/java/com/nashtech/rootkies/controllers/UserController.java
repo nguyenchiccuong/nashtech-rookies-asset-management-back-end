@@ -2,9 +2,15 @@ package com.nashtech.rootkies.controllers;
 
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.service.UserService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -13,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -30,9 +40,9 @@ public class UserController {
 
     @PutMapping("/password/first")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        String message = userService.changePasswordFirstLogin(passwordRequest);
+        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
-        dto.setData(message);
+        dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
@@ -47,4 +57,8 @@ public class UserController {
         response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(response);
     }
+
+     @Autowired
+     UserConverter userConverter;
+     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 }
