@@ -33,50 +33,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    UserConverter userConverter;
-
     @GetMapping("/home")
-    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
-    }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
-                                                  @RequestParam Integer size,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String search)throws DataNotFoundException {
-        ResponseDTO response = new ResponseDTO();
-        try {
-            Pageable pageable = null;
-            if (sort.contains("ASC")) {
-                pageable = PageRequest.of(page, size, Sort.by(sort.replace("ASC", "")).ascending());
-            } else {
-                pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
-            }
-
-
-            UserSpecificationBuilder builder = new UserSpecificationBuilder();
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-            }
-
-            Specification<User> spec = builder.build();
-
-            response.setData(userService.findAllUser(pageable, spec));
-
-            response.setSuccessCode(SuccessCode.GET_USER_SUCCESS);
-            return ResponseEntity.ok().body(response);
-        } catch (Exception ex) {
-            response.setErrorCode(ErrorCode.GET_USER_FAIL);
-            return ResponseEntity.badRequest().body(response);
-        }
     }
 
     @PutMapping("/password/first")
@@ -98,16 +57,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
-    @PostMapping(value = "/save")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
-        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
-        return ResponseEntity.ok().body(responseDTO);
-    }
-
+     @Autowired
+     UserConverter userConverter;
+     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 }
