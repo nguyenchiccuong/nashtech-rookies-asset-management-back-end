@@ -37,14 +37,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    UserConverter userConverter;
+
     @GetMapping("/home")
-    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
     }
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -53,7 +54,16 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-     @Autowired
-     UserConverter userConverter;
+
+    @PostMapping(value = "/save")
+    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
+        Boolean check = userService.createUser(user);
+        responseDTO.setData(check);
+        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
      private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 }
