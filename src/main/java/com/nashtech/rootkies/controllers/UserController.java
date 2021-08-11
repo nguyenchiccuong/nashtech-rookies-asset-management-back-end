@@ -20,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -44,42 +43,8 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
-                                                  @RequestParam Integer size,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String search)throws DataNotFoundException {
-        ResponseDTO response = new ResponseDTO();
-        try {
-            Pageable pageable = null;
-            if (sort.contains("ASC")) {
-                pageable = PageRequest.of(page, size, Sort.by(sort.replace("ASC", "")).ascending());
-            } else {
-                pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
-            }
-
-
-            UserSpecificationBuilder builder = new UserSpecificationBuilder();
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-            }
-
-            Specification<User> spec = builder.build();
-
-            response.setData(userService.findAllUser(pageable, spec));
-
-            response.setSuccessCode(SuccessCode.GET_USER_SUCCESS);
-            return ResponseEntity.ok().body(response);
-        } catch (Exception ex) {
-            response.setErrorCode(ErrorCode.GET_USER_FAIL);
-            return ResponseEntity.badRequest().body(response);
-        }
-    }
-
     @PutMapping("/password/first")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         String response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -89,6 +54,7 @@ public class UserController {
     }
     //changepssword
     @PutMapping("/password/{username}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
                                                       @RequestBody ChangePasswordRequest request) {
         String message = userService.changePassword(username, request);

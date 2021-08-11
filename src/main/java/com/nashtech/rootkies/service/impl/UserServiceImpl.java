@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
             }
             //auto-generated password
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-            String password = username + '@' + user.getDateOfBirth().format(formatter);
+            String password = user.getUsername() + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
             //save
             userRepository.save(user);
