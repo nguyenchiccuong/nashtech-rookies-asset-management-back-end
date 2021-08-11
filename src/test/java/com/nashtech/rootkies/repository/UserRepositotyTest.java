@@ -27,4 +27,10 @@ public class UserRepositotyTest {
         Boolean check = userRepository.existsByUsername(username);
         assertEquals(check, true);
     }
+
+    @Test
+    public void findByUsernameTest() {
+        Optional<User> option = userRepository.findByUsername("binhnv");
+        assertEquals(true, option.isPresent());
+    }
 }
