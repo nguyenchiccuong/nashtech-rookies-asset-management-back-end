@@ -4,6 +4,7 @@ import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Asset;
 
 import org.springframework.data.domain.Pageable;
@@ -21,8 +22,6 @@ public interface AssetService {
 
         public ResponseDTO retrieveAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException;
 
-        public ResponseDTO countAssetHavingFilterSearchSort();
-
         public ResponseDTO retrieveAssetHavingFilterSearchSort(Integer pageNum, Integer numOfItems,
                         SearchFilterSortAssetDTO searchFilterSortAssetDTO, Long locationId)
                         throws DataNotFoundException;
@@ -31,4 +30,6 @@ public interface AssetService {
                         Long locationId) throws DataNotFoundException;
 
         public ResponseDTO saveAsset(Asset asset) throws CreateDataFailException;
+
+        public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException, DeleteDataFailException;
 }

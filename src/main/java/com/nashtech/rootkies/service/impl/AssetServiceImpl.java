@@ -22,6 +22,7 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.specs.AssetSpecification;
@@ -100,12 +101,6 @@ public class AssetServiceImpl implements AssetService {
         } catch (Exception e) {
             throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
         }
-    }
-
-    @Override
-    public ResponseDTO countAssetHavingFilterSearchSort() {
-
-        return null;
     }
 
     @Override
@@ -325,6 +320,33 @@ public class AssetServiceImpl implements AssetService {
             e.printStackTrace();
             throw new CreateDataFailException(ErrorCode.ERR_CREATE_ASSET_FAIL);
         }
+    }
+
+    @Override
+    public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode)
+            throws DataNotFoundException, DeleteDataFailException {
+
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Asset> asset;
+
+        asset = assetRepository.findByAssetCode(locationId, assetCode);
+        if (!asset.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
+
+        if (asset.get().getAssignments().size() > 0) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+        } else {
+            try {
+                assetRepository.deleteById(assetCode);
+                responseDto.setSuccessCode(SuccessCode.ASSET_DELETE_SUCCESS);
+                return responseDto;
+            } catch (Exception e) {
+                throw new DeleteDataFailException(ErrorCode.ERR_ASSET_DELETE_FAIL);
+            }
+
+        }
+
     }
 
 }
