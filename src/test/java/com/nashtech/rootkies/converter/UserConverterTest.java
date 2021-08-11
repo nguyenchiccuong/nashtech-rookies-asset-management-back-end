@@ -1,13 +1,21 @@
 package com.nashtech.rootkies.converter;
 
+import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
+import com.nashtech.rootkies.enums.ERole;
+import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.RoleRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserConverterTest {
     @Autowired
     UserConverter userConverter;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Test
     public void convertCreateUserDTOtoEntityTest() throws ConvertEntityDTOException {
@@ -37,4 +48,40 @@ public class UserConverterTest {
         assertEquals(createUserDTO.getLocation(), user.getLocation().getLocationId());
     }
 
+    @Test
+    public void convertEditUserDTOtoEntityTest() throws ConvertEntityDTOException {
+        EditUserDTO editUserDTO = new EditUserDTO();
+        editUserDTO.setFirstName("Nhi");
+        editUserDTO.setLastName("Mai Hoang");
+        editUserDTO.setGender("Female");
+        editUserDTO.setDateOfBirth("2000-06-01 00:00");
+        editUserDTO.setJoinedDate("2021-08-10 00:00");
+        editUserDTO.setRole("ROLE_USER");
+
+        User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
+        assertEquals(editUserDTO.getGender(), user.getGender().name());
+        assertEquals(editUserDTO.getLastName(), user.getLastName());
+        assertEquals(editUserDTO.getFirstName(), user.getFirstName());
+    }
+
+    @Test
+    public void convertToDtoTest() {
+        User user = new User();
+        user.setFirstName("Nhi");
+        user.setLastName("Mai Hoang");
+        user.setUsername("nhimh");
+        user.setGender(Gender.Female);
+        user.setDateOfBirth(LocalDateTime.of(2000, 6, 1, 0, 0));
+        user.setJoinedDate(LocalDateTime.now());
+        Role role = roleRepository.findByRoleName(ERole.ROLE_USER).get();
+        user.setRole(role);
+
+        UserDTO userDTO = userConverter.convertToDto(user);
+        assertEquals(user.getFirstName(), userDTO.getFirstName());
+        assertEquals(user.getLastName(), userDTO.getLastName());
+        assertEquals(user.getUsername(), userDTO.getUsername());
+        assertEquals(user.getRole().getRoleName().name(), userDTO.getRole());
+        assertEquals(user.getGender().name(), userDTO.getGender());
+        assertEquals("2000-06-01 00:00", userDTO.getDateOfBirth());
+    }
 }

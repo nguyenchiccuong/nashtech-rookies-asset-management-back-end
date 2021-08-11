@@ -22,6 +22,7 @@ public class UserDTO {
     private String status;
     private String firstName;
     private String lastName;
+    private String username;
     private String dateOfBirth;
     private String joinedDate;
     private String gender;
