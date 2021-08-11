@@ -1,9 +1,7 @@
 package com.nashtech.rootkies.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
@@ -16,6 +14,7 @@ import org.hibernate.annotations.Parameter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Location {
     @Id
     @GeneratedValue(generator = "sequence-generator")
@@ -29,9 +28,9 @@ public class Location {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location" , fetch = FetchType.LAZY)
     private Collection<User> users;
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location" , fetch = FetchType.LAZY)
     private Collection<Asset> assets;
 }

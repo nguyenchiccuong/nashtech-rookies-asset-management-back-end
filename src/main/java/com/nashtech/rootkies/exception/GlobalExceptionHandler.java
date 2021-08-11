@@ -14,6 +14,18 @@ import java.time.LocalDateTime;
 // @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ConverterUserException.class)
+    	public ResponseEntity convertUserFail(ConverterUserException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null , null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(DataNotFoundException.class)
+	public ResponseEntity getDataFail(ConverterUserException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null , null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(DataNotFoundException.class)
 	public ResponseEntity dataNotFoundException(DataNotFoundException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);

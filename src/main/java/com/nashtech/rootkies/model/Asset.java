@@ -1,9 +1,6 @@
 package com.nashtech.rootkies.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +17,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Asset {
         @Id
         @Column(name = "assetcode")
@@ -57,6 +55,6 @@ public class Asset {
         @JoinColumn(name = "categorycode")
         private Category category;
 
-        @OneToMany(mappedBy = "asset")
+        @OneToMany(mappedBy = "asset" ,fetch = FetchType.LAZY)
         private Collection<Assignment> assignments;
 }

@@ -1,22 +1,29 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
+import com.nashtech.rootkies.repository.UserRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,5 +53,31 @@ public class UserServiceTest {
 
         Boolean createUser = userService.createUser(user);
         assertNotNull(createUser);
+    }
+
+    @Test
+    public void changePasswordFirstLoginTest() {
+        JwtResponse response = userService.changePasswordFirstLogin(
+            new PasswordRequest("SD0003", "123123")
+        );
+        assertNotNull(response.getToken());
+    }
+
+    @Test
+    public void changePasswordBySamePassword() {
+        assertThrows(ApiRequestException.class, () -> {
+            userService.changePasswordFirstLogin(
+                new PasswordRequest("SD0003", "123123")
+            );
+        });
+    }
+
+    @Test
+    public void changePasswordByIdNotFound() {
+        assertThrows(ApiRequestException.class, () -> {
+            userService.changePasswordFirstLogin(
+                new PasswordRequest("SD0000", "123123")
+            );
+        });
     }
 }

@@ -29,15 +29,26 @@ public class ErrorCode {
     public static final String ERR_USER_SIGNUP_FAIL = "ERR_USER_SIGNUP_FAIL";
     public static final String ERR_USER_EXISTED = "ERR_USER_EXISTED";
     public static final String ERR_CREATE_USER_FAIL = "ERR_CREATE_USER_FAIL";
+    public static final String GET_USER_FAIL = "GET_USER_FAIL";
+    public static final String ERR_CONVERT_ENTITY_DTO_FAIL = "ERR_CONVERT_ENTITY_DTO_FAIL";
     public static final String ERR_CREATE_USER_DOB = "ERR_CREATE_USER_DOB";
     public static final String ERR_CREATE_USER_JD = "ERR_CREATE_USER_JD";
     public static final String ERR_CREATE_USER_JD_DOB = "ERR_CREATE_USER_JD_DOB";
+    public static final String ERR_GET_ALL_USER = "ERR_GET_ALL_USER";
 
     /** CONVERTER **/
     public static final String ERR_CONVERT_DTO_ENTITY_FAIL = "ERR_CONVERT_DTO_ENTITY_FAIL";
 
     /** AUTHENTICATION - AUTHORIZATION **/
     public static final String ERR_USER_LOGIN_FAIL = "ERR_USER_LOGIN_FAIL";
+
+    /** ORGANIZATION **/
+    public static final String ERR_ORGANIZATION_EXISTED = "ERR_ORGANIZATION_EXISTED";
+    public static final String CREATE_ORGANIZATION_FAIL = "CREATE_ORGANIZATION_FAIL";
+    public static final String ERR_ORGANIZATION_NOT_FOUND = "ERR_ORGANIZATION_NOT_FOUND";
+
+    /** ROLE **/
+    public static final String ERR_GET_ALL_ROLE = "ERR_GET_ALL_ROLE";
 
     /** ASSET **/
     public static final String ERR_RETRIEVE_ASSET_FAIL = "ERR_RETRIEVE_ASSET_FAIL";
