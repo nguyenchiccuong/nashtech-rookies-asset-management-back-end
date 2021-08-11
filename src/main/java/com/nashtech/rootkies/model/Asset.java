@@ -3,6 +3,9 @@ package com.nashtech.rootkies.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.GenericGenerator;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -18,27 +21,36 @@ import java.util.Collection;
 public class Asset {
         @Id
         @Column(name = "assetcode")
+        @GeneratedValue(generator = "assetCodeGenerator")
+        @GenericGenerator(name = "assetCodeGenerator", strategy = "com.nashtech.rootkies.generator.AssetCodeGenerator")
         private String assetCode;
 
+        @NotBlank
         @Column(name = "assetname")
         private String assetName;
 
+        @NotNull
         @Column(name = "state")
         private Short state;
 
+        @NotNull
         @Column(name = "installdate")
         private LocalDateTime installDate;
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "locationid" )
+        @NotNull
+        @ManyToOne
+        @JoinColumn(name = "locationid")
         private Location location;
 
+        @NotBlank
         @Column(name = "specification")
         private String specification;
 
+        @NotNull
         @Column(name = "isdeleted")
         private Boolean isDeleted;
 
+        @NotNull
         @ManyToOne
         @JoinColumn(name = "categorycode")
         private Category category;

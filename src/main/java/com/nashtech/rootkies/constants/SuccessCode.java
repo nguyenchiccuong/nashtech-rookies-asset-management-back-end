@@ -18,6 +18,7 @@ public class SuccessCode {
     /** ASSET **/
     public static final String ASSET_LOADED_SUCCESS = "ASSET_LOADED_SUCCESS";
     public static final String ASSET_COUNT_SUCCESS = "ASSET_COUNT_SUCCESS";
+    public static final String ASSET_CREATED_SUCCESS = "ASSET_CREATED_SUCCESS";
 
     /** USER **/
     public static final String GET_USER_SUCCESS       = "GET_USER_SUCCESS";
