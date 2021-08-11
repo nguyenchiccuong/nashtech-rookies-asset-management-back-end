@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.controllers;
 
+<<<<<<< HEAD
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
@@ -12,6 +13,13 @@ import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
+=======
+import com.nashtech.rootkies.constants.SuccessCode;
+import com.nashtech.rootkies.converter.UserConverter;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
+>>>>>>> develop
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.User;
@@ -20,24 +28,9 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +43,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
-@Api( tags = "User")
+// @Api( tags = "User")
 public class UserController {
 
     @Autowired
@@ -105,11 +98,22 @@ public class UserController {
     @PutMapping("/password/first")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
+        String response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
+    }
+    //changepssword
+    @PutMapping("/password/{username}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
+                                                      @RequestBody ChangePasswordRequest request) {
+        String message = userService.changePassword(username, request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(message);
+        response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{staffcode}")
