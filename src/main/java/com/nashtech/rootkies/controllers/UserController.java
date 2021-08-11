@@ -1,17 +1,15 @@
 package com.nashtech.rootkies.controllers;
 
+import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
-import com.nashtech.rootkies.dto.common.ResponseDTO;
-import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
-import com.nashtech.rootkies.exception.ConvertEntityDTOException;
-import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.service.UserService;
-import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +36,11 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/home")
-    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
     }
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -52,6 +48,22 @@ public class UserController {
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
+
+    @PutMapping("/{staffcode}")
+    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
+                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
+            User updateUser = userService.updateUser(staffcode, user);
+            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
+        } catch (Exception e){
+            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
 
      @Autowired
      UserConverter userConverter;

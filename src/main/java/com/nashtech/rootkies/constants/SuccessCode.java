@@ -25,4 +25,5 @@ public class SuccessCode {
     /** BRAND **/
     public static final String CREATE_BRAND_SUCCESS       = "CREATE_BRAND_SUCCESS";
 
+    public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
 }

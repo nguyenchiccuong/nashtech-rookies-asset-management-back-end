@@ -4,6 +4,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.dto.auth.SignupDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserConverter {
@@ -47,27 +50,59 @@ public class UserConverter {
         return user;
     }
 
-    public User convertToEntity(CreateUserDTO dto) throws ConvertEntityDTOException {
-        try{
-            User user = modelMapper.map(dto , User.class);
-            /*dto.getRoles().stream().map(role -> roleRepository.findByName(role.getName()).get()).collect(Collectors.toSet());
-            user.setPassword(encoder.encode(dto.getPassword()));
-            user.setCreatedDate(LocalDateTime.now());
-            user.setDeleted(false);
-            user.setStatus(UserStatus.ACTIVE.name());*/
-            return user;
-        }catch(Exception ex){
-            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
-        }
+    public UserDTO convertToDto(User user) {
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        //gender
+        userDTO.setGender(user.getGender().name());
+        //date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        userDTO.setDateOfBirth(user.getDateOfBirth().format(formatter));
+        userDTO.setJoinedDate(user.getJoinedDate().format(formatter));
+        //role
+        userDTO.setRole(user.getRole().getRoleName().name());
+        return userDTO;
     }
 
-    public UserDTO convertToDTO(User user) throws ConvertEntityDTOException {
+    public User convertToEti(UserDTO userDTO) {
+        User user = modelMapper.map(userDTO , User.class);
+        //gender
+        user.setGender(Gender.valueOf(userDTO.getGender()));
+        //role
+        ERole eRole = ERole.valueOf(userDTO.getRole());
+        user.setRole(roleRepository.findByRoleName(eRole).get());
+        //convert string to datetime
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        user.setDateOfBirth(LocalDateTime.parse(userDTO.getDateOfBirth(), formatter));
+        user.setJoinedDate(LocalDateTime.parse(userDTO.getJoinedDate(), formatter));
+        //location
+        user.setLocation(locationRepository.findById(userDTO.getLocation()).get());
+        return user;
+    }
+
+
+    public List<UserDTO> toListDto(List<User> listEntity) {
+        List<UserDTO> listDto = new ArrayList<>();
+
+        listEntity.forEach(e->{
+            listDto.add(this.convertToDto(e));
+        });
+        return listDto;
+    }
+
+    public User convertEditUserDTOtoEntity(EditUserDTO editUserDTO) throws ConvertEntityDTOException {
         try{
-            UserDTO dto = modelMapper.map(user , UserDTO.class);
-            /*dto.setRoles(user.getRoles().stream().map(role -> modelMapper.map(role , RoleDTO.class))
-                    .collect(Collectors.toSet()));*/
-            return dto;
-        }catch(Exception ex){
+            User user = modelMapper.map(editUserDTO , User.class);
+            //gender
+            user.setGender(Gender.valueOf(editUserDTO.getGender()));
+            //role
+            ERole eRole = ERole.valueOf(editUserDTO.getRole());
+            user.setRole(roleRepository.findByRoleName(eRole).get());
+            //convert string to datetime
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            user.setDateOfBirth(LocalDateTime.parse(editUserDTO.getDateOfBirth(), formatter));
+            user.setJoinedDate(LocalDateTime.parse(editUserDTO.getJoinedDate(), formatter));
+            return user;
+        } catch(Exception ex){
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }

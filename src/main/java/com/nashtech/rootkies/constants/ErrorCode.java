@@ -10,6 +10,7 @@ public  class ErrorCode {
     public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
     public static final String ERR_CHANGE_PASSWORD = "ERR_CHANGE_PASSWORD";
     public static final String USER_BLOCKED = "USER_BLOCKED";
+    public static final String ERR_ROLE_NOT_FOUND = "ERR_ROLE_NOT_FOUND";
 
     /** CATEGORY **/
     public static final String ERR_CATEGORY_NOT_FOUND   = "ERR_CATEGORY_NOT_FOUND";
@@ -64,4 +65,5 @@ public  class ErrorCode {
     public static final String ERR_ORGANIZATION_EXISTED     = "ERR_ORGANIZATION_EXISTED";
     public static final String CREATE_ORGANIZATION_FAIL     = "CREATE_ORGANIZATION_FAIL";
     public static final String ERR_ORGANIZATION_NOT_FOUND   = "ERR_ORGANIZATION_NOT_FOUND";
+    public static final String ERR_UPDATE_USER_FAIL = "ERR_UPDATE_USER_FAIL";
 }

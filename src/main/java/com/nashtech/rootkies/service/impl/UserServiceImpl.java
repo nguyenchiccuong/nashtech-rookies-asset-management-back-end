@@ -1,12 +1,20 @@
 package com.nashtech.rootkies.service.impl;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
+import com.nashtech.rootkies.dto.user.UserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.ResourceNotFoundException;
+import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
 import com.nashtech.rootkies.service.UserService;
@@ -19,13 +27,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -83,13 +96,58 @@ public class UserServiceImpl implements UserService {
 
 
     /*@Override
+    public List<User> retrieveUsers() throws UserNotFoundException {
+        try {
+            List<User> users = userRepository.findAll();
+            return users;
+        } catch (Exception exception) {
+            throw new UserNotFoundException(ErrorCode.ERR_USER_EXISTED);
+        }
+    }
+
+    @Override
+    public Optional<User> getUser(String staffCode) throws UserNotFoundException {
+        User user = userRepository.findByStaffCode(staffCode).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        return Optional.of(user);
+    }*/
+
+    @Override
+    public User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException {
+        User userExist = userRepository.findByStaffCode(userId).orElseThrow(() ->
+                new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        Role roleExist = roleRepository.findByRoleName(user.getRole().getRoleName()).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorCode.ERR_ROLE_NOT_FOUND));
+
+//        userExist.setFirstName(userDTO.getFirstName());
+//        userExist.setLastName(userDTO.getLastName());
+        userExist.setDateOfBirth(user.getDateOfBirth());
+        userExist.setJoinedDate(user.getJoinedDate());
+        userExist.setGender(user.getGender());
+        userExist.setRole(roleExist);
+
+        user = userRepository.save(userExist);
+        return userExist;
+    }
+
+    @Override
+    public Boolean deleteUser(String userId) throws UserNotFoundException {
+        User user = userRepository.findByStaffCode(userId).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        //user.setIsDeleted(Boolean.TRUE);
+        this.userRepository.delete(user);
+        return true;
+    }
+    /*@Autowired
+    UserRepository userRepository;
+
+    @Override
     public User getUser(Long id) throws UserNotFoundException {
         if(!userRepository.existsById(id)){
             throw new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
         }
         return userRepository.findById(id).get();
-    }*/
+    }
 
+     */
     @Override
     public boolean createUser(User user) throws CreateDataFailException {
         try{
