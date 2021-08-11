@@ -66,6 +66,7 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
                                                   @RequestParam Integer size,
                                                   @RequestParam String sort,
