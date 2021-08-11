@@ -4,7 +4,8 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
-import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
@@ -13,8 +14,6 @@ import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
-import com.nashtech.rootkies.exception.UpdateDataFailException;
-import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.service.UserService;
 import io.swagger.annotations.Api;
@@ -68,7 +67,6 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
                                                   @RequestParam Integer size,
                                                   @RequestParam String sort,
@@ -102,7 +100,6 @@ public class UserController {
         }
     }
 
-
     @PutMapping("/password/first")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
@@ -126,4 +123,29 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
+
+    @PostMapping(value = "/save")
+    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
+        Boolean check = userService.createUser(user);
+        responseDTO.setData(check);
+        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @PutMapping("/update/{staffcode}")
+    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
+                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
+            User updateUser = userService.updateUser(staffcode, user);
+            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
+        } catch (Exception e){
+            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
 }

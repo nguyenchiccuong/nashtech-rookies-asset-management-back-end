@@ -40,13 +40,11 @@ public class AdminController {
     private UserConverter userConverter;
 
     @GetMapping("/home")
-    @PreAuthorize("hasRole('ADMIN')")
     public String getHome() {
         return "<h1>ADMIN Home Page</h1>";
     }
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest) {
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -54,30 +52,4 @@ public class AdminController {
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
-
-    @PostMapping(value = "/user/save")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
-        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
-        return ResponseEntity.ok().body(responseDTO);
-    }
-
-    @PutMapping("/user/update/{staffcode}")
-    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
-                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        try {
-            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
-            User updateUser = userService.updateUser(staffcode, user);
-            responseDTO.setData(userConverter.convertToDto(updateUser));
-            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
-        } catch (Exception e){
-            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
-        }
-        return ResponseEntity.ok(responseDTO);
-    }
-
 }
