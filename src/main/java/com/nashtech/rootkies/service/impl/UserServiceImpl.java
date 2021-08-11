@@ -19,7 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -123,6 +126,9 @@ public class UserServiceImpl implements UserService {
         try{
             //validation
             /*if (user.getDateOfBirth().until(LocalDateTime.now(), ChronoUnit.YEARS) < 18)
+=======
+            /*if (LocalDateTime.now().until(user.getDateOfBirth(), ChronoUnit.YEARS) < 18)
+>>>>>>> edd53ac (complete)
                 throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
             if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
                 throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
