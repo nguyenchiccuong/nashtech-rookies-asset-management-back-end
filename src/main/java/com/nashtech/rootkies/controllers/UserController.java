@@ -4,6 +4,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
