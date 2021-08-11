@@ -64,11 +64,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
 				.antMatchers("/signin", "/fakesignup", "/home").permitAll()
+				.antMatchers("/user").hasRole("ADMIN")
 				.anyRequest().authenticated();
 
 		// http.headers().frameOptions().disable();
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
-
 
 }

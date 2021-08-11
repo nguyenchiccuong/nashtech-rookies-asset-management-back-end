@@ -84,4 +84,39 @@ public class UserConverterTest {
         assertEquals(user.getGender().name(), userDTO.getGender());
         assertEquals("2000-06-01 00:00", userDTO.getDateOfBirth());
     }
+    
+    public void convertEntityToDetailDTO(){
+        UserDetailDTO dto = UserDetailDTO.builder()
+                .staffCode("SD001")
+                .fullName("Nguyen Hung")
+                .joinedDate(LocalDate.now())
+                .dateOfBirth(LocalDate.now().minusYears(20))
+                .type("ROLE_ADMIN")
+                .location("HCM")
+                .username("hungnb")
+                .gender("Male")
+                .build();
+
+        User user = User.builder()
+                .staffCode("SD001")
+                .lastName("Hung")
+                .firstName("Nguyen")
+                .location(Location.builder().locationId(1L).address("HCM").build())
+                .gender(Gender.Male)
+                .role(Role.builder().id(1L).roleName(ERole.ROLE_ADMIN).build())
+                .joinedDate(LocalDateTime.now())
+                .dateOfBirth(LocalDateTime.now().minusYears(20))
+                .username("hungnb")
+                .build();
+
+        assertEquals(userConverter.entityToDetailDTO(user).getStaffCode() , dto.getStaffCode());
+        assertEquals(userConverter.entityToDetailDTO(user).getUsername() , dto.getUsername());
+        assertEquals(userConverter.entityToDetailDTO(user).getType() , dto.getType());
+        assertEquals(userConverter.entityToDetailDTO(user).getLocation() , dto.getLocation());
+        assertEquals(userConverter.entityToDetailDTO(user).getGender() , dto.getGender());
+        assertEquals(userConverter.entityToDetailDTO(user).getFullName() , dto.getFullName());
+        assertEquals(userConverter.entityToDetailDTO(user).getDateOfBirth() , dto.getDateOfBirth());
+        assertEquals(userConverter.entityToDetailDTO(user).getJoinedDate() , dto.getJoinedDate());
+    }
+
 }
