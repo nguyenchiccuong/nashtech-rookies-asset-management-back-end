@@ -2,7 +2,10 @@ package com.nashtech.rootkies.model;
 
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.generator.StaffCodeGenerator;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -26,7 +29,6 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staffcode_generator")
@@ -64,8 +66,8 @@ public class User {
 	@Column(name = "gender")
 	private Gender gender;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "locationid" )
+	@ManyToOne
+	@JoinColumn(name = "locationid")
 	private Location location;
 
 	@ManyToOne
@@ -78,16 +80,16 @@ public class User {
 	@Column(name = "isdeleted")
 	private Boolean isDeleted;
 
-	@OneToMany(mappedBy = "assignedTo" , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "assignedTo")
 	private Collection<Assignment> assignmentAssignedTo;
 
-	@OneToMany(mappedBy = "assignedBy" , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "assignedBy")
 	private Collection<Assignment> assignmentAssignedBy;
 
-	@OneToMany(mappedBy = "requestedBy" , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "requestedBy")
 	private Collection<Request> requestRequestedBy;
 
-	@OneToMany(mappedBy = "acceptedBy" , fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "acceptedBy")
 	private Collection<Request> requestAcceptedBy;
 
 	public User(String staffCode, @NotBlank String username, @NotBlank String password, String firstName,
