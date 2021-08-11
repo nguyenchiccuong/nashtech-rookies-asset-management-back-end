@@ -1,8 +1,6 @@
 package com.nashtech.rootkies.repository;
 
 import com.nashtech.rootkies.model.User;
-import com.nashtech.rootkies.repository.UserRepository;
-import com.nashtech.rootkies.repository.specs.SearchCriteria;
 import com.nashtech.rootkies.repository.specs.SearchCriteria1;
 import com.nashtech.rootkies.repository.specs.UserSpecification;
 import org.junit.Test;
@@ -34,11 +32,16 @@ public class UserRepositotyTest {
     }
 
     @Test
-    public void findAllUser(){
+    public void findAllUser() {
         Specification specification = new UserSpecification(
-                new SearchCriteria1("staffCode" , ":" , "SD0001"));
+                new SearchCriteria1("staffCode", ":", "SD0001"));
 
-        assertEquals(userRepository.findAll(specification , PageRequest.of(0 , 1)).getTotalElements() , 1);
+        assertEquals(userRepository.findAll(specification, PageRequest.of(0, 1)).getTotalElements(), 1);
+    }
 
+    @Test
+    public void findByUsernameTest() {
+        Optional<User> option = userRepository.findByUsername("binhnv");
+        assertEquals(true, option.isPresent());
     }
 }
