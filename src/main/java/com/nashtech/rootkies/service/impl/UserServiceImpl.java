@@ -111,6 +111,15 @@ public class UserServiceImpl implements UserService {
         if(newPassword.equals(oldPassword)){
             throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
         }
+        try{
+            User user = optionalUser.get();
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+            return "Success to change password.";
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
+        }
     }
 
     @Override

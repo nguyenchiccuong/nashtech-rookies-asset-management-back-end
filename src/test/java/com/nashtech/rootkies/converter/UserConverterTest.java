@@ -1,12 +1,12 @@
 package com.nashtech.rootkies.converter;
 
 import com.nashtech.rootkies.dto.user.UserDTO;
-import com.nashtech.rootkies.dto.user.UserDetailDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.RoleRepository;
 import org.junit.Test;
@@ -14,6 +14,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -83,7 +85,7 @@ public class UserConverterTest {
         assertEquals("2000-06-01 00:00", userDTO.getDateOfBirth());
     }
     
-    public void convertEntityToDetailDTO(){
+    /*public void convertEntityToDetailDTO(){
         UserDetailDTO dto = UserDetailDTO.builder()
                 .staffCode("SD001")
                 .fullName("Nguyen Hung")
@@ -115,6 +117,6 @@ public class UserConverterTest {
         assertEquals(userConverter.entityToDetailDTO(user).getFullName() , dto.getFullName());
         assertEquals(userConverter.entityToDetailDTO(user).getDateOfBirth() , dto.getDateOfBirth());
         assertEquals(userConverter.entityToDetailDTO(user).getJoinedDate() , dto.getJoinedDate());
-    }
+    }*/
 
 }

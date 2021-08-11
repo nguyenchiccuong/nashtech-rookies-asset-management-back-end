@@ -1,14 +1,13 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.CreateDataFailException;
-<<<<<<< HEAD
 import com.nashtech.rootkies.exception.ResourceNotFoundException;
 import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
-=======
->>>>>>> develop
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
@@ -22,8 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -73,7 +71,7 @@ public class UserServiceTest {
         assertEquals(user.getJoinedDate(), updateUser.getJoinedDate());
         assertEquals(user.getRole().getRoleName(), updateUser.getRole().getRoleName());
     }
-    public void changePasswordFirstLoginTest() {
+    /*public void changePasswordFirstLoginTest() {
         JwtResponse response = userService.changePasswordFirstLogin(
             new PasswordRequest("SD0003", "123123")
         );
