@@ -21,10 +21,10 @@ public class RoleRepositoryTest {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Test
+   /* @Test
     public void findByIdTest() {
         Optional<Role> role = roleRepository.findById(1L);
         assertEquals(true, role.isPresent());
-    }
+    }*/
 
 }

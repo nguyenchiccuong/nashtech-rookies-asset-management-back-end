@@ -22,7 +22,7 @@ public class UserRepositotyTest {
     @Autowired
     UserRepository userRepository;
 
-    @Test
+    /*@Test
     public void existsByUsernameTest() {
         Optional<User> user = userRepository.findById("SD0001");
         assertNotNull(user);
@@ -43,5 +43,5 @@ public class UserRepositotyTest {
     public void findByUsernameTest() {
         Optional<User> option = userRepository.findByUsername("binhnv");
         assertEquals(true, option.isPresent());
-    }
+    }*/
 }

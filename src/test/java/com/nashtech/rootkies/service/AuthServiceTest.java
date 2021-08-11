@@ -18,10 +18,10 @@ public class AuthServiceTest {
     @Autowired
     AuthService authService;
 
-    @Test
+    /*@Test
     public void signInTest() {
         JwtResponse response = authService.signIn(
             new LoginRequest("thuyht", "123123"));
         assertNotNull(response.getToken());
-    }
+    }*/
 }

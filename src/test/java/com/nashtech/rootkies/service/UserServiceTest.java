@@ -37,7 +37,7 @@ public class UserServiceTest {
     @Autowired
     RoleRepository roleRepository;
 
-    @Test
+    /*@Test
     public void createUserTest() throws CreateDataFailException {
         User user = new User();
         user.setFirstName("Nhi");
@@ -79,5 +79,5 @@ public class UserServiceTest {
                 new PasswordRequest("SD0000", "123123")
             );
         });
-    }
+    }*/
 }
