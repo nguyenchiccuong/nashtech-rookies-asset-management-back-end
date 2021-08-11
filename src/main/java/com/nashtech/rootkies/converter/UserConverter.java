@@ -22,13 +22,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
-=======
-import java.util.List;
 import java.util.stream.Collectors;
->>>>>>> develop
 
 @Component
 public class UserConverter {
@@ -94,7 +90,6 @@ public class UserConverter {
         return user;
     }
 
-<<<<<<< HEAD
     public UserDTO convertToDto(User user) {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         //gender
@@ -135,8 +130,8 @@ public class UserConverter {
     }
 
     public User convertEditUserDTOtoEntity(EditUserDTO editUserDTO) throws ConvertEntityDTOException {
-        try{
-            User user = modelMapper.map(editUserDTO , User.class);
+        try {
+            User user = modelMapper.map(editUserDTO, User.class);
             //gender
             user.setGender(Gender.valueOf(editUserDTO.getGender()));
             //role
@@ -147,8 +142,11 @@ public class UserConverter {
             user.setDateOfBirth(LocalDateTime.parse(editUserDTO.getDateOfBirth(), formatter));
             user.setJoinedDate(LocalDateTime.parse(editUserDTO.getJoinedDate(), formatter));
             return user;
-        } catch(Exception ex){
-=======
+        } catch (Exception ex) {
+            throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
+        }
+    }
+
     public User convertToEntity(CreateUserDTO dto) throws ConvertEntityDTOException {
         try {
             User user = modelMapper.map(dto, User.class);
@@ -170,7 +168,6 @@ public class UserConverter {
                     .collect(Collectors.toSet()));*/
             return dto;
         } catch (Exception ex) {
->>>>>>> develop
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }
