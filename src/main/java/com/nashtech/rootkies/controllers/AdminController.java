@@ -60,7 +60,7 @@ public class AdminController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(value = "/user/save")
     public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
