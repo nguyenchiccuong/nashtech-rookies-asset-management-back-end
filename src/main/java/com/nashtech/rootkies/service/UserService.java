@@ -22,7 +22,7 @@ public interface UserService {
     boolean createUser(User user) throws CreateDataFailException;
     Boolean deleteUser(String userId) throws UserNotFoundException;
     User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException;
-    //Optional<User> getUser(String staffCode) throws UserNotFoundException;
-    //List<User> retrieveUsers() throws UserNotFoundException;
+    Optional<User> getUser(String staffCode) throws UserNotFoundException;
+    List<User> retrieveUsers() throws UserNotFoundException;
 
 }

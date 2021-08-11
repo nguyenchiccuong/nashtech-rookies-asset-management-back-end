@@ -5,9 +5,12 @@ import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
+import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.service.UserService;
 import org.slf4j.Logger;
@@ -25,6 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -49,7 +56,38 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PutMapping("/{staffcode}")
+    @GetMapping("")
+    public ResponseEntity<ResponseDTO> getAllUser() throws UserNotFoundException {
+        ResponseDTO response = new ResponseDTO();
+        List<ResponseDTO> responseDTO = new ArrayList<>();
+
+        List<User> users = userService.retrieveUsers();
+        List list = Collections.synchronizedList(new ArrayList(users));
+
+        if (responseDTO.addAll(list) == true) {
+            response.setData(userConverter.toListDto(users));
+        }
+        response.setSuccessCode(SuccessCode.USER_LOADED_SUCCESS);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{staffcode}")
+    public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            Optional<User> user = userService.getUser(staffCode);
+
+            responseDTO.setData(userConverter.convertToDto(user.get()));
+            responseDTO.setSuccessCode(SuccessCode.FIND_USER_SUCCESS);
+        } catch (Exception e){
+            throw new DataNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
+
+    @PutMapping("/update/{staffcode}")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
                                                   @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();

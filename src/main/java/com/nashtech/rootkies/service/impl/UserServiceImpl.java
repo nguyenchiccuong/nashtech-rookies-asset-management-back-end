@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    /*@Override
+    @Override
     public List<User> retrieveUsers() throws UserNotFoundException {
         try {
             List<User> users = userRepository.findAll();
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUser(String staffCode) throws UserNotFoundException {
         User user = userRepository.findByStaffCode(staffCode).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
         return Optional.of(user);
-    }*/
+    }
 
     @Override
     public User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException {
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
             }
             //auto-generated password
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
-            String password = username + '@' + user.getDateOfBirth().format(formatter);
+            String password = user.getUsername() + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
             //save
             userRepository.save(user);
