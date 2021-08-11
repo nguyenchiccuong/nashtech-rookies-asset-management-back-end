@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.dto.asset.response;
 
 import com.nashtech.rootkies.enums.Gender;
 

@@ -5,6 +5,7 @@ import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.CategoryConverter;
 import com.nashtech.rootkies.dto.category.response.BasicCategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.repository.CategoryRepository;
@@ -45,6 +46,28 @@ public class CategoryServiceImpl implements CategoryService {
             return responseDto;
         } catch (Exception e) {
             throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_CATEGORY_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO saveCategory(Category category) throws CreateDataFailException {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            Category categorySave;
+            try {
+                categorySave = categoryRepository.save(category);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_CATEGORY_FAIL);
+            }
+
+            responseDto.setSuccessCode(SuccessCode.CATEGORY_CREATED_SUCCESS);
+            responseDto.setData(categoryConverter.convertEntityToBasicDTO(categorySave));
+            return responseDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_CATEGORY_FAIL);
         }
     }
 

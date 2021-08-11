@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.dto.asset.response;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
