@@ -1,6 +1,8 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
@@ -30,6 +32,6 @@ public interface AssetService {
                         Long locationId) throws DataNotFoundException;
 
         public ResponseDTO saveAsset(Asset asset) throws CreateDataFailException;
-
+        public EditAssetDTO editAsset(String assetCode, EditAssetRequest editAssetRequest);
         public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException, DeleteDataFailException;
 }

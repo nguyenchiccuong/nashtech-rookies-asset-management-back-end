@@ -4,6 +4,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
@@ -102,6 +103,16 @@ public class UserController {
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
+    }
+    //changepssword
+    @PutMapping("/password/{username}")
+    public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
+                                                      @RequestBody ChangePasswordRequest request) {
+        String message = userService.changePassword(username, request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(message);
+        response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 
 

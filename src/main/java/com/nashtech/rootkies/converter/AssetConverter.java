@@ -9,6 +9,7 @@ import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import com.nashtech.rootkies.dto.asset.response.CreateAssetResponseDTO;
 import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
@@ -106,5 +107,18 @@ public class AssetConverter {
             e.printStackTrace();
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
+    }
+
+    public EditAssetDTO toDTO(Asset asset) {
+        EditAssetDTO dto = new EditAssetDTO();
+        dto.setAssetCode(asset.getAssetCode());
+        dto.setAssetName(asset.getAssetName());
+        dto.setState(asset.getState());
+        dto.setInstallDate(asset.getInstallDate());
+        dto.setLocationId(asset.getLocation().getLocationId());
+        dto.setSpecification(asset.getSpecification());
+        dto.setIsDeleted(asset.getIsDeleted());
+        dto.setCategoryId(asset.getCategory().getCategoryCode());
+        return dto;
     }
 }
