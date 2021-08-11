@@ -1,6 +1,12 @@
 
 package com.nashtech.rootkies.service.impl;
 
+import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
+import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
+import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,6 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +48,8 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
 
     private final AssetConverter assetConverter;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter) {
@@ -301,6 +315,87 @@ public class AssetServiceImpl implements AssetService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSET_FAIL);
+        }
+    }
+    //Edit Asset
+
+    public Boolean checkFormatDate(String date) {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(date);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public EditAssetDTO editAsset(String assetCode, EditAssetRequest editAssetRequest) {
+        Asset asset = assetRepository.findById(assetCode).orElseThrow(
+                () -> new ApiRequestException(ErrorCode.ASSET_NOT_FOUND)
+        );
+
+        if(asset.getIsDeleted()){
+            throw new ApiRequestException(ErrorCode.ASSET_IS_DELETED);
+        }
+
+        List<Assignment> assignments = assignmentRepository.findByAsset(asset);
+        if(assignments.size() > 0) {
+            throw new ApiRequestException(ErrorCode.ASSET_ALREADY_ASSIGNED);
+        }
+
+        String name = editAssetRequest.getName();
+        String specification = editAssetRequest.getSpecification();
+        String installDate = editAssetRequest.getInstallDate();
+        String state = editAssetRequest.getState();
+
+        if(name == null || name.trim().length() == 0) {
+            throw new ApiRequestException(ErrorCode.NAME_IS_EMPTY);
+        }
+
+        if(specification == null || specification.trim().length() == 0) {
+            throw new ApiRequestException(ErrorCode.SPEC_IS_EMPTY);
+        }
+
+        if(checkFormatDate(installDate) == false) {
+            throw new ApiRequestException(ErrorCode.DATE_INCORRECT_FORMAT);
+        }
+
+        if(!state.trim().equalsIgnoreCase("available")
+                && !state.trim().equalsIgnoreCase("not available")
+                && !state.trim().equalsIgnoreCase("waiting for recycling")
+                && !state.trim().equalsIgnoreCase("recycled")
+        ){
+            throw new ApiRequestException(ErrorCode.STATE_INCORRECT_FORMAT);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(installDate + " 00:00:00", formatter);
+
+        asset.setAssetName(name);
+        asset.setSpecification(specification);
+        asset.setInstallDate(dateTime);
+
+        if(state.trim().equalsIgnoreCase("available")){
+            asset.setState(State.AVAILABLE);
+        }
+        else if(state.trim().equalsIgnoreCase("not available")){
+            asset.setState(State.NOT_AVAILABLE);
+        }
+        else if(state.trim().equalsIgnoreCase("waiting for recycling")){
+            asset.setState(State.WAITING_FOR_RECYCLING);
+        }
+        else{
+            asset.setState(State.RECYLED);
+        }
+
+        try{
+            asset = assetRepository.save(asset);
+            EditAssetDTO dto = assetConverter.toDTO(asset);
+            return dto;
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_EDIT_ASSET);
         }
     }
 

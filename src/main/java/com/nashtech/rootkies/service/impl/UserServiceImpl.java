@@ -3,6 +3,7 @@ package com.nashtech.rootkies.service.impl;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.PageDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.UserNotFoundException;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -117,7 +119,38 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public String changePassword(String username, ChangePasswordRequest changePasswordRequest) {
+        String oldPassword = changePasswordRequest.getOldPassword();
+        String newPassword = changePasswordRequest.getNewPassword();
 
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if(optionalUser.isPresent() == false) {
+            throw new ApiRequestException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if(checkOldPassword(username, oldPassword) == false) {
+            throw new ApiRequestException(ErrorCode.PASSWORD_NOT_CORRECT);
+        }
+
+        if(newPassword == null || newPassword.trim().length() == 0){
+            throw new ApiRequestException(ErrorCode.PASSWORD_IS_EMPTY);
+        }
+
+        if(newPassword.equals(oldPassword)){
+            throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
+        }
+
+        try{
+            User user = optionalUser.get();
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+            return "Success to change password.";
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
+        }
+    }
 
 
     @Override
