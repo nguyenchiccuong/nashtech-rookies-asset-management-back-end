@@ -58,6 +58,7 @@ public class UserController {
     UserConverter userConverter;
 
     @GetMapping("/home")
+    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
     }
@@ -100,6 +101,7 @@ public class UserController {
 
 
     @PutMapping("/password/first")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -110,6 +112,7 @@ public class UserController {
 
 
     @PostMapping(value = "/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
