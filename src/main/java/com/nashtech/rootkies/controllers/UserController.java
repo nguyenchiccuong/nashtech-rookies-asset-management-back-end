@@ -60,6 +60,7 @@ public class UserController {
     UserConverter userConverter;
 
     @GetMapping("/home")
+    @PreAuthorize("hasRole('USER')")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
     }
@@ -67,6 +68,7 @@ public class UserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
                                                   @RequestParam Integer size,
                                                   @RequestParam String sort,
@@ -101,6 +103,7 @@ public class UserController {
     }
 
     @PutMapping("/password/first")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
@@ -110,6 +113,7 @@ public class UserController {
     }
 
     @GetMapping("/{staffcode}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
@@ -125,6 +129,7 @@ public class UserController {
 
 
     @PostMapping(value = "/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
@@ -135,6 +140,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{staffcode}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
                                                   @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
