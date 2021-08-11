@@ -56,16 +56,15 @@ public class UserController {
 
     @Autowired
     UserConverter userConverter;
-<<<<<<< HEAD
 
     @GetMapping("/home")
     public String getHome() {
         return "<h1>USER Home Page</h1>";
-=======
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
                                                   @RequestParam Integer size,
                                                   @RequestParam String sort,
@@ -97,7 +96,6 @@ public class UserController {
             response.setErrorCode(ErrorCode.GET_USER_FAIL);
             return ResponseEntity.badRequest().body(response);
         }
->>>>>>> develop
     }
 
 
@@ -121,5 +119,4 @@ public class UserController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 }
