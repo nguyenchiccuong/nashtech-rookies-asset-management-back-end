@@ -50,7 +50,7 @@ public class AdminController {
 
     @PutMapping("/password/first")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
+        String response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);

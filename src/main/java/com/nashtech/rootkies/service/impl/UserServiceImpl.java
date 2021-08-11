@@ -5,13 +5,9 @@ import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
-import com.nashtech.rootkies.exception.ResourceNotFoundException;
-import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
-import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
-import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
 import com.nashtech.rootkies.service.UserService;
@@ -24,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -33,9 +28,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -47,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private AuthService authService;
 
     @Override
-    public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest) {
+    public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
         String id = passwordRequest.getStaffCode();
         String newPassword = passwordRequest.getNewPassword();
 
@@ -65,10 +57,8 @@ public class UserServiceImpl implements UserService {
 
         try{
             user.setPassword(encoder.encode(newPassword));
-            user.setFirstLogin(true);
-            user = userRepository.save(user);
-            LoginRequest loginRequest = new LoginRequest(user.getUsername(), newPassword);
-            return authService.signIn(loginRequest);
+            userRepository.save(user);
+            return "Success to change password.";
         }
         catch(Exception e){
             throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
@@ -163,47 +153,5 @@ public class UserServiceImpl implements UserService {
             throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
         }
     }
-
-    @Override
-    public List<User> retrieveUsers() throws UserNotFoundException {
-        try {
-            List<User> users = userRepository.findAll();
-            return users;
-        } catch (Exception exception) {
-            throw new UserNotFoundException(ErrorCode.ERR_USER_EXISTED);
-        }
-    }
-
-    @Override
-    public Optional<User> getUser(String staffCode) throws UserNotFoundException {
-        User user = userRepository.findByStaffCode(staffCode).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
-        return Optional.of(user);
-    }
-
-    @Override
-    public User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException {
-        User userExist = userRepository.findByStaffCode(userId).orElseThrow(() ->
-                new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
-        Role roleExist = roleRepository.findByRoleName(user.getRole().getRoleName()).orElseThrow(() ->
-                new ResourceNotFoundException(ErrorCode.ERR_ROLE_NOT_FOUND));
-
-//        userExist.setFirstName(userDTO.getFirstName());
-//        userExist.setLastName(userDTO.getLastName());
-        userExist.setDateOfBirth(user.getDateOfBirth());
-        userExist.setJoinedDate(user.getJoinedDate());
-        userExist.setGender(user.getGender());
-        userExist.setRole(roleExist);
-
-        user = userRepository.save(userExist);
-        return userExist;
-    }
-
-    @Override
-    public Boolean deleteUser(String userId) throws UserNotFoundException {
-        User user = userRepository.findByStaffCode(userId).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
-        //user.setIsDeleted(Boolean.TRUE);
-        this.userRepository.delete(user);
-        return true;
-    }
-
+  
 }

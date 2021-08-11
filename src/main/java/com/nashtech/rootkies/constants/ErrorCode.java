@@ -64,5 +64,4 @@ public  class ErrorCode {
     public static final String ERR_ORGANIZATION_EXISTED     = "ERR_ORGANIZATION_EXISTED";
     public static final String CREATE_ORGANIZATION_FAIL     = "CREATE_ORGANIZATION_FAIL";
     public static final String ERR_ORGANIZATION_NOT_FOUND   = "ERR_ORGANIZATION_NOT_FOUND";
-    public static final String ERR_ROLE_NOT_FOUND = "ERR_ROLE_NOT_FOUND";
 }
