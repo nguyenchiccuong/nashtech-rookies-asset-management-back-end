@@ -13,6 +13,7 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.organization.request.CreateOrganizationDTO;
 import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.Category;
@@ -68,4 +69,20 @@ public class AdminController {
         responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
         return ResponseEntity.ok().body(responseDTO);
     }
+
+    @PutMapping("/user/update/{staffcode}")
+    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
+                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
+            User updateUser = userService.updateUser(staffcode, user);
+            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
+        } catch (Exception e){
+            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
 }

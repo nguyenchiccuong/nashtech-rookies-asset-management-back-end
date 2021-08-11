@@ -86,23 +86,6 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
-
-    @PutMapping("/update/{staffcode}")
-    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
-                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        try {
-            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
-            User updateUser = userService.updateUser(staffcode, user);
-            responseDTO.setData(userConverter.convertToDto(updateUser));
-            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
-        } catch (Exception e){
-            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
-        }
-        return ResponseEntity.ok(responseDTO);
-    }
-
-
      @Autowired
      UserConverter userConverter;
      private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
