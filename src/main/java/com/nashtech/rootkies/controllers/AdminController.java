@@ -39,7 +39,6 @@ public class AdminController {
     private UserConverter userConverter;
 
     @GetMapping("/home")
-    @PreAuthorize("hasRole('ADMIN')")
     public String getHome() {
         return "<h1>ADMIN Home Page</h1>";
     }

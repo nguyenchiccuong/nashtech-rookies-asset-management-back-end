@@ -1,6 +1,7 @@
 package com.nashtech.rootkies.service.impl;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -59,26 +61,12 @@ public class UserServiceImpl implements UserService {
     private AuthService authService;
 
     @Override
-    public PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException {
-        try{
-            Page<User> page =  repository.findAll(specification , pageable);
-            PageDTO pageDTO= converter.pageToPageDto(page);
-            return  pageDTO;
-        }catch (Exception exception){
-            throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
-        }
-
-
-
-    }
-
-    @Override
-    public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest) {
+    public String changePasswordFirstLogin(PasswordRequest passwordRequest) {
         String id = passwordRequest.getStaffCode();
         String newPassword = passwordRequest.getNewPassword();
 
         User user = userRepository.findById(id).orElseThrow(
-            () -> new ApiRequestException(ErrorCode.USER_NOT_FOUND)
+                () -> new ApiRequestException(ErrorCode.USER_NOT_FOUND)
         );
 
         if(user.getIsDeleted()){
@@ -89,16 +77,10 @@ public class UserServiceImpl implements UserService {
             throw new ApiRequestException(ErrorCode.PASSWORD_IS_EMPTY);
         }
 
-        if(checkOldPassword(user.getUsername(), newPassword)){
-            throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
-        }
-
         try{
             user.setPassword(encoder.encode(newPassword));
-            user.setFirstLogin(true);
-            user = userRepository.save(user);
-            LoginRequest loginRequest = new LoginRequest(user.getUsername(), newPassword);
-            return authService.signIn(loginRequest);
+            userRepository.save(user);
+            return "Success to change password.";
         }
         catch(Exception e){
             throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
@@ -108,7 +90,7 @@ public class UserServiceImpl implements UserService {
     public Boolean checkOldPassword(String username, String password){
         try{
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password));
+                    new UsernamePasswordAuthenticationToken(username, password));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         catch(Exception e){
@@ -117,6 +99,38 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    @Override
+    public String changePassword(String username, ChangePasswordRequest changePasswordRequest) {
+        String oldPassword = changePasswordRequest.getOldPassword();
+        String newPassword = changePasswordRequest.getNewPassword();
+
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if(optionalUser.isPresent() == false) {
+            throw new ApiRequestException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if(checkOldPassword(username, oldPassword) == false) {
+            throw new ApiRequestException(ErrorCode.PASSWORD_NOT_CORRECT);
+        }
+
+        if(newPassword == null || newPassword.trim().length() == 0){
+            throw new ApiRequestException(ErrorCode.PASSWORD_IS_EMPTY);
+        }
+
+        if(newPassword.equals(oldPassword)){
+            throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
+        }
+
+        try{
+            User user = optionalUser.get();
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+            return "Success to change password.";
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_CHANGE_PASSWORD);
+        }
+    }
 
 
 

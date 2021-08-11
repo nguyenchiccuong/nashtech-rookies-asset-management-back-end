@@ -11,6 +11,7 @@ import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
@@ -34,12 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +50,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/home")
+    public String getHome() {
+        return "<h1>USER Home Page</h1>";
     @Autowired
     UserConverter userConverter;
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -95,13 +94,22 @@ public class UserController {
 
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
-        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
+        String response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
+    }
+    //changepssword
+    @PutMapping("/password/{username}")
+    public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
+                                                      @RequestBody ChangePasswordRequest request) {
+        String message = userService.changePassword(username, request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(message);
+        response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 
 
