@@ -4,8 +4,13 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.*;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.brand.request.CreateBrandDTO;
 import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
+import com.nashtech.rootkies.dto.category.request.SearchCategoryDTO;
+import com.nashtech.rootkies.dto.category.request.UpdateCategoryDTO;
+import com.nashtech.rootkies.dto.category.response.CategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.organization.request.CreateOrganizationDTO;
 import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
@@ -44,9 +49,8 @@ public class AdminController {
     }
 
     @PutMapping("/password/first")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest) {
-        JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
+    public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
+        String response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
@@ -54,8 +58,7 @@ public class AdminController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
-            throws ConvertEntityDTOException, CreateDataFailException {
+    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
         Boolean check = userService.createUser(user);
