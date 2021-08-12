@@ -227,7 +227,7 @@ VALUES
 INSERT INTO public.users
     (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
 VALUES
-    ('SD0003', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$G9L9OcCBIGTgaAIw19s9yO28qrG51R/wUSj7Ain0wNhu7t24O2VxC', 'nhimh2', 101, 1002);
+    ('SD0003', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$G9L9OcCBIGTgaAIw19s9yO28qrG51R/wUSj7Ain0wNhu7t24O2VxC', 'nhimh2', 102, 1002);
 INSERT INTO public.users
     (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
 VALUES
@@ -239,4 +239,7 @@ VALUES
 INSERT INTO public.users
     (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
 VALUES
-    ('SD0006', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$G9L9OcCBIGTgaAIw19s9yO28qrG51R/wUSj7Ain0wNhu7t24O2VxC', 'nhimh5', 101, 1001);
+    ('SD0006', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$G9L9OcCBIGTgaAIw19s9yO28qrG51R/wUSj7Ain0wNhu7t24O2VxC', 'nhimh5', 102, 1001);
+
+
+
