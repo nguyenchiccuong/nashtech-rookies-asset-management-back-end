@@ -439,4 +439,23 @@ public class AssetServiceImpl implements AssetService {
 
     }
 
+    @Override
+    public ResponseDTO checkDeleteAssetByAssetCode(Long locationId, String assetCode)
+            throws DataNotFoundException, DeleteDataFailException {
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Asset> asset;
+
+        asset = assetRepository.findByAssetCode(locationId, assetCode);
+        if (!asset.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
+
+        if (asset.get().getAssignments().size() > 0) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+        } else {
+            responseDto.setSuccessCode(SuccessCode.ASSET_ABLE_TO_DELETE);
+            return responseDto;
+        }
+    }
+
 }

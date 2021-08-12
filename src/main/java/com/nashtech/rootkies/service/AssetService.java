@@ -32,6 +32,12 @@ public interface AssetService {
                         Long locationId) throws DataNotFoundException;
 
         public ResponseDTO saveAsset(Asset asset) throws CreateDataFailException;
+
         public EditAssetDTO editAsset(String assetCode, EditAssetRequest editAssetRequest);
-        public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode) throws DataNotFoundException, DeleteDataFailException;
+
+        public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode)
+                        throws DataNotFoundException, DeleteDataFailException;
+
+        public ResponseDTO checkDeleteAssetByAssetCode(Long locationId, String assetCode)
+                        throws DataNotFoundException, DeleteDataFailException;;
 }
