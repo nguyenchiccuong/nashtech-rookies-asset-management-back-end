@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditUserDTO {
-    private String firstName;
-    private String lastName;
     private String dateOfBirth;
     private String joinedDate;
     private String gender;

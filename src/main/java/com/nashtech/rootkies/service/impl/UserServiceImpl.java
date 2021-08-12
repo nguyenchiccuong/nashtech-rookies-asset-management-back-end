@@ -182,8 +182,6 @@ public class UserServiceImpl implements UserService {
         Role roleExist = roleRepository.findByRoleName(user.getRole().getRoleName()).orElseThrow(() ->
                 new ResourceNotFoundException(ErrorCode.ERR_ROLE_NOT_FOUND));
 
-//        userExist.setFirstName(userDTO.getFirstName());
-//        userExist.setLastName(userDTO.getLastName());
         userExist.setDateOfBirth(user.getDateOfBirth());
         userExist.setJoinedDate(user.getJoinedDate());
         userExist.setGender(user.getGender());

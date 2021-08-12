@@ -131,7 +131,7 @@ public class UserController {
     }
 
     @GetMapping("/{staffcode}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
