@@ -21,7 +21,6 @@ import java.util.List;
 public interface UserService {
 
     public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest);
-    String changePassword(String username, ChangePasswordRequest changePasswordRequest);
     //User getUser(Long id) throws UserNotFoundException;
     //boolean createUser(User user) throws UpdateDataFailException;
     PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
