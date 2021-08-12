@@ -53,8 +53,6 @@ public class UserConverterTest {
     @Test
     public void convertEditUserDTOtoEntityTest() throws ConvertEntityDTOException {
         EditUserDTO editUserDTO = new EditUserDTO();
-        editUserDTO.setFirstName("Nhi");
-        editUserDTO.setLastName("Mai Hoang");
         editUserDTO.setGender("Female");
         editUserDTO.setDateOfBirth("2000-06-01 00:00");
         editUserDTO.setJoinedDate("2021-08-10 00:00");
@@ -62,8 +60,6 @@ public class UserConverterTest {
 
         User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
         assertEquals(editUserDTO.getGender(), user.getGender().name());
-        assertEquals(editUserDTO.getLastName(), user.getLastName());
-        assertEquals(editUserDTO.getFirstName(), user.getFirstName());
     }
 
     @Test
