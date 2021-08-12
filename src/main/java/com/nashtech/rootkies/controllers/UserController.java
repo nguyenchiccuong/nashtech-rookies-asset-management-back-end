@@ -159,7 +159,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{staffcode}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
                                                   @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();

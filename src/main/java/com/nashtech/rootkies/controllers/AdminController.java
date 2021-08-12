@@ -54,4 +54,15 @@ public class AdminController {
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
+    //changepssword
+    @PutMapping("/password/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
+                                                      @RequestBody ChangePasswordRequest request) {
+        String message = userService.changePassword(username, request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(message);
+        response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(response);
+    }
 }
