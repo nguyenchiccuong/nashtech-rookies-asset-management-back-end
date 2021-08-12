@@ -45,6 +45,7 @@ public class ErrorCode {
     public static final String ERR_CREATE_USER_JD = "ERR_CREATE_USER_JD";
     public static final String ERR_CREATE_USER_JD_DOB = "ERR_CREATE_USER_JD_DOB";
     public static final String ERR_GET_ALL_USER = "ERR_GET_ALL_USER";
+    public static final String ERR_DISABLE_USER = "ERR_DISABLE_USER";
     public static final String ERR_UPDATE_USER_FAIL = "ERR_UPDATE_USER_FAIL";
 
     /** CONVERTER **/
@@ -72,5 +73,8 @@ public class ErrorCode {
 
     /** LOCATION **/
     public static final String ERR_LOCATION_NOT_FAIL = "ERR_LOCATION_NOT_FAIL";
+
+    /** LOCATION **/
+    public static final String ERR_CHECK_VALID_ASSIGNMENT = "ERR_CHECK_VALID_ASSIGNMENT";
 
 }

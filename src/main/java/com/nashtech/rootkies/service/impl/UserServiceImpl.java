@@ -19,6 +19,7 @@ import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
@@ -55,6 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final UserConverter converter;
+
+    @Autowired
+    private final AssignmentRepository assignmentRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -244,6 +248,25 @@ public class UserServiceImpl implements UserService {
         } catch(Exception ex){
             throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
         }
+    }
+
+    public void disableUser(String staffCode) throws DataNotFoundException {
+
+        if(!repository.checkUserExist(staffCode)){
+            throw new DataNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        repository.disableUser(staffCode);
+    }
+
+    public boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException {
+
+        if(!repository.checkUserExist(staffCode)){
+            throw new DataNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // check user have any valid assignment or not
+        return assignmentRepository.checkAnyValidAssignment(staffCode);
     }
   
 }

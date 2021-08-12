@@ -130,6 +130,39 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/checkHaveAssignment/{staffCode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> checkAnyValidAssignment(@PathVariable String staffCode){
+        ResponseDTO response = new ResponseDTO();
+
+        try{
+
+            response.setData(userService.checkAnyValidAssignment(staffCode));
+            response.setSuccessCode(SuccessCode.CHECK_HAVE_ASSIGNMENT_SUCCESS);
+            return ResponseEntity.ok().body(response);
+        }catch (Exception exception){
+
+            response.setErrorCode(ErrorCode.ERR_CHECK_VALID_ASSIGNMENT);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @DeleteMapping("/{staffCode}")
+    public ResponseEntity<ResponseDTO> disableUser(@PathVariable String staffCode){
+        ResponseDTO response = new ResponseDTO();
+
+        try{
+
+            userService.disableUser(staffCode);
+            response.setSuccessCode(SuccessCode.DISABLE_USER_SUCCESS);
+            return ResponseEntity.ok().body(response);
+
+        }catch (Exception ex){
+            response.setErrorCode(ErrorCode.ERR_DISABLE_USER);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
     @GetMapping("/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
