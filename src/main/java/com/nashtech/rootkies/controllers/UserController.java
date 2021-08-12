@@ -88,7 +88,6 @@ public class UserController {
                 pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
             }
 
-
             UserSpecificationBuilder builder = new UserSpecificationBuilder();
             Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
             Matcher matcher = pattern.matcher(search + ",");
@@ -185,8 +184,8 @@ public class UserController {
             throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
+        User saveUser = userService.createUser(user);
+        responseDTO.setData(userConverter.convertToDto(saveUser));
         responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
         return ResponseEntity.ok().body(responseDTO);
     }

@@ -215,16 +215,8 @@ public class UserServiceImpl implements UserService {
 
      */
     @Override
-    public boolean createUser(User user) throws CreateDataFailException {
+    public User createUser(User user) throws CreateDataFailException {
         try{
-            //validation
-            /*if (user.getDateOfBirth().until(LocalDateTime.now(), ChronoUnit.YEARS) < 18)
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
-            if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
-            DayOfWeek day = user.getJoinedDate().getDayOfWeek();
-            if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD);*/
             user.setIsDeleted(false);
             user.setFirstLogin(false);
             //auto-generated username
@@ -243,8 +235,8 @@ public class UserServiceImpl implements UserService {
             String password = user.getUsername() + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
             //save
-            userRepository.save(user);
-            return true;
+            User saveUser = userRepository.save(user);
+            return saveUser;
         } catch(Exception ex){
             throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
         }

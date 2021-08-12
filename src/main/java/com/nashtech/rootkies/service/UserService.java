@@ -34,11 +34,9 @@ public interface UserService {
     PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
 
 
+    User createUser(User user) throws CreateDataFailException;
     void disableUser(String staffCode) throws DataNotFoundException;
-
     boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException;
-
-    boolean createUser(User user) throws CreateDataFailException;
     Boolean deleteUser(String userId) throws UserNotFoundException;
     User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException;
     Optional<User> getUser(String staffCode) throws UserNotFoundException;
