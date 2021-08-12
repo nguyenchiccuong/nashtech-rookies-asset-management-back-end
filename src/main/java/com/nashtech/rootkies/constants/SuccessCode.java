@@ -28,4 +28,6 @@ public class SuccessCode {
     /** ROLE **/
     public static final String GET_ALL_ROLE_SUCCESS       = "GET_ALL_ROLE_SUCCESS";
 
+    public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
+    public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
 }

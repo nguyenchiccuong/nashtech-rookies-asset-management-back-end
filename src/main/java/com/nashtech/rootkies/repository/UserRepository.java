@@ -11,8 +11,8 @@ import com.nashtech.rootkies.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> , JpaSpecificationExecutor<User> {
 	Optional<User> findByUsername(String username);
-
 	Boolean existsByUsername(String username);
+	Optional<User> findByStaffCode(String staffcode);
 
 	//Boolean existsByEmail(String email);
 }

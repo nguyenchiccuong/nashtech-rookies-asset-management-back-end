@@ -24,11 +24,17 @@ public class UserRepositotyTest {
 
     /*@Test
     public void existsByUsernameTest() {
-        Optional<User> user = userRepository.findById("SD0001");
+        Optional<User> user = userRepository.findByStaffCode("SD0001");
         assertNotNull(user);
         String username = user.get().getUsername();
         Boolean check = userRepository.existsByUsername(username);
         assertEquals(check, true);
+    }
+
+    @Test
+    public void findByStaffCodeTest() {
+        Optional<User> user = userRepository.findByStaffCode("SD0001");
+        assertEquals("SD0001", user.get().getStaffCode());
     }
 
     @Test

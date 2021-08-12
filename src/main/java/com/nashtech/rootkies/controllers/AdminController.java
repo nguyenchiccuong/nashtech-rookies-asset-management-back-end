@@ -8,6 +8,7 @@ import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.Category;
