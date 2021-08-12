@@ -49,7 +49,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
- @Api( tags = "User")
+@Api( tags = "User")
 public class UserController {
 
     @Autowired
