@@ -87,7 +87,7 @@ public class AssetController {
 
     }
 
-    @GetMapping("/filter-search-sort")
+    @PostMapping("/filter-search-sort")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> retrieveAssetHavingFilterSearchSort(HttpServletRequest req,
             @RequestParam(name = "page", required = true) Integer pageNum,
@@ -100,7 +100,7 @@ public class AssetController {
                 searchFilterSortAssetDTO, locationId));
     }
 
-    @GetMapping("/count/filter-search-sort")
+    @PostMapping("/count/filter-search-sort")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> countAssetHavingFilterSearchSort(HttpServletRequest req,
             @RequestBody SearchFilterSortAssetDTO searchFilterSortAssetDTO) throws DataNotFoundException {
