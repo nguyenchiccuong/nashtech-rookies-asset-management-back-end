@@ -53,15 +53,4 @@ public class AdminController {
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
-
-    @PostMapping(value = "/save")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
-            throws ConvertEntityDTOException, CreateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
-        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
-        return ResponseEntity.ok().body(responseDTO);
-    }
 }

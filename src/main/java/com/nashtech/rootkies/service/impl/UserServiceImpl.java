@@ -69,9 +69,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception exception){
             throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
         }
-
-
-
     }
 
     @Override
@@ -140,7 +137,6 @@ public class UserServiceImpl implements UserService {
         if(newPassword.equals(oldPassword)){
             throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
         }
-
         try{
             User user = optionalUser.get();
             user.setPassword(encoder.encode(newPassword));
