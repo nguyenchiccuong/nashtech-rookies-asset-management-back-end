@@ -145,10 +145,11 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
-
+    
     @PostMapping(value = "/save")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws ConvertEntityDTOException, CreateDataFailException {
+    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
+            throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
         Boolean check = userService.createUser(user);

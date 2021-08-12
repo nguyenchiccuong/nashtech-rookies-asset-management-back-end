@@ -80,9 +80,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception exception){
             throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
         }
-
-
-
     }
 
     @Override
