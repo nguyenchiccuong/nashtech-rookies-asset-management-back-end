@@ -24,8 +24,12 @@ public class SuccessCode {
 
     /** USER **/
     public static final String GET_USER_SUCCESS       = "GET_USER_SUCCESS";
+    public static final String DISABLE_USER_SUCCESS       = "DISABLE_USER_SUCCESS";
 
     /** ROLE **/
     public static final String GET_ALL_ROLE_SUCCESS       = "GET_ALL_ROLE_SUCCESS";
+
+    /** ASSIGNMENT **/
+    public static final String CHECK_HAVE_ASSIGNMENT_SUCCESS       = "CHECK_HAVE_ASSIGNMENT_SUCCESS";
 
 }

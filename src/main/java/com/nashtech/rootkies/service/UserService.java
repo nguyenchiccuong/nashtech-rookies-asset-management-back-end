@@ -29,4 +29,8 @@ public interface UserService {
     public String changePassword(String username, ChangePasswordRequest changePasswordRequest);
     boolean createUser(User user) throws CreateDataFailException;
 
+    void disableUser(String staffCode) throws DataNotFoundException;
+
+    boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException;
+
 }
