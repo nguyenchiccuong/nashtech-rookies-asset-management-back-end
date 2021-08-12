@@ -149,7 +149,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public boolean createUser(User user) throws CreateDataFailException {
         try{

@@ -1,11 +1,14 @@
 package com.nashtech.rootkies.controllers;
 
+import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import com.nashtech.rootkies.converter.LocationConverter;
+import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
@@ -24,15 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -139,5 +135,15 @@ public class AssetController {
     }
 
     // remeber to research valid only work when input or output
-
+//edit asset
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<ResponseDTO> editAsset(@PathVariable("id") String id,
+                                                 @RequestBody EditAssetRequest editAssetRequest)
+    {
+        EditAssetDTO editAssetDTO = assetService.editAsset(id, editAssetRequest);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(editAssetDTO);
+        response.setSuccessCode(SuccessCode.ASSET_EDIT_SUCCESS);
+        return ResponseEntity.ok(response);
+    }
 }

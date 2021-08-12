@@ -26,7 +26,7 @@ public interface UserService {
     //boolean createUser(User user) throws UpdateDataFailException;
     PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
 
-
+    public String changePassword(String username, ChangePasswordRequest changePasswordRequest);
     boolean createUser(User user) throws CreateDataFailException;
 
 }
