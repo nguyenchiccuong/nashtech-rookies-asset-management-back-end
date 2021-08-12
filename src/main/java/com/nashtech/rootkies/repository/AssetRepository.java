@@ -14,10 +14,10 @@ import com.nashtech.rootkies.model.Asset;
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecificationExecutor<Asset> {
 
-    @Query("FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false and (a.state = 1 or a.state = 2 or a.state = 3)")
+    @Query("FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false AND (a.state = 1 OR a.state = 2 OR a.state = 3)")
     public Page<Asset> getAllByLocationAndDefaultState(Pageable page, Long locationId);
 
-    @Query("SELECT COUNT (*) FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false and (a.state = 1 or a.state = 2 or a.state = 3)")
+    @Query("SELECT COUNT (*) FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false AND (a.state = 1 OR a.state = 2 OR a.state = 3)")
     public Long CountAllByLocationAndDefaultState(Long locationId);
 
     @Query("FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false AND a.assetCode = ?2")

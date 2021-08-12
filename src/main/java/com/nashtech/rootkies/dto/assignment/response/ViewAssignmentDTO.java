@@ -1,8 +1,9 @@
 package com.nashtech.rootkies.dto.assignment.response;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
-public class ViewAssignment {
+public class ViewAssignmentDTO {
     private Long assignmentId;
 
     private UserDTO assignedTo;
@@ -16,4 +17,6 @@ public class ViewAssignment {
     private String note;
 
     private AssetDTO asset;
+
+    private Collection<RequestDTO> requests;
 }

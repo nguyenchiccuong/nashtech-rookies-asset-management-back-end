@@ -9,12 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AssetDTO {
-    private String assetCode;
-
-    private String assetName;
-
-    private String specification;
-
-    private CategoryDTO category;
+public class NumberOfAssignmentDTO {
+    private Long numberOfEntity;
 }

@@ -7,17 +7,20 @@ import com.nashtech.rootkies.exception.DataNotFoundException;
 import org.springframework.data.domain.Pageable;
 
 public interface AssignmentService {
-        // Assignment list can be sorted by column titles (default: ascending)
+        // search assignment (by asset code or asset name or assignee’s username) and
+        // filter assignment (by state, assigned date)
 
+        // sort by asset code, asset name, category, assigne date, state, assign to,
+        // assign by, id
         // -------------------------------------------------------------------------------------
-        // By default, it displays all assets having state = Available, Not available,
-        // Assigned and location of the user
+        // view assignment list, state = 1,2,3 and isdelete =false and location of the
+        // user
         public ResponseDTO countAssignment(Long locationId) throws DataNotFoundException;
 
         public ResponseDTO retrieveAssignments(Pageable page, Long locationId) throws DataNotFoundException;
         // -------------------------------------------------------------------------------------
 
-        public ResponseDTO retrieveAssignmentByAssignmentCode(Long locationId, String assignmentCode)
+        public ResponseDTO retrieveAssignmentByAssignmentId(Long locationId, Long assignmentId)
                         throws DataNotFoundException;
 
         public ResponseDTO countAssignmentHavingFilterSearchSort();

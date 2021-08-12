@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,32 +55,32 @@ public class AssignmentController {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity.ok(assignmentService.retrieveAssignments(
-                PageRequest.of(pageNum, numOfItems, Sort.by("assetName").ascending()), locationId));
+                PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending()), locationId));
     }
 
     @GetMapping("/count")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> countAsset(HttpServletRequest req) throws DataNotFoundException {
+    public ResponseEntity<ResponseDTO> countAssignment(HttpServletRequest req) throws DataNotFoundException {
         String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity.ok(assignmentService.countAssignment(locationId));
     }
 
-    @GetMapping("/{assignmentCode}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> retrieveAssetById(HttpServletRequest req,
-            @PathVariable("assignmentCode") String assignmentCode) throws DataNotFoundException {
+    @GetMapping("/{assignmentId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> retrieveAssignmentById(HttpServletRequest req,
+            @PathVariable("assignmentId") Long assignmentId) throws DataNotFoundException {
         String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
-        return ResponseEntity.ok(assignmentService.retrieveAssignmentByAssignmentCode(locationId, assignmentCode));
+        return ResponseEntity.ok(assignmentService.retrieveAssignmentByAssignmentId(locationId, assignmentId));
 
     }
 
-    @GetMapping("/filter-search-sort")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> retrieveAssetHavingFilterSearchSort(HttpServletRequest req,
+    @PostMapping("/filter-search-sort")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> retrieveAssignmentHavingFilterSearchSort(HttpServletRequest req,
             @RequestParam(name = "page", required = true) Integer pageNum,
             @RequestParam(name = "size", required = true) Integer numOfItems,
             @RequestBody SearchFilterSortAssignmentDTO searchFilterSortAssignmentDTO) throws DataNotFoundException {
@@ -90,9 +91,9 @@ public class AssignmentController {
                 searchFilterSortAssignmentDTO, locationId));
     }
 
-    @GetMapping("/count/filter-search-sort")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> countAssetHavingFilterSearchSort(HttpServletRequest req,
+    @PostMapping("/count/filter-search-sort")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> countAssignmentHavingFilterSearchSort(HttpServletRequest req,
             @RequestBody SearchFilterSortAssignmentDTO searchFilterSortAssignmentDTO) throws DataNotFoundException {
         String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
         String username = jwtUtils.getUserNameFromJwtToken(jwt);

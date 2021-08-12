@@ -48,13 +48,15 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
 
     private final AssetConverter assetConverter;
-    @Autowired
+
     private AssignmentRepository assignmentRepository;
 
     @Autowired
-    public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter) {
+    public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,
+            AssignmentRepository assignmentRepository) {
         this.assetRepository = assetRepository;
         this.assetConverter = assetConverter;
+        this.assignmentRepository = assignmentRepository;
     }
 
     @Override

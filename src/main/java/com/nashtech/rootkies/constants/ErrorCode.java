@@ -11,7 +11,7 @@ public class ErrorCode {
     public static final String ERR_CHANGE_PASSWORD = "ERR_CHANGE_PASSWORD";
     public static final String USER_BLOCKED = "USER_BLOCKED";
     public static final String ERR_ROLE_NOT_FOUND = "ERR_ROLE_NOT_FOUND";
-    //Asset
+    // Asset
     public static final String ASSET_NOT_FOUND = "ASSET_NOT_FOUND";
     public static final String ASSET_IS_DELETED = "ASSET_IS_DELETED";
     public static final String ASSET_ALREADY_ASSIGNED = "ASSET_ALREADY_ASSIGNED";
@@ -72,5 +72,10 @@ public class ErrorCode {
 
     /** LOCATION **/
     public static final String ERR_LOCATION_NOT_FAIL = "ERR_LOCATION_NOT_FAIL";
+
+    // ASSIGNMENT
+    public static final String ERR_COUNT_ASSIGNMENT_FAIL = "ERR_COUNT_ASSIGNMENT_FAIL";
+    public static final String ERR_RETRIEVE_ASSIGNMENT_FAIL = "ERR_RETRIEVE_ASSIGNMENT_FAIL";
+    public static final String ERR_ASSIGNMENT_ID_NOT_FOUND = "ERR_ASSIGNMENT_ID_NOT_FOUND";
 
 }
