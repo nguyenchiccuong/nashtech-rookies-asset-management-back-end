@@ -1,14 +1,15 @@
 package com.nashtech.rootkies.repository;
 
-import com.nashtech.rootkies.model.Asset;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 import java.util.Optional;
+
+import com.nashtech.rootkies.model.Asset;
 
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecificationExecutor<Asset> {
@@ -21,4 +22,6 @@ public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecif
 
     @Query("FROM Asset a WHERE a.location.locationId = ?1 AND a.isDeleted = false AND a.assetCode = ?2")
     Optional<Asset> findByAssetCode(Long locationId, String assetCode);
+
+    public List<Asset> findByAssetCodeStartingWithOrderByAssetCodeDesc(String categoryCode);
 }

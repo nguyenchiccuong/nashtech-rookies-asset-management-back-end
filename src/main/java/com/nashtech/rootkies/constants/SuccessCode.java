@@ -14,9 +14,20 @@ public class SuccessCode {
     public static final String CATEGORY_CREATED_SUCCESS = "CATEGORY_CREATED_SUCCESS";
     public static final String CATEGORY_DELETED_SUCCESS = "CATEGORY_DELETED_SUCCESS";
     public static final String CATEGORIES_LOADED_SUCCESS = "CATEGORIES_LOADED_SUCCESS";
+    public static final String ASSET_DELETE_SUCCESS = "ASSET_DELETE_SUCCESS";
 
     /** ASSET **/
     public static final String ASSET_LOADED_SUCCESS = "ASSET_LOADED_SUCCESS";
     public static final String ASSET_COUNT_SUCCESS = "ASSET_COUNT_SUCCESS";
+    public static final String ASSET_CREATED_SUCCESS = "ASSET_CREATED_SUCCESS";
+    public static final String ASSET_EDIT_SUCCESS = "ASSET_EDIT_SUCCESS";
 
+    /** USER **/
+    public static final String GET_USER_SUCCESS       = "GET_USER_SUCCESS";
+
+    /** ROLE **/
+    public static final String GET_ALL_ROLE_SUCCESS       = "GET_ALL_ROLE_SUCCESS";
+
+    public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
+    public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
 }

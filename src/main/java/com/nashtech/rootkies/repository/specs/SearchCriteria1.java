@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.repository.specs;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class LocationDTO {
-    private Long locationId;
+public class SearchCriteria1 {
+    private String key;
+    private String operation;
+    private Object value;
 
-    private String address;
 }

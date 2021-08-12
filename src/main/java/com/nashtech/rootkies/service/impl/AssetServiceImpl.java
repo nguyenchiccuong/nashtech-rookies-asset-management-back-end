@@ -1,6 +1,12 @@
 
 package com.nashtech.rootkies.service.impl;
 
+import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
+import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
+import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -8,19 +14,27 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
-import com.nashtech.rootkies.dto.asset.reponse.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.reponse.NumberOfAssetDTO;
-import com.nashtech.rootkies.dto.asset.reponse.ViewAssetDTO;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.NumberOfAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.specs.AssetSpecification;
@@ -34,6 +48,8 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
 
     private final AssetConverter assetConverter;
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter) {
@@ -99,12 +115,6 @@ public class AssetServiceImpl implements AssetService {
         } catch (Exception e) {
             throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
         }
-    }
-
-    @Override
-    public ResponseDTO countAssetHavingFilterSearchSort() {
-
-        return null;
     }
 
     @Override
@@ -306,6 +316,127 @@ public class AssetServiceImpl implements AssetService {
             e.printStackTrace();
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSET_FAIL);
         }
+    }
+    // Edit Asset
+
+    public Boolean checkFormatDate(String date) {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(date);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public EditAssetDTO editAsset(String assetCode, EditAssetRequest editAssetRequest) {
+        Asset asset = assetRepository.findById(assetCode)
+                .orElseThrow(() -> new ApiRequestException(ErrorCode.ASSET_NOT_FOUND));
+
+        if (asset.getIsDeleted()) {
+            throw new ApiRequestException(ErrorCode.ASSET_IS_DELETED);
+        }
+
+        List<Assignment> assignments = assignmentRepository.findByAsset(asset);
+        if (assignments.size() > 0) {
+            throw new ApiRequestException(ErrorCode.ASSET_ALREADY_ASSIGNED);
+        }
+
+        String name = editAssetRequest.getName();
+        String specification = editAssetRequest.getSpecification();
+        String installDate = editAssetRequest.getInstallDate();
+        String state = editAssetRequest.getState();
+
+        if (name == null || name.trim().length() == 0) {
+            throw new ApiRequestException(ErrorCode.NAME_IS_EMPTY);
+        }
+
+        if (specification == null || specification.trim().length() == 0) {
+            throw new ApiRequestException(ErrorCode.SPEC_IS_EMPTY);
+        }
+
+        if (checkFormatDate(installDate) == false) {
+            throw new ApiRequestException(ErrorCode.DATE_INCORRECT_FORMAT);
+        }
+
+        if (!state.trim().equalsIgnoreCase("available") && !state.trim().equalsIgnoreCase("not available")
+                && !state.trim().equalsIgnoreCase("waiting for recycling")
+                && !state.trim().equalsIgnoreCase("recycled")) {
+            throw new ApiRequestException(ErrorCode.STATE_INCORRECT_FORMAT);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(installDate + " 00:00:00", formatter);
+
+        asset.setAssetName(name);
+        asset.setSpecification(specification);
+        asset.setInstallDate(dateTime);
+
+        if (state.trim().equalsIgnoreCase("available")) {
+            asset.setState(State.AVAILABLE);
+        } else if (state.trim().equalsIgnoreCase("not available")) {
+            asset.setState(State.NOT_AVAILABLE);
+        } else if (state.trim().equalsIgnoreCase("waiting for recycling")) {
+            asset.setState(State.WAITING_FOR_RECYCLING);
+        } else {
+            asset.setState(State.RECYLED);
+        }
+
+        try {
+            asset = assetRepository.save(asset);
+            EditAssetDTO dto = assetConverter.toDTO(asset);
+            return dto;
+        } catch (Exception e) {
+            throw new ApiRequestException(ErrorCode.ERR_EDIT_ASSET);
+        }
+    }
+
+    @Override
+    public ResponseDTO saveAsset(Asset asset) throws CreateDataFailException {
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            Asset assetSave;
+
+            assetSave = assetRepository.save(asset);
+
+            responseDto.setData(assetConverter.convertToCreateResponseDTO(assetSave));
+            responseDto.setSuccessCode(SuccessCode.ASSET_CREATED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_ASSET_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO deleteAssetByAssetCode(Long locationId, String assetCode)
+            throws DataNotFoundException, DeleteDataFailException {
+
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Asset> asset;
+
+        asset = assetRepository.findByAssetCode(locationId, assetCode);
+        if (!asset.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
+
+        if (asset.get().getAssignments().size() > 0) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+        } else {
+            try {
+                Asset assetSave = asset.get();
+                assetSave.setIsDeleted(true);
+                assetRepository.save(assetSave);
+                responseDto.setSuccessCode(SuccessCode.ASSET_DELETE_SUCCESS);
+                return responseDto;
+            } catch (Exception e) {
+                throw new DeleteDataFailException(ErrorCode.ERR_ASSET_DELETE_FAIL);
+            }
+
+        }
+
     }
 
 }

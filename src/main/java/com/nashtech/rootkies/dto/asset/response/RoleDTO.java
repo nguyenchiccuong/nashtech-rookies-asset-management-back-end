@@ -1,4 +1,6 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.dto.asset.response;
+
+import com.nashtech.rootkies.enums.ERole;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class NumberOfAssetDTO {
-    private Long numberOfEntity;
+public class RoleDTO {
+    private Long id;
+
+    private ERole roleName;
 }

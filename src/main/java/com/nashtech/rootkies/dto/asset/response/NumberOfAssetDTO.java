@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.dto.asset.reponse;
+package com.nashtech.rootkies.dto.asset.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CategoryDTO {
-    private String categoryCode;
-
-    private String categoryName;
+public class NumberOfAssetDTO {
+    private Long numberOfEntity;
 }
