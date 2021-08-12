@@ -31,7 +31,7 @@ public interface UserService {
     String changePassword(String username, ChangePasswordRequest changePasswordRequest);
     //User getUser(Long id) throws UserNotFoundException;
     //boolean createUser(User user) throws UpdateDataFailException;
-    //PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
+    PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
 
 
     boolean createUser(User user) throws CreateDataFailException;
