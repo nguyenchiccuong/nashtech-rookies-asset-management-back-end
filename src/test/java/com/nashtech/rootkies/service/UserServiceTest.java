@@ -13,10 +13,13 @@ import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.LocationRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
+import com.nashtech.rootkies.repository.UserRepository;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
@@ -35,7 +38,7 @@ public class UserServiceTest {
     @Autowired
     RoleRepository roleRepository;
 
-    @Test
+    /*@Test
     public void createUserTest() throws CreateDataFailException {
         User user = new User();
         user.setFirstName("Nhi");
@@ -71,7 +74,8 @@ public class UserServiceTest {
         assertEquals(user.getJoinedDate(), updateUser.getJoinedDate());
         assertEquals(user.getRole().getRoleName(), updateUser.getRole().getRoleName());
     }
-    /*public void changePasswordFirstLoginTest() {
+   
+    public void changePasswordFirstLoginTest() {
         JwtResponse response = userService.changePasswordFirstLogin(
             new PasswordRequest("SD0003", "123123")
         );

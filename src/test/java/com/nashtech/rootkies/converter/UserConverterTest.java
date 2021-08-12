@@ -1,11 +1,13 @@
 package com.nashtech.rootkies.converter;
 
 import com.nashtech.rootkies.dto.user.UserDTO;
-import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
+import com.nashtech.rootkies.dto.user.UserDetailDTO;
+import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.enums.Gender;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.RoleRepository;

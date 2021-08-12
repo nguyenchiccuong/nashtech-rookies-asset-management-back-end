@@ -214,3 +214,17 @@ values('PC000003',
         'PC',
         101
 );
+
+-- password là nhimh@01062000
+INSERT INTO public.users
+    (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
+VALUES
+    ('SD0001', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$OLjR1nFlun7W1qhg98K4k.YVtGva/cqv2F.kN8RH8TRDJ8kaOjxCy', 'nhimh', 101, 1002);
+INSERT INTO public.users
+    (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
+VALUES
+    ('SD0002', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$Lk.D2VDexaRyzmWrHQMpkevOyXZgj3cmB1Lk6hSx3xEQ6VZgWjCjy', 'nhimh1', 101, 1002);
+INSERT INTO public.users
+    (staffcode, dateofbirth, firstlogin, firstname, gender, isdeleted, joineddate, lastname, password, username, locationid, roleid)
+VALUES
+    ('SD0003', '2000-06-01 05:00:00', false, 'Nhi', 'Female', false, '2021-08-06 12:30:00', 'Mai Hoang', '$2a$10$G9L9OcCBIGTgaAIw19s9yO28qrG51R/wUSj7Ain0wNhu7t24O2VxC', 'nhimh2', 101, 1002);

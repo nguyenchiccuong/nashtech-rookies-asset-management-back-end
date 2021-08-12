@@ -1,11 +1,14 @@
 package com.nashtech.rootkies.repository;
 
 import com.nashtech.rootkies.model.User;
-import com.nashtech.rootkies.repository.UserRepository;
+import com.nashtech.rootkies.repository.specs.SearchCriteria1;
+import com.nashtech.rootkies.repository.specs.UserSpecification;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
@@ -33,6 +36,8 @@ public class UserRepositotyTest {
         Optional<User> user = userRepository.findByStaffCode("SD0001");
         assertEquals("SD0001", user.get().getStaffCode());
     }
+
+    @Test
     public void findAllUser() {
         Specification specification = new UserSpecification(
                 new SearchCriteria1("staffCode", ":", "SD0001"));
