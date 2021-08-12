@@ -35,6 +35,8 @@ public interface UserService {
 
 
     User createUser(User user) throws CreateDataFailException;
+    void disableUser(String staffCode) throws DataNotFoundException;
+    boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException;
     Boolean deleteUser(String userId) throws UserNotFoundException;
     User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException;
     Optional<User> getUser(String staffCode) throws UserNotFoundException;

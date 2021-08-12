@@ -317,7 +317,7 @@ public class AssetServiceImpl implements AssetService {
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSET_FAIL);
         }
     }
-    //Edit Asset
+    // Edit Asset
 
     public Boolean checkFormatDate(String date) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -331,16 +331,15 @@ public class AssetServiceImpl implements AssetService {
     }
 
     public EditAssetDTO editAsset(String assetCode, EditAssetRequest editAssetRequest) {
-        Asset asset = assetRepository.findById(assetCode).orElseThrow(
-                () -> new ApiRequestException(ErrorCode.ASSET_NOT_FOUND)
-        );
+        Asset asset = assetRepository.findById(assetCode)
+                .orElseThrow(() -> new ApiRequestException(ErrorCode.ASSET_NOT_FOUND));
 
-        if(asset.getIsDeleted()){
+        if (asset.getIsDeleted()) {
             throw new ApiRequestException(ErrorCode.ASSET_IS_DELETED);
         }
 
         List<Assignment> assignments = assignmentRepository.findByAsset(asset);
-        if(assignments.size() > 0) {
+        if (assignments.size() > 0) {
             throw new ApiRequestException(ErrorCode.ASSET_ALREADY_ASSIGNED);
         }
 
@@ -349,23 +348,21 @@ public class AssetServiceImpl implements AssetService {
         String installDate = editAssetRequest.getInstallDate();
         String state = editAssetRequest.getState();
 
-        if(name == null || name.trim().length() == 0) {
+        if (name == null || name.trim().length() == 0) {
             throw new ApiRequestException(ErrorCode.NAME_IS_EMPTY);
         }
 
-        if(specification == null || specification.trim().length() == 0) {
+        if (specification == null || specification.trim().length() == 0) {
             throw new ApiRequestException(ErrorCode.SPEC_IS_EMPTY);
         }
 
-        if(checkFormatDate(installDate) == false) {
+        if (checkFormatDate(installDate) == false) {
             throw new ApiRequestException(ErrorCode.DATE_INCORRECT_FORMAT);
         }
 
-        if(!state.trim().equalsIgnoreCase("available")
-                && !state.trim().equalsIgnoreCase("not available")
+        if (!state.trim().equalsIgnoreCase("available") && !state.trim().equalsIgnoreCase("not available")
                 && !state.trim().equalsIgnoreCase("waiting for recycling")
-                && !state.trim().equalsIgnoreCase("recycled")
-        ){
+                && !state.trim().equalsIgnoreCase("recycled")) {
             throw new ApiRequestException(ErrorCode.STATE_INCORRECT_FORMAT);
         }
 
@@ -376,25 +373,21 @@ public class AssetServiceImpl implements AssetService {
         asset.setSpecification(specification);
         asset.setInstallDate(dateTime);
 
-        if(state.trim().equalsIgnoreCase("available")){
+        if (state.trim().equalsIgnoreCase("available")) {
             asset.setState(State.AVAILABLE);
-        }
-        else if(state.trim().equalsIgnoreCase("not available")){
+        } else if (state.trim().equalsIgnoreCase("not available")) {
             asset.setState(State.NOT_AVAILABLE);
-        }
-        else if(state.trim().equalsIgnoreCase("waiting for recycling")){
+        } else if (state.trim().equalsIgnoreCase("waiting for recycling")) {
             asset.setState(State.WAITING_FOR_RECYCLING);
-        }
-        else{
+        } else {
             asset.setState(State.RECYLED);
         }
 
-        try{
+        try {
             asset = assetRepository.save(asset);
             EditAssetDTO dto = assetConverter.toDTO(asset);
             return dto;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(ErrorCode.ERR_EDIT_ASSET);
         }
     }
@@ -433,7 +426,9 @@ public class AssetServiceImpl implements AssetService {
             throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
         } else {
             try {
-                assetRepository.deleteById(assetCode);
+                Asset assetSave = asset.get();
+                assetSave.setIsDeleted(true);
+                assetRepository.save(assetSave);
                 responseDto.setSuccessCode(SuccessCode.ASSET_DELETE_SUCCESS);
                 return responseDto;
             } catch (Exception e) {
