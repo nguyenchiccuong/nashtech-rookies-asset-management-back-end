@@ -1,9 +1,9 @@
 package com.nashtech.rootkies.service;
 
-import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.User;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,13 @@ import java.util.List;
 
 public interface UserService {
 
-    public String changePasswordFirstLogin(PasswordRequest passwordRequest);
+    public JwtResponse changePasswordFirstLogin(PasswordRequest passwordRequest);
+
+    //User getUser(Long id) throws UserNotFoundException;
+    //boolean createUser(User user) throws UpdateDataFailException;
+    PageDTO findAllUser(Pageable pageable, Specification specification) throws DataNotFoundException;
+
     public String changePassword(String username, ChangePasswordRequest changePasswordRequest);
-    public boolean createUser(User user) throws CreateDataFailException;
+    boolean createUser(User user) throws CreateDataFailException;
+
 }

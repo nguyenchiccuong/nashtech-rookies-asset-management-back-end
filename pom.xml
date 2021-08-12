@@ -29,7 +29,7 @@
   <description>Asset Management Backend Service Api</description>
   <packaging>jar</packaging>
   <properties>
-    <java.version>11</java.version>
+    <java.version>1.8</java.version>
   </properties>
   <dependencies>
     <!-- jpa -->
@@ -76,16 +76,9 @@
       <artifactId>modelmapper</artifactId>
       <version>2.3.5</version>
     </dependency>
-    <!-- jackson -->
-    <!-- 3 of this need in the same version -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.12.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
       <version>2.12.0</version>
     </dependency>
     <dependency>
@@ -97,8 +90,7 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>2.12.0</version>
-    </dependency>
-    <!-- jackson -->
+  </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -158,13 +150,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
       <version>3.5.6-Final</version>
-    </dependency>
-    <!-- dev tool for auto restart -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
     </dependency>
   </dependencies>
   <build>
