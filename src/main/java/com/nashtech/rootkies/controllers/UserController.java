@@ -191,14 +191,14 @@ public class UserController {
     }
 
     @PutMapping("/update/{staffcode}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
                                                   @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
             User updateUser = userService.updateUser(staffcode, user);
-            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setData(userConverter.entityToDetailDTO(updateUser));
             responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
         } catch (Exception e){
             throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
