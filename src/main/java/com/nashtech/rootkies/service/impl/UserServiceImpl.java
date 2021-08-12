@@ -9,11 +9,18 @@ import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.dto.auth.JwtResponse;
 import com.nashtech.rootkies.dto.auth.LoginRequest;
+import com.nashtech.rootkies.dto.user.UserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.ResourceNotFoundException;
+import com.nashtech.rootkies.exception.UserNotFoundException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssignmentRepository;
+import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
 import com.nashtech.rootkies.service.UserService;
@@ -35,6 +42,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -56,6 +64,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -73,9 +84,6 @@ public class UserServiceImpl implements UserService {
         }catch (Exception exception){
             throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
         }
-
-
-
     }
 
     @Override
@@ -144,7 +152,6 @@ public class UserServiceImpl implements UserService {
         if(newPassword.equals(oldPassword)){
             throw new ApiRequestException(ErrorCode.SAME_PASSWORD);
         }
-
         try{
             User user = optionalUser.get();
             user.setPassword(encoder.encode(newPassword));
@@ -156,7 +163,57 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public List<User> retrieveUsers() throws UserNotFoundException {
+        try {
+            List<User> users = userRepository.findAll();
+            return users;
+        } catch (Exception exception) {
+            throw new UserNotFoundException(ErrorCode.ERR_USER_EXISTED);
+        }
+    }
 
+    @Override
+    public Optional<User> getUser(String staffCode) throws UserNotFoundException {
+        User user = userRepository.findByStaffCode(staffCode).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        return Optional.of(user);
+    }
+
+    @Override
+    public User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException {
+        User userExist = userRepository.findByStaffCode(userId).orElseThrow(() ->
+                new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        Role roleExist = roleRepository.findByRoleName(user.getRole().getRoleName()).orElseThrow(() ->
+                new ResourceNotFoundException(ErrorCode.ERR_ROLE_NOT_FOUND));
+
+        userExist.setDateOfBirth(user.getDateOfBirth());
+        userExist.setJoinedDate(user.getJoinedDate());
+        userExist.setGender(user.getGender());
+        userExist.setRole(roleExist);
+
+        user = userRepository.save(userExist);
+        return userExist;
+    }
+
+    @Override
+    public Boolean deleteUser(String userId) throws UserNotFoundException {
+        User user = userRepository.findByStaffCode(userId).orElseThrow(() -> new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+        //user.setIsDeleted(Boolean.TRUE);
+        this.userRepository.delete(user);
+        return true;
+    }
+    /*@Autowired
+    UserRepository userRepository;
+
+    @Override
+    public User getUser(Long id) throws UserNotFoundException {
+        if(!userRepository.existsById(id)){
+            throw new UserNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
+        }
+        return userRepository.findById(id).get();
+    }
+
+     */
     @Override
     public boolean createUser(User user) throws CreateDataFailException {
         try{

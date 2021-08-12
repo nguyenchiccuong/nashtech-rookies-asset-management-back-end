@@ -10,6 +10,7 @@ public class ErrorCode {
     public static final String USER_NOT_FOUND = "USER_NOT_FOUND";
     public static final String ERR_CHANGE_PASSWORD = "ERR_CHANGE_PASSWORD";
     public static final String USER_BLOCKED = "USER_BLOCKED";
+    public static final String ERR_ROLE_NOT_FOUND = "ERR_ROLE_NOT_FOUND";
     //Asset
     public static final String ASSET_NOT_FOUND = "ASSET_NOT_FOUND";
     public static final String ASSET_IS_DELETED = "ASSET_IS_DELETED";
@@ -45,6 +46,7 @@ public class ErrorCode {
     public static final String ERR_CREATE_USER_JD_DOB = "ERR_CREATE_USER_JD_DOB";
     public static final String ERR_GET_ALL_USER = "ERR_GET_ALL_USER";
     public static final String ERR_DISABLE_USER = "ERR_DISABLE_USER";
+    public static final String ERR_UPDATE_USER_FAIL = "ERR_UPDATE_USER_FAIL";
 
     /** CONVERTER **/
     public static final String ERR_CONVERT_DTO_ENTITY_FAIL = "ERR_CONVERT_DTO_ENTITY_FAIL";

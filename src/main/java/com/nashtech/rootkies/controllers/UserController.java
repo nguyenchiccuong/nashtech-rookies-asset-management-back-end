@@ -15,9 +15,13 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
-import com.nashtech.rootkies.exception.ConvertEntityDTOException;
-import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.dto.auth.JwtResponse;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
+import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
+import com.nashtech.rootkies.dto.user.request.PasswordRequest;
+import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.service.UserService;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -45,6 +49,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -57,6 +64,13 @@ public class UserController {
 
     @Autowired
     UserConverter userConverter;
+
+    @GetMapping("/home")
+    @PreAuthorize("hasRole('USER')")
+    public String getHome() {
+        return "<h1>USER Home Page</h1>";
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
@@ -106,6 +120,7 @@ public class UserController {
     }
     //changepssword
     @PutMapping("/password/{username}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
                                                       @RequestBody ChangePasswordRequest request) {
         String message = userService.changePassword(username, request);
@@ -148,5 +163,47 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{staffcode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            Optional<User> user = userService.getUser(staffCode);
 
+            responseDTO.setData(userConverter.convertToDto(user.get()));
+            responseDTO.setSuccessCode(SuccessCode.FIND_USER_SUCCESS);
+        } catch (Exception e){
+            throw new DataNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
+
+    
+    @PostMapping(value = "/save")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
+            throws ConvertEntityDTOException, CreateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
+        Boolean check = userService.createUser(user);
+        responseDTO.setData(check);
+        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @PutMapping("/update/{staffcode}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
+                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+        try {
+            User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
+            User updateUser = userService.updateUser(staffcode, user);
+            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
+        } catch (Exception e){
+            throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
+        }
+        return ResponseEntity.ok(responseDTO);
+    }
 }

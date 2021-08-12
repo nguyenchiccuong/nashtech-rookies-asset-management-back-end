@@ -15,8 +15,8 @@ import javax.transaction.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> , JpaSpecificationExecutor<User> {
 	Optional<User> findByUsername(String username);
-
 	Boolean existsByUsername(String username);
+	Optional<User> findByStaffCode(String staffcode);
 
 	//Boolean existsByEmail(String email);
 	@Query(value = "SELECT CASE  WHEN count(staffcode) > 0 THEN true ELSE false END checkExist FROM "+

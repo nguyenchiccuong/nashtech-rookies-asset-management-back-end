@@ -8,6 +8,7 @@ import com.nashtech.rootkies.dto.category.request.CreateCategoryDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
+import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.Category;
@@ -53,15 +54,15 @@ public class AdminController {
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
-
-    @PostMapping(value = "/save")
-    public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
-            throws ConvertEntityDTOException, CreateDataFailException {
-        ResponseDTO responseDTO = new ResponseDTO();
-        User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
-        responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
-        return ResponseEntity.ok().body(responseDTO);
+    //changepssword
+    @PutMapping("/password/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
+                                                      @RequestBody ChangePasswordRequest request) {
+        String message = userService.changePassword(username, request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(message);
+        response.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 }
