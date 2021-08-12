@@ -185,7 +185,7 @@ public class UserController {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
         User saveUser = userService.createUser(user);
-        responseDTO.setData(userConverter.convertToDto(saveUser));
+        responseDTO.setData(userConverter.entityToDetailDTO(saveUser));
         responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
         return ResponseEntity.ok().body(responseDTO);
     }
