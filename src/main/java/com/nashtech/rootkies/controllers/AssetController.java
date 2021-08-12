@@ -135,15 +135,24 @@ public class AssetController {
     }
 
     // remeber to research valid only work when input or output
-//edit asset
+    // edit asset
     @PutMapping("/edit/{id}")
     public ResponseEntity<ResponseDTO> editAsset(@PathVariable("id") String id,
-                                                 @RequestBody EditAssetRequest editAssetRequest)
-    {
+            @RequestBody EditAssetRequest editAssetRequest) {
         EditAssetDTO editAssetDTO = assetService.editAsset(id, editAssetRequest);
         ResponseDTO response = new ResponseDTO();
         response.setData(editAssetDTO);
         response.setSuccessCode(SuccessCode.ASSET_EDIT_SUCCESS);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/check/{assetCode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> checkDeleteAssetById(HttpServletRequest req,
+            @PathVariable("assetCode") String assetCode) throws DataNotFoundException, DeleteDataFailException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        return ResponseEntity.ok(assetService.checkDeleteAssetByAssetCode(locationId, assetCode));
     }
 }

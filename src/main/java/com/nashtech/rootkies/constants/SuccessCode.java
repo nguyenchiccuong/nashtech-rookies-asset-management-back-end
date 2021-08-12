@@ -21,6 +21,7 @@ public class SuccessCode {
     public static final String ASSET_COUNT_SUCCESS = "ASSET_COUNT_SUCCESS";
     public static final String ASSET_CREATED_SUCCESS = "ASSET_CREATED_SUCCESS";
     public static final String ASSET_EDIT_SUCCESS = "ASSET_EDIT_SUCCESS";
+    public static final String ASSET_ABLE_TO_DELETE = "ASSET_ABLE_TO_DELETE";
 
     /** USER **/
     public static final String GET_USER_SUCCESS       = "GET_USER_SUCCESS";
@@ -30,4 +31,6 @@ public class SuccessCode {
 
     public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
     public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
+
+  
 }
