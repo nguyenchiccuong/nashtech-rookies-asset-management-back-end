@@ -2,6 +2,7 @@ package com.nashtech.rootkies.repository.specs;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -9,16 +10,17 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.nashtech.rootkies.model.Asset;
-import com.nashtech.rootkies.model.Category;
+import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.model.Location;
+import com.nashtech.rootkies.model.User;
 
 import org.springframework.data.jpa.domain.Specification;
 
-public class AssetSpecification implements Specification<Asset> {
+public class AssignmentSpecification implements Specification<Assignment> {
 
     private List<SearchCriteria> list;
 
-    public AssetSpecification() {
+    public AssignmentSpecification() {
         this.list = new ArrayList<>();
     }
 
@@ -27,7 +29,7 @@ public class AssetSpecification implements Specification<Asset> {
     }
 
     @Override
-    public Predicate toPredicate(Root<Asset> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public Predicate toPredicate(Root<Assignment> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         // create a new predicate list
         List<Predicate> predicates = new ArrayList<>();
 
@@ -45,15 +47,30 @@ public class AssetSpecification implements Specification<Asset> {
             } else if (criteria.getOperation().equals(SearchOperation.NOT_EQUAL)) {
                 predicates.add(builder.notEqual(root.get(criteria.getKey()), criteria.getValue()));
             } else if (criteria.getOperation().equals(SearchOperation.EQUAL)) {
-                if (criteria.getKey().equals("location")) {
-                    Join<Asset, Location> groupJoin = root.join("location");
-                    predicates.add(builder.equal(groupJoin.get("locationId"), criteria.getValue()));
+                if (criteria.getKey().equals("assignedBy")) {
+                    Join<Assignment, User> groupJoin = root.join("assignedBy");
+                    Join<User, Location> groupJoin2 = groupJoin.join("location");
+                    predicates.add(builder.equal(groupJoin2.get("locationId"), criteria.getValue()));
                 } else {
                     predicates.add(builder.equal(root.get(criteria.getKey()), criteria.getValue()));
                 }
             } else if (criteria.getOperation().equals(SearchOperation.MATCH)) {
-                predicates.add(builder.like(builder.lower(root.get(criteria.getKey())),
-                        "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                if (criteria.getKey().equals("assetCode")) {
+                    Join<Assignment, Asset> groupJoin = root.join("asset");
+                    predicates.add(builder.like(builder.lower(groupJoin.<String>get("assetCode")),
+                            "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                } else if (criteria.getKey().equals("assetName")) {
+                    Join<Assignment, Asset> groupJoin = root.join("asset");
+                    predicates.add(builder.like(builder.lower(groupJoin.<String>get("assetName")),
+                            "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                } else if (criteria.getKey().equals("assignedTo")) {
+                    Join<Assignment, User> groupJoin = root.join("assignedTo");
+                    predicates.add(builder.like(builder.lower(groupJoin.<String>get("username")),
+                            "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                } else {
+                    predicates.add(builder.like(builder.lower(root.get(criteria.getKey())),
+                            "%" + criteria.getValue().toString().toLowerCase() + "%"));
+                }
             } else if (criteria.getOperation().equals(SearchOperation.MATCH_END)) {
                 predicates.add(builder.like(builder.lower(root.get(criteria.getKey())),
                         criteria.getValue().toString().toLowerCase() + "%"));
@@ -61,12 +78,7 @@ public class AssetSpecification implements Specification<Asset> {
                 predicates.add(builder.like(builder.lower(root.get(criteria.getKey())),
                         "%" + criteria.getValue().toString().toLowerCase()));
             } else if (criteria.getOperation().equals(SearchOperation.IN)) {
-                if (criteria.getKey().equals("category")) {
-                    Join<Asset, Category> groupJoin = root.join("category");
-                    predicates.add(builder.in(groupJoin.get("categoryCode")).value(criteria.getValue()));
-                } else {
-                    predicates.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
-                }
+                predicates.add(builder.in(root.get(criteria.getKey())).value(criteria.getValue()));
             } else if (criteria.getOperation().equals(SearchOperation.NOT_IN)) {
                 predicates.add(builder.not(root.get(criteria.getKey())).in(criteria.getValue()));
             }
