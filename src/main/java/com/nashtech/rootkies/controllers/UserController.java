@@ -205,4 +205,38 @@ public class UserController {
         }
         return ResponseEntity.ok(responseDTO);
     }
+
+    @GetMapping("/assignment")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> getAllUserAssignment(@RequestParam Integer page,
+                                                  @RequestParam Integer size,
+                                                  @RequestParam String sort,
+                                                  @RequestParam String search)throws DataNotFoundException {
+        ResponseDTO response = new ResponseDTO();
+        try {
+            Pageable pageable = null;
+            if (sort.contains("ASC")) {
+                pageable = PageRequest.of(page, size, Sort.by(sort.replace("ASC", "")).ascending());
+            } else {
+                pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
+            }
+
+            UserSpecificationBuilder builder = new UserSpecificationBuilder();
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            }
+
+            Specification<User> spec = builder.build();
+
+            response.setData(userService.getAllUserInAssignment(pageable, spec));
+
+            response.setSuccessCode(SuccessCode.GET_USER_SUCCESS);
+            return ResponseEntity.ok().body(response);
+        } catch (Exception ex) {
+            response.setErrorCode(ErrorCode.GET_USER_FAIL);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 }
