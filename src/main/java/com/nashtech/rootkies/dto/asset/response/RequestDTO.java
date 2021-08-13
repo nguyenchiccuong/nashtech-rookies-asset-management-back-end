@@ -21,4 +21,6 @@ public class RequestDTO {
 
     private Short state;
 
+    private Boolean isDeleted;
+
 }

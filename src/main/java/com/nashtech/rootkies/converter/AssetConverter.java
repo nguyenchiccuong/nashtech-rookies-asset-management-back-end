@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.converter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,9 +8,11 @@ import java.util.stream.Collectors;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
+import com.nashtech.rootkies.dto.asset.response.AssignmentDTO;
 import com.nashtech.rootkies.dto.asset.response.CreateAssetResponseDTO;
 import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.RequestDTO;
 import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
@@ -38,7 +41,20 @@ public class AssetConverter {
 
     public DetailAssetDTO convertToDetailDTO(Asset asset) throws ConvertEntityDTOException {
         try {
-            return modelMapper.map(asset, DetailAssetDTO.class);
+            DetailAssetDTO detailAssetDTO = modelMapper.map(asset, DetailAssetDTO.class);
+
+            Collection<AssignmentDTO> filteredAssignmentDTOCollection = detailAssetDTO.getAssignments().stream()
+                    .filter(e -> !e.getIsDeleted()).collect(Collectors.toList());
+            detailAssetDTO.setAssignments(filteredAssignmentDTOCollection);
+
+            detailAssetDTO.getAssignments().forEach(e -> {
+                Collection<RequestDTO> filteredRequestDTOCollection = e.getRequests().stream()
+                        .filter(e1 -> !e1.getIsDeleted()).collect(Collectors.toList());
+                e.setRequests(filteredRequestDTOCollection);
+            });
+
+            return detailAssetDTO;
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
