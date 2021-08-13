@@ -6,11 +6,14 @@ import java.util.stream.Collectors;
 
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.dto.PageDTO;
+import com.nashtech.rootkies.dto.asset.AssetInAssignmentDTO;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import com.nashtech.rootkies.dto.asset.response.CreateAssetResponseDTO;
 import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
+import com.nashtech.rootkies.dto.user.UserInAssignmentDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
@@ -120,5 +123,28 @@ public class AssetConverter {
         dto.setIsDeleted(asset.getIsDeleted());
         dto.setCategoryId(asset.getCategory().getCategoryCode());
         return dto;
+    }
+
+    public AssetInAssignmentDTO entityToAssetInAssignmentDTO(Asset asset){
+
+        return AssetInAssignmentDTO.builder()
+                .code(asset.getAssetCode())
+                .name(asset.getAssetName())
+                .category(asset.getCategory().getCategoryName())
+                .build();
+
+    }
+
+    public PageDTO pageAssetToPageDTO(Page<Asset> page){
+
+        List<AssetInAssignmentDTO> users = page.stream()
+                .map(asset -> entityToAssetInAssignmentDTO(asset))
+                .collect(Collectors.toList());
+
+        return PageDTO.builder()
+                .totalPages(page.getTotalPages())
+                .totalElements(page.getTotalElements())
+                .data(users)
+                .build();
     }
 }

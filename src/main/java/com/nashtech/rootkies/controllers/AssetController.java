@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.controllers;
 
+import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
@@ -17,6 +18,9 @@ import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Location;
+import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.specs.AssetsSpecificationBuilder;
+import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
 import com.nashtech.rootkies.security.jwt.JwtUtils;
 import com.nashtech.rootkies.service.AssetService;
 
@@ -24,12 +28,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -154,5 +162,39 @@ public class AssetController {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity.ok(assetService.checkDeleteAssetByAssetCode(locationId, assetCode));
+    }
+
+    @GetMapping("/assetInAssignment")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> getAllAsset(@RequestParam Integer page,
+                                                  @RequestParam Integer size,
+                                                  @RequestParam String sort,
+                                                  @RequestParam String search)throws DataNotFoundException {
+        ResponseDTO response = new ResponseDTO();
+        try {
+            Pageable pageable = null;
+            if (sort.contains("ASC")) {
+                pageable = PageRequest.of(page, size, Sort.by(sort.replace("ASC", "")).ascending());
+            } else {
+                pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
+            }
+
+            AssetsSpecificationBuilder builder = new AssetsSpecificationBuilder();
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            }
+
+            Specification<Asset> spec = builder.build();
+
+            response.setData(assetService.getAllAssetAvailable(pageable, spec));
+
+            response.setSuccessCode(SuccessCode.GET_ASSET_SUCCESS);
+            return ResponseEntity.ok().body(response);
+        } catch (Exception ex) {
+            response.setErrorCode(ErrorCode.ERR_GET_ALL_ASSET);
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

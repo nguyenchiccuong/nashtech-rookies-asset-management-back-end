@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.repository.specs;
 
+import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class UserSpecification implements Specification<User> {
 
         }
         if (criteria.getKey().equals("location")) {
-            Join<User, Role> join = root.join("location");
+            Join<User, Location> join = root.join("location");
             return builder.equal(join.<Long>get("locationId"), criteria.getValue());
         }
         if (criteria.getValue().equals("true")) {
