@@ -78,8 +78,12 @@ public class ErrorCode {
     public static final String ERR_COUNT_ASSIGNMENT_FAIL = "ERR_COUNT_ASSIGNMENT_FAIL";
     public static final String ERR_RETRIEVE_ASSIGNMENT_FAIL = "ERR_RETRIEVE_ASSIGNMENT_FAIL";
     public static final String ERR_ASSIGNMENT_ID_NOT_FOUND = "ERR_ASSIGNMENT_ID_NOT_FOUND";
+    public static final String ERR_ASSIGNMENT_DELETE_FAIL = "ERR_ASSIGNMENT_DELETE_FAIL";
+    public static final String ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE = "ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE";
 
     /** LOCATION **/
     public static final String ERR_CHECK_VALID_ASSIGNMENT = "ERR_CHECK_VALID_ASSIGNMENT";
+
+  
 
 }
