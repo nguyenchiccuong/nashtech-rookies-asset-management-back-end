@@ -49,7 +49,7 @@ public class AssetServiceImpl implements AssetService {
 
     private final AssetConverter assetConverter;
 
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,

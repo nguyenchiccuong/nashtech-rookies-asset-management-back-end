@@ -42,7 +42,7 @@ public class AssetController {
 
     private final AssetConverter assetConverter;
 
-    LocationConverter locationConverter;
+    private final LocationConverter locationConverter;
 
     private final JwtUtils jwtUtils;
 

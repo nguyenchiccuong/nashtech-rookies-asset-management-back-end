@@ -35,7 +35,7 @@ public class AssignmentController {
 
     private final AssignmentService assignmentService;
 
-    LocationConverter locationConverter;
+    private final LocationConverter locationConverter;
 
     private final JwtUtils jwtUtils;
 

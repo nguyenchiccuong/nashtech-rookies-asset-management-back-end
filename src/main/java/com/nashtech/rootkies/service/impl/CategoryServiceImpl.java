@@ -19,9 +19,9 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    CategoryConverter categoryConverter;
+    private final CategoryConverter categoryConverter;
 
-    CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public CategoryServiceImpl(CategoryConverter categoryConverter, CategoryRepository categoryRepository) {

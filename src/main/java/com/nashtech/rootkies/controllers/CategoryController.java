@@ -26,9 +26,9 @@ public class CategoryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
-    CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    CategoryConverter categoryConverter;
+    private final CategoryConverter categoryConverter;
 
     @Autowired
     public CategoryController(CategoryService categoryService, CategoryConverter categoryConverter,
