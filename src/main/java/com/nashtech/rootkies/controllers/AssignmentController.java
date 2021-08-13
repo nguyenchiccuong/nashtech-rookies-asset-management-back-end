@@ -27,9 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/assignment")
+@Tag(name = "ASSIGNMENT", description = "ASSIGNMENT API")
 public class AssignmentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentController.class);
 
