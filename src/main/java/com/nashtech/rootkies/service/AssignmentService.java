@@ -23,8 +23,6 @@ public interface AssignmentService {
         public ResponseDTO retrieveAssignmentByAssignmentId(Long locationId, Long assignmentId)
                         throws DataNotFoundException;
 
-        public ResponseDTO countAssignmentHavingFilterSearchSort();
-
         public ResponseDTO retrieveAssignmentHavingFilterSearchSort(Integer pageNum, Integer numOfItems,
                         SearchFilterSortAssignmentDTO searchFilterSortAssignmentDTO, Long locationId)
                         throws DataNotFoundException;
