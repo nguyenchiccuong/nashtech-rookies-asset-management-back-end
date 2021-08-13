@@ -23,4 +23,6 @@ public class AssignmentDTO {
     private Short state;
 
     private Collection<RequestDTO> requests;
+
+    private Boolean isDeleted;
 }
