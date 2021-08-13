@@ -48,13 +48,15 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetRepository;
 
     private final AssetConverter assetConverter;
-    @Autowired
+
     private AssignmentRepository assignmentRepository;
 
     @Autowired
-    public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter) {
+    public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,
+            AssignmentRepository assignmentRepository) {
         this.assetRepository = assetRepository;
         this.assetConverter = assetConverter;
+        this.assignmentRepository = assignmentRepository;
     }
 
     @Override
@@ -195,29 +197,6 @@ public class AssetServiceImpl implements AssetService {
             }
             List<ViewAssetDTO> viewAssetsDTO = assetConverter.convertToListDTO(assets);
 
-            if (viewAssetsDTO.size() <= 0) {
-                spec = Specification.where(assetLocation).and(assetIsDeleted);
-
-                if (assetState != null) {
-                    spec = spec.and(assetState);
-                }
-                if (assetCategoryCode != null) {
-                    spec = spec.and(assetCategoryCode);
-                }
-                if (assetCode != null) {
-                    spec = spec.and(assetName);
-                    spec = spec.or(assetCode);
-                }
-                try {
-                    assets = assetRepository.findAll(spec, page);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
-                }
-
-                viewAssetsDTO = assetConverter.convertToListDTO(assets);
-            }
-
             responseDto.setData(viewAssetsDTO);
             responseDto.setSuccessCode(SuccessCode.ASSET_LOADED_SUCCESS);
             return responseDto;
@@ -270,8 +249,7 @@ public class AssetServiceImpl implements AssetService {
                 spec = spec.and(assetCategoryCode);
             }
             if (assetCode != null) {
-                spec = spec.and(assetCode);
-                spec = spec.or(assetName);
+                spec = spec.and(Specification.where(assetCode).or(assetName));
             }
 
             List<Asset> assets;
@@ -282,28 +260,6 @@ public class AssetServiceImpl implements AssetService {
                 throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
             }
             List<ViewAssetDTO> viewAssetsDTO = assetConverter.convertToListDTO(assets);
-
-            if (viewAssetsDTO.size() <= 0) {
-                spec = Specification.where(assetLocation).and(assetIsDeleted);
-
-                if (assetState != null) {
-                    spec = spec.and(assetState);
-                }
-                if (assetCategoryCode != null) {
-                    spec = spec.and(assetCategoryCode);
-                }
-                if (assetCode != null) {
-                    spec = spec.and(assetName);
-                    spec = spec.or(assetCode);
-                }
-                try {
-                    assets = assetRepository.findAll(spec);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new DataNotFoundException(ErrorCode.ERR_RETRIEVE_ASSET_FAIL);
-                }
-                viewAssetsDTO = assetConverter.convertToListDTO(assets);
-            }
 
             NumberOfAssetDTO numberOfAssetDto = new NumberOfAssetDTO();
 
@@ -437,6 +393,25 @@ public class AssetServiceImpl implements AssetService {
 
         }
 
+    }
+
+    @Override
+    public ResponseDTO checkDeleteAssetByAssetCode(Long locationId, String assetCode)
+            throws DataNotFoundException, DeleteDataFailException {
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Asset> asset;
+
+        asset = assetRepository.findByAssetCode(locationId, assetCode);
+        if (!asset.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+        }
+
+        if (asset.get().getAssignments().size() > 0) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+        } else {
+            responseDto.setSuccessCode(SuccessCode.ASSET_ABLE_TO_DELETE);
+            return responseDto;
+        }
     }
 
 }
