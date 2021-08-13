@@ -39,4 +39,5 @@ public class SuccessCode {
     // ASSIGNMENT
     public static final String ASSIGNMENT_COUNT_SUCCESS = "ASSIGNMENT_COUNT_SUCCESS";
     public static final String ASSIGNMENT_LOADED_SUCCESS = "ASSIGNMENT_LOADED_SUCCESS";
+    public static final String ASSIGNMENT_DELETE_SUCCESS = "ASSIGNMENT_DELETE_SUCCESS";
 }

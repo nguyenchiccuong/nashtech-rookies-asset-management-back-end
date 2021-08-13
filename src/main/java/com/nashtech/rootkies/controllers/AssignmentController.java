@@ -6,6 +6,7 @@ import com.nashtech.rootkies.converter.LocationConverter;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.security.jwt.JwtUtils;
 import com.nashtech.rootkies.service.AssignmentService;
 
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -99,6 +101,16 @@ public class AssignmentController {
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity
                 .ok(assignmentService.countAssignmentHavingFilterSearchSort(searchFilterSortAssignmentDTO, locationId));
+    }
+
+    @DeleteMapping("/{assignmentId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> deleteAssignmentById(HttpServletRequest req,
+            @PathVariable("assignmentId") Long assignmentId) throws DataNotFoundException, DeleteDataFailException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        return ResponseEntity.ok(assignmentService.deleteAssetByAssignmentId(locationId, assignmentId));
     }
 
 }

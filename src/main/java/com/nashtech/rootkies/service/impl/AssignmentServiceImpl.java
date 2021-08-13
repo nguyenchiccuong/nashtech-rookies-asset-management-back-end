@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssignmentConverter;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
@@ -12,6 +13,7 @@ import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.specs.AssignmentSpecification;
@@ -90,7 +92,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
             assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId);
             if (!assignment.isPresent()) {
-                throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+                throw new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND);
             }
 
             ViewAssignmentDTO viewAssignmentDTO = assignmentConverter.convertToViewDTO(assignment.get());
@@ -306,6 +308,31 @@ public class AssignmentServiceImpl implements AssignmentService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSIGNMENT_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO deleteAssetByAssignmentId(Long locationId, Long assignmentId)
+            throws DataNotFoundException, DeleteDataFailException {
+
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Assignment> assignment;
+
+        assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId);
+        if (!assignment.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND);
+        }
+        Assignment assignmentSave = assignment.get();
+        if (assignmentSave.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE);
+        }
+        try {
+            assignmentSave.setIsDeleted(true);
+            assignmentRepository.save(assignmentSave);
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DELETE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL);
         }
     }
 
