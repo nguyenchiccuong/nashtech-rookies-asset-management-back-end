@@ -88,7 +88,6 @@ public class UserController {
                 pageable = PageRequest.of(page, size, Sort.by(sort.replace("DES", "")).descending());
             }
 
-
             UserSpecificationBuilder builder = new UserSpecificationBuilder();
             Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
             Matcher matcher = pattern.matcher(search + ",");
@@ -130,6 +129,39 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/checkHaveAssignment/{staffCode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> checkAnyValidAssignment(@PathVariable String staffCode){
+        ResponseDTO response = new ResponseDTO();
+
+        try{
+
+            response.setData(userService.checkAnyValidAssignment(staffCode));
+            response.setSuccessCode(SuccessCode.CHECK_HAVE_ASSIGNMENT_SUCCESS);
+            return ResponseEntity.ok().body(response);
+        }catch (Exception exception){
+
+            response.setErrorCode(ErrorCode.ERR_CHECK_VALID_ASSIGNMENT);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @DeleteMapping("/{staffCode}")
+    public ResponseEntity<ResponseDTO> disableUser(@PathVariable String staffCode){
+        ResponseDTO response = new ResponseDTO();
+
+        try{
+
+            userService.disableUser(staffCode);
+            response.setSuccessCode(SuccessCode.DISABLE_USER_SUCCESS);
+            return ResponseEntity.ok().body(response);
+
+        }catch (Exception ex){
+            response.setErrorCode(ErrorCode.ERR_DISABLE_USER);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
     @GetMapping("/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
@@ -152,8 +184,8 @@ public class UserController {
             throws ConvertEntityDTOException, CreateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         User user = userConverter.convertCreateUserDTOtoEntity(createUserDTO);
-        Boolean check = userService.createUser(user);
-        responseDTO.setData(check);
+        User saveUser = userService.createUser(user);
+        responseDTO.setData(userConverter.entityToDetailDTO(saveUser));
         responseDTO.setSuccessCode(SuccessCode.USER_CREATED_SUCCESS);
         return ResponseEntity.ok().body(responseDTO);
     }
@@ -166,7 +198,7 @@ public class UserController {
         try {
             User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
             User updateUser = userService.updateUser(staffcode, user);
-            responseDTO.setData(userConverter.convertToDto(updateUser));
+            responseDTO.setData(userConverter.entityToDetailDTO(updateUser));
             responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
         } catch (Exception e){
             throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);

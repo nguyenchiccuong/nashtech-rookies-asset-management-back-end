@@ -26,4 +26,9 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long>, J
 
     @Query("FROM Assignment a WHERE a.assignedBy.location.locationId = ?1 AND a.isDeleted = false AND a.assignmentId = ?2")
     Optional<Assignment> findByAssignmentId(Long locationId, Long assignmentId);
+
+    @Query(value = "SELECT CASE WHEN count(assignmentid) > 0 THEN true ELSE false END checkExist "
+            + "FROM assignments a WHERE assignedby = ?1 or assignedto =?1 ", nativeQuery = true)
+
+    Boolean checkAnyValidAssignment(String staffCode);
 }

@@ -151,6 +151,13 @@
       <artifactId>hibernate-annotations</artifactId>
       <version>3.5.6-Final</version>
     </dependency>
+    <!-- dev tool -->
+    <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
   </dependencies>
   <build>
     <plugins>

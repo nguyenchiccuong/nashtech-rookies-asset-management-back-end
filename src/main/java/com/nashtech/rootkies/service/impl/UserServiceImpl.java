@@ -19,6 +19,7 @@ import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.model.Role;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.service.AuthService;
@@ -55,6 +56,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private final UserConverter converter;
+
+    @Autowired
+    private final AssignmentRepository assignmentRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -211,16 +215,8 @@ public class UserServiceImpl implements UserService {
 
      */
     @Override
-    public boolean createUser(User user) throws CreateDataFailException {
+    public User createUser(User user) throws CreateDataFailException {
         try{
-            //validation
-            /*if (user.getDateOfBirth().until(LocalDateTime.now(), ChronoUnit.YEARS) < 18)
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_DOB);
-            if (user.getDateOfBirth().isAfter(user.getJoinedDate()))
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD_DOB);
-            DayOfWeek day = user.getJoinedDate().getDayOfWeek();
-            if (day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY)
-                throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_JD);*/
             user.setIsDeleted(false);
             user.setFirstLogin(false);
             //auto-generated username
@@ -239,11 +235,30 @@ public class UserServiceImpl implements UserService {
             String password = user.getUsername() + '@' + user.getDateOfBirth().format(formatter);
             user.setPassword(encoder.encode(password));
             //save
-            userRepository.save(user);
-            return true;
+            User saveUser = userRepository.save(user);
+            return saveUser;
         } catch(Exception ex){
             throw new CreateDataFailException(ErrorCode.ERR_CREATE_USER_FAIL);
         }
+    }
+
+    public void disableUser(String staffCode) throws DataNotFoundException {
+
+        if(!repository.checkUserExist(staffCode)){
+            throw new DataNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        repository.disableUser(staffCode);
+    }
+
+    public boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException {
+
+        if(!repository.checkUserExist(staffCode)){
+            throw new DataNotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // check user have any valid assignment or not
+        return assignmentRepository.checkAnyValidAssignment(staffCode);
     }
   
 }
