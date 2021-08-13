@@ -184,8 +184,7 @@ public class AssetServiceImpl implements AssetService {
                 spec = spec.and(assetCategoryCode);
             }
             if (assetCode != null) {
-                spec = spec.and(assetCode);
-                spec = spec.or(assetName);
+                spec = spec.and(Specification.where(assetCode).or(assetName));
             }
 
             Page<Asset> assets;
