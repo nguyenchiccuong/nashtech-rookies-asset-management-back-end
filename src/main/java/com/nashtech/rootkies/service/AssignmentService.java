@@ -1,9 +1,11 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 
+import com.nashtech.rootkies.model.Assignment;
 import org.springframework.data.domain.Pageable;
 
 public interface AssignmentService {
@@ -30,4 +32,7 @@ public interface AssignmentService {
         public ResponseDTO countAssignmentHavingFilterSearchSort(
                         SearchFilterSortAssignmentDTO searchFilterSortAssignmentDTO, Long locationId)
                         throws DataNotFoundException;
+
+        Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO);
+
 }

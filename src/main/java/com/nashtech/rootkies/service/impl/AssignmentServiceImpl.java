@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssignmentConverter;
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.NumberOfAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
@@ -307,6 +308,14 @@ public class AssignmentServiceImpl implements AssignmentService {
             e.printStackTrace();
             throw new DataNotFoundException(ErrorCode.ERR_COUNT_ASSIGNMENT_FAIL);
         }
+    }
+
+    @Override
+    public Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) {
+        
+        Assignment assignment = assignmentConverter.createDTOToEntity(createAssignmentDTO);
+
+        return  assignmentRepository.save(assignment);
     }
 
 }

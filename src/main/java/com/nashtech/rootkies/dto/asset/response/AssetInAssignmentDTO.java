@@ -1,4 +1,4 @@
-package com.nashtech.rootkies.dto.asset;
+package com.nashtech.rootkies.dto.asset.response;
 
 import lombok.*;
 

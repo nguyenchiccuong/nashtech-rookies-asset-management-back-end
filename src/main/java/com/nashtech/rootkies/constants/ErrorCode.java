@@ -79,6 +79,12 @@ public class ErrorCode {
     public static final String ERR_COUNT_ASSIGNMENT_FAIL = "ERR_COUNT_ASSIGNMENT_FAIL";
     public static final String ERR_RETRIEVE_ASSIGNMENT_FAIL = "ERR_RETRIEVE_ASSIGNMENT_FAIL";
     public static final String ERR_ASSIGNMENT_ID_NOT_FOUND = "ERR_ASSIGNMENT_ID_NOT_FOUND";
+    public static final String STAFF_CODE_IS_BLANK = "STAFF_CODE_IS_BLANK";
+    public static final String ASSETCODE_IS_BLANK = "ASSETCODE_IS_BLANK";
+    public static final String ASSIGNED_DATE_IS_BLANK = "ASSIGNED_DATE_IS_BLANK";
+    public static final String NOTE_IS_BLANK = "NOTE_IS_BLANK";
+    public static final String ERR_CREATE_ASSIGNMENT = "ERR_CREATE_ASSIGNMENT";
+    public static final String ERR_ASSIGNED_DATE_IN_PAST = "ERR_ASSIGNED_DATE_IN_PAST";
 
     /** LOCATION **/
     public static final String ERR_CHECK_VALID_ASSIGNMENT = "ERR_CHECK_VALID_ASSIGNMENT";

@@ -1,15 +1,20 @@
 package com.nashtech.rootkies.converter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.RequestDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
 
+import com.nashtech.rootkies.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,5 +72,19 @@ public class AssignmentConverter {
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
     }
+
+    public Assignment createDTOToEntity(CreateAssignmentDTO dto){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return Assignment.builder()
+                .assignedBy(User.builder().staffCode(dto.getAssignedBy()).build())
+                .assignedTo(User.builder().staffCode(dto.getAssignedTo()).build())
+                .note(dto.getNote())
+                .state((short)1)
+                .asset(Asset.builder().assetCode(dto.getAssetCode()).build())
+                .isDeleted(false)
+                .assignedDate(LocalDateTime.parse(dto.getAssignedDate() , formatter))
+                .build();
+    }
+
 
 }

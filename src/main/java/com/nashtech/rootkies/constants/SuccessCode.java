@@ -33,6 +33,7 @@ public class SuccessCode {
 
     /** ASSIGNMENT **/
     public static final String CHECK_HAVE_ASSIGNMENT_SUCCESS = "CHECK_HAVE_ASSIGNMENT_SUCCESS";
+    public static final String CREATE_ASSIGNMENT_SUCCESS = "CREATE_ASSIGNMENT_SUCCESS";
 
     public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
     public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
