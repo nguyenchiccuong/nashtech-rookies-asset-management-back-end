@@ -23,7 +23,6 @@ import com.nashtech.rootkies.dto.user.request.ChangePasswordRequest;
 import com.nashtech.rootkies.dto.user.request.PasswordRequest;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.service.UserService;
-import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +45,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,7 +57,7 @@ import java.util.regex.Pattern;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
-@Api( tags = "User")
+@Tag(name = "CATEGORY", description = "CATEGORY API")
 public class UserController {
 
     @Autowired
@@ -75,10 +76,8 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
-                                                  @RequestParam Integer size,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String search)throws DataNotFoundException {
+    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page, @RequestParam Integer size,
+            @RequestParam String sort, @RequestParam String search) throws DataNotFoundException {
         ResponseDTO response = new ResponseDTO();
         try {
             Pageable pageable = null;
@@ -107,21 +106,21 @@ public class UserController {
         }
     }
 
-
     @PutMapping("/password/first")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest){
+    public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest) {
         JwtResponse response = userService.changePasswordFirstLogin(passwordRequest);
         ResponseDTO dto = new ResponseDTO();
         dto.setData(response);
         dto.setSuccessCode(SuccessCode.CHANGE_PASSWORD_SUCCESS);
         return ResponseEntity.ok(dto);
     }
-    //changepssword
+
+    // changepssword
     @PutMapping("/password/{username}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
-                                                      @RequestBody ChangePasswordRequest request) {
+            @RequestBody ChangePasswordRequest request) {
         String message = userService.changePassword(username, request);
         ResponseDTO response = new ResponseDTO();
         response.setData(message);
@@ -131,15 +130,15 @@ public class UserController {
 
     @GetMapping("/checkHaveAssignment/{staffCode}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> checkAnyValidAssignment(@PathVariable String staffCode){
+    public ResponseEntity<ResponseDTO> checkAnyValidAssignment(@PathVariable String staffCode) {
         ResponseDTO response = new ResponseDTO();
 
-        try{
+        try {
 
             response.setData(userService.checkAnyValidAssignment(staffCode));
             response.setSuccessCode(SuccessCode.CHECK_HAVE_ASSIGNMENT_SUCCESS);
             return ResponseEntity.ok().body(response);
-        }catch (Exception exception){
+        } catch (Exception exception) {
 
             response.setErrorCode(ErrorCode.ERR_CHECK_VALID_ASSIGNMENT);
             return ResponseEntity.badRequest().body(response);
@@ -147,16 +146,16 @@ public class UserController {
     }
 
     @DeleteMapping("/{staffCode}")
-    public ResponseEntity<ResponseDTO> disableUser(@PathVariable String staffCode){
+    public ResponseEntity<ResponseDTO> disableUser(@PathVariable String staffCode) {
         ResponseDTO response = new ResponseDTO();
 
-        try{
+        try {
 
             userService.disableUser(staffCode);
             response.setSuccessCode(SuccessCode.DISABLE_USER_SUCCESS);
             return ResponseEntity.ok().body(response);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             response.setErrorCode(ErrorCode.ERR_DISABLE_USER);
             return ResponseEntity.badRequest().body(response);
         }
@@ -164,20 +163,20 @@ public class UserController {
 
     @GetMapping("/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode) throws DataNotFoundException {
+    public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode)
+            throws DataNotFoundException {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             Optional<User> user = userService.getUser(staffCode);
 
             responseDTO.setData(userConverter.convertToDto(user.get()));
             responseDTO.setSuccessCode(SuccessCode.FIND_USER_SUCCESS);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new DataNotFoundException(ErrorCode.ERR_USER_NOT_FOUND);
         }
         return ResponseEntity.ok(responseDTO);
     }
 
-    
     @PostMapping(value = "/save")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
@@ -193,14 +192,14 @@ public class UserController {
     @PutMapping("/update/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
-                                                  @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
+            @Valid @RequestBody EditUserDTO editUserDTO) throws UpdateDataFailException {
         ResponseDTO responseDTO = new ResponseDTO();
         try {
             User user = userConverter.convertEditUserDTOtoEntity(editUserDTO);
             User updateUser = userService.updateUser(staffcode, user);
             responseDTO.setData(userConverter.entityToDetailDTO(updateUser));
             responseDTO.setSuccessCode(SuccessCode.USER_UPDATED_SUCCESS);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new UpdateDataFailException(ErrorCode.ERR_UPDATE_USER_FAIL);
         }
         return ResponseEntity.ok(responseDTO);

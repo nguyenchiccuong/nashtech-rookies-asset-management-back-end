@@ -2,7 +2,7 @@ package com.nashtech.rootkies.dto.common;
 
 import lombok.*;
 
-// @Data
+@Data
 @Setter
 @Getter
 @NoArgsConstructor
