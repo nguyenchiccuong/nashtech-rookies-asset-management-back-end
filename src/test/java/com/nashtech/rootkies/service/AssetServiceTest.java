@@ -25,8 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,6 +37,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class AssetServiceTest {
 
     @MockBean
@@ -45,7 +49,7 @@ public class AssetServiceTest {
     @Autowired
     private AssetConverter assetConverter;
 
-    /*@Test
+    @Test
     public void saveAssetSuccess() throws CreateDataFailException, ConvertEntityDTOException {
         assertNotNull(assetRepository);
 
@@ -104,5 +108,5 @@ public class AssetServiceTest {
 
         // Then
         assertEquals(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT, exception.getMessage());
-    }*/
+    }
 }
