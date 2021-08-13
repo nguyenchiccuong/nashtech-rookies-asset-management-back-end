@@ -51,7 +51,6 @@ public class AssetSpecification implements Specification<Asset> {
                 } else {
                     predicates.add(builder.equal(root.get(criteria.getKey()), criteria.getValue()));
                 }
-                predicates.add(builder.equal(root.get(criteria.getKey()), criteria.getValue()));
             } else if (criteria.getOperation().equals(SearchOperation.MATCH)) {
                 predicates.add(builder.like(builder.lower(root.get(criteria.getKey())),
                         "%" + criteria.getValue().toString().toLowerCase() + "%"));
