@@ -136,10 +136,11 @@ public class AssetController {
 
     // remeber to research valid only work when input or output
     // edit asset
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseDTO> editAsset(@PathVariable("id") String id,
+    @PutMapping("/edit/{assetcode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> editAsset(@PathVariable("assetcode") String assetCode,
             @RequestBody EditAssetRequest editAssetRequest) {
-        EditAssetDTO editAssetDTO = assetService.editAsset(id, editAssetRequest);
+        EditAssetDTO editAssetDTO = assetService.editAsset(assetCode, editAssetRequest);
         ResponseDTO response = new ResponseDTO();
         response.setData(editAssetDTO);
         response.setSuccessCode(SuccessCode.ASSET_EDIT_SUCCESS);
