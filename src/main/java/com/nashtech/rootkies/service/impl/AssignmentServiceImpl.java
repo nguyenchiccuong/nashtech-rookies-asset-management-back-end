@@ -128,23 +128,35 @@ public class AssignmentServiceImpl implements AssignmentService {
                 } else {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.assetName").ascending());
                 }
-            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignTo")) {
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedTo")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignTo.username").descending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedTo.username").descending());
                 } else {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignTo.username").ascending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedTo.username").ascending());
                 }
-            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignBy")) {
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedBy")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignBy.username").descending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedBy.username").descending());
                 } else {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignBy.username").ascending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedBy.username").ascending());
                 }
             } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("category")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.category.categoryName").descending());
                 } else {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.category.categoryName").ascending());
+                }
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedDate")) {
+                if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending());
+                } else {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").ascending());
+                }
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("state")) {
+                if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("state").descending());
+                } else {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("state").ascending());
                 }
             } else {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
