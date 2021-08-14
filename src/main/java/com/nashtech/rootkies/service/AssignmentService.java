@@ -37,5 +37,5 @@ public interface AssignmentService {
         public ResponseDTO deleteAssetByAssignmentId(Long locationId, Long assignmentId)
                         throws DataNotFoundException, DeleteDataFailException;
 
-        public ResponseDTO editAssignment(Assignment assignment) throws UpdateDataFailException;
+        public ResponseDTO editAssignment(Assignment assignment, String AssetCode) throws UpdateDataFailException;
 }

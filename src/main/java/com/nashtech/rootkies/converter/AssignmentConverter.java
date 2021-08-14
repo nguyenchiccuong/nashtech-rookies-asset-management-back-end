@@ -17,6 +17,7 @@ import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.AssetRepository;
@@ -106,14 +107,10 @@ public class AssignmentConverter {
         }
         assignment.setAssignedDate(ldtToSet);
 
-        if (assignment.getAsset().getAssetCode().equalsIgnoreCase(editAssignmentDTO.getAssetCode())) {
-            assignment.setAsset(assetRepository.findByAssetCode(locationId, editAssignmentDTO.getAssetCode())
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND)));
-        } else {
-            assignment.setAsset(assetRepository.findByAssetCode(locationId, editAssignmentDTO.getAssetCode())
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND)));
-
-            if (assignment.getAsset().getState() != State.AVAILABLE) {
+        Asset asset = assetRepository.findByAssetCode(locationId, editAssignmentDTO.getAssetCode())
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
+        if (!asset.getAssetCode().equalsIgnoreCase(editAssignmentDTO.getAssetCode())) {
+            if (asset.getState() != State.AVAILABLE) {
                 throw new InvalidRequestDataException(ErrorCode.ERR_ASSET_NOT_AVAILABLE);
             }
         }

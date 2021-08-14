@@ -343,22 +343,21 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
     }
 
-
     @Override
-    public ResponseDTO editAssignment(Assignment assignment) throws UpdateDataFailException {
+    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException {
         ResponseDTO responseDto = new ResponseDTO();
         try {
-            Assignment assignmentCur = assignmentRepository.findById(assignment.getAssignmentId())
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+            Asset assetUp = assetRepository.findById(assetCode)
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
 
-            if (!assignmentCur.getAsset().getAssetCode().equalsIgnoreCase(assignment.getAsset().getAssetCode())) {
-                Asset assetCur = assignmentCur.getAsset();
+            if (!assignment.getAsset().getAssetCode().equalsIgnoreCase(assetCode)) {
+                Asset assetCur = assignment.getAsset();
                 assetCur.setState(State.AVAILABLE);
                 assetRepository.save(assetCur);
 
-                Asset assetUp = assignment.getAsset();
                 assetUp.setState(State.ASSIGNED);
                 assetRepository.save(assetUp);
+                assignment.setAsset(assetUp);
             }
 
             ViewAssignmentDTO viewAssignmentDTO = assignmentConverter

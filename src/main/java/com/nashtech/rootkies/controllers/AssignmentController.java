@@ -136,6 +136,6 @@ public class AssignmentController {
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         Assignment assignment = assignmentConverter.convertEditAssignmentDTOToEntity(locationId, EditAssignmentDTO,
                 username);
-        return ResponseEntity.ok(assignmentService.editAssignment(assignment));
+        return ResponseEntity.ok(assignmentService.editAssignment(assignment, EditAssignmentDTO.getAssetCode()));
     }
 }
