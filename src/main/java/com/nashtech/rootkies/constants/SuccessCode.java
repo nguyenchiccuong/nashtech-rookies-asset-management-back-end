@@ -37,4 +37,6 @@ public class SuccessCode {
     public static final String ASSIGNMENT_LOADED_SUCCESS = "ASSIGNMENT_LOADED_SUCCESS";
     public static final String ASSIGNMENT_DELETE_SUCCESS = "ASSIGNMENT_DELETE_SUCCESS";
     public static final String ASSIGNMENT_UPDATE_SUCCESS = "ASSIGNMENT_UPDATE_SUCCESS";
+    public static final String REQUEST_CANCEL_SUCCESS = "REQUEST_CANCEL_SUCCESS";
+    public static final String REQUEST_COMPLETE_SUCCESS = "REQUEST_COMPLETE_SUCCESS";
 }
