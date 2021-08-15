@@ -335,7 +335,9 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         try {
             assignmentSave.setIsDeleted(true);
+            assignmentSave.getAsset().setState(State.AVAILABLE);
             assignmentRepository.save(assignmentSave);
+
             responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DELETE_SUCCESS);
             return responseDto;
         } catch (Exception e) {
@@ -356,7 +358,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                 assetRepository.save(assetCur);
 
                 assetUp.setState(State.ASSIGNED);
-                assetRepository.save(assetUp);
+                //assetRepository.save(assetUp);
                 assignment.setAsset(assetUp);
             }
 
