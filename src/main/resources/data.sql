@@ -307,7 +307,7 @@ VALUES
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
-    (1, true, NULL, 1, 'SD0002', 1, 'SD0001');
+    (1, true, NULL, 1, NULL, 1, 'SD0001');
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
@@ -315,4 +315,4 @@ VALUES
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
-    (3, false, NULL, 1, 'SD0002', 4, 'SD0001');
+    (3, false, NULL, 1, NULL, 4, 'SD0001');
