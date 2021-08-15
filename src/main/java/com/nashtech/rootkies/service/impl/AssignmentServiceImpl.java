@@ -14,7 +14,10 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
+import com.nashtech.rootkies.exception.UpdateDataFailException;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.specs.AssignmentSpecification;
 import com.nashtech.rootkies.repository.specs.SearchCriteria;
@@ -36,10 +39,14 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentConverter assignmentConverter;
 
+    private final AssetRepository assetRepository;
+
     @Autowired
-    public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter) {
+    public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter,
+            AssetRepository assetRepository) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
+        this.assetRepository = assetRepository;
     }
 
     @Override
@@ -340,11 +347,41 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         try {
             assignmentSave.setIsDeleted(true);
+            assignmentSave.getAsset().setState(State.AVAILABLE);
             assignmentRepository.save(assignmentSave);
+
             responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DELETE_SUCCESS);
             return responseDto;
         } catch (Exception e) {
             throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException {
+        ResponseDTO responseDto = new ResponseDTO();
+        try {
+            Asset assetUp = assetRepository.findById(assetCode)
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
+
+            if (!assignment.getAsset().getAssetCode().equalsIgnoreCase(assetCode)) {
+                Asset assetCur = assignment.getAsset();
+                assetCur.setState(State.AVAILABLE);
+                assetRepository.save(assetCur);
+
+                assetUp.setState(State.ASSIGNED);
+                //assetRepository.save(assetUp);
+                assignment.setAsset(assetUp);
+            }
+
+            ViewAssignmentDTO viewAssignmentDTO = assignmentConverter
+                    .convertToViewDTO(assignmentRepository.save(assignment));
+
+            responseDto.setData(viewAssignmentDTO);
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_UPDATE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_UPDATE_FAIL);
         }
     }
 
