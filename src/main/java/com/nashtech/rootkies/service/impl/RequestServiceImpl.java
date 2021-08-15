@@ -1,5 +1,7 @@
 package com.nashtech.rootkies.service.impl;
 
+import java.time.LocalDateTime;
+
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
@@ -44,6 +46,8 @@ public class RequestServiceImpl implements RequestService {
             ResponseDTO responseDto = new ResponseDTO();
             request.setIsDeleted(true);
             request.setAcceptedBy(admin);
+            LocalDateTime currentTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+            request.setReturnedDate(currentTime);
             requestRepository.save(request);
 
             responseDto.setSuccessCode(SuccessCode.REQUEST_CANCEL_SUCCESS);
@@ -69,6 +73,8 @@ public class RequestServiceImpl implements RequestService {
             request.setState(State.COMPLETED);
             request.setAcceptedBy(admin);
             request.getAssignment().getAsset().setState(State.AVAILABLE);
+            LocalDateTime currentTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+            request.setReturnedDate(currentTime);
             requestRepository.save(request);
 
             responseDto.setSuccessCode(SuccessCode.REQUEST_COMPLETE_SUCCESS);
