@@ -85,4 +85,11 @@ public class ErrorCode {
     public static final String ERR_ASSIGNMENT_DECLINED_FAIL = "ERR_ASSIGNMENT_DECLINED_FAIL";
 
 
+
+    // REQUEST
+    public static final String ERR_REQUEST_NOT_FOUND = "ERR_REQUEST_NOT_FOUND";
+    public static final String ERR_REQUEST_ALREADY_COMPLETE = "ERR_REQUEST_ALREADY_COMPLETE";
+    public static final String ERR_REQUEST_CANCEL_FAIL = "ERR_REQUEST_CANCEL_FAIL";
+    public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
+
 }
