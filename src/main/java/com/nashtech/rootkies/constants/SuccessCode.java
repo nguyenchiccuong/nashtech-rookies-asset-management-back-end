@@ -2,13 +2,12 @@ package com.nashtech.rootkies.constants;
 
 public class SuccessCode {
 
-    public static final String CHANGE_PASSWORD_SUCCESS = "CHANGE_PASSWORD_SUCCESS";
-
     /** USER AUTH **/
     public static final String USER_SIGNUP_SUCCESS = "USER_SIGNUP_SUCCESS";
     public static final String USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
     public static final String USER_CREATED_SUCCESS = "USER_CREATED_SUCCESS";
     public static final String USER_LOADED_SUCCESS = "USER_LOADED_SUCCESS";
+    public static final String CHANGE_PASSWORD_SUCCESS = "CHANGE_PASSWORD_SUCCESS";
 
     /** CATEGORY **/
     public static final String CATEGORY_CREATED_SUCCESS = "CATEGORY_CREATED_SUCCESS";
@@ -27,6 +26,8 @@ public class SuccessCode {
     /** USER **/
     public static final String GET_USER_SUCCESS = "GET_USER_SUCCESS";
     public static final String DISABLE_USER_SUCCESS = "DISABLE_USER_SUCCESS";
+    public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
+    public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
 
     /** ROLE **/
     public static final String GET_ALL_ROLE_SUCCESS = "GET_ALL_ROLE_SUCCESS";
@@ -35,10 +36,15 @@ public class SuccessCode {
     public static final String CHECK_HAVE_ASSIGNMENT_SUCCESS = "CHECK_HAVE_ASSIGNMENT_SUCCESS";
     public static final String CREATE_ASSIGNMENT_SUCCESS = "CREATE_ASSIGNMENT_SUCCESS";
 
-    public static final String USER_UPDATED_SUCCESS = "USER_UPDATED_SUCCESS";
-    public static final String FIND_USER_SUCCESS = "FIND_USER_SUCCESS";
-
     // ASSIGNMENT
     public static final String ASSIGNMENT_COUNT_SUCCESS = "ASSIGNMENT_COUNT_SUCCESS";
     public static final String ASSIGNMENT_LOADED_SUCCESS = "ASSIGNMENT_LOADED_SUCCESS";
+    public static final String ASSIGNMENT_DELETE_SUCCESS = "ASSIGNMENT_DELETE_SUCCESS";
+    public static final String ASSIGNMENT_UPDATE_SUCCESS = "ASSIGNMENT_UPDATE_SUCCESS";
+    public static final String ASSIGNMENT_ACCEPTED_SUCCESS = "ASSIGNMENT_ACCEPTED_SUCCESS";
+    public static final String ASSIGNMENT_DECLINED_SUCCESS = "ASSIGNMENT_DECLINED_SUCCESS";
+
+    // REQUEST
+    public static final String REQUEST_CANCEL_SUCCESS = "REQUEST_CANCEL_SUCCESS";
+    public static final String REQUEST_COMPLETE_SUCCESS = "REQUEST_COMPLETE_SUCCESS";
 }

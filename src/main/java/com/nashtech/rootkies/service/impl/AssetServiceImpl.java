@@ -50,7 +50,7 @@ public class AssetServiceImpl implements AssetService {
 
     private final AssetConverter assetConverter;
 
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,
@@ -185,8 +185,7 @@ public class AssetServiceImpl implements AssetService {
                 spec = spec.and(assetCategoryCode);
             }
             if (assetCode != null) {
-                spec = spec.and(assetCode);
-                spec = spec.or(assetName);
+                spec = spec.and(Specification.where(assetCode).or(assetName));
             }
 
             Page<Asset> assets;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssignmentConverter;
 import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
@@ -13,6 +14,9 @@ import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
+import com.nashtech.rootkies.exception.InvalidRequestDataException;
+import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.repository.AssetRepository;
@@ -40,9 +44,8 @@ public class AssignmentServiceImpl implements AssignmentService {
     private final AssetRepository assetRepository;
 
     @Autowired
-    public AssignmentServiceImpl(AssignmentRepository assignmentRepository,
-                                 AssignmentConverter assignmentConverter,
-                                 AssetRepository assetRepository) {
+    public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter,
+            AssetRepository assetRepository) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
         this.assetRepository = assetRepository;
@@ -98,7 +101,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
             assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId);
             if (!assignment.isPresent()) {
-                throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
+                throw new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND);
             }
 
             ViewAssignmentDTO viewAssignmentDTO = assignmentConverter.convertToViewDTO(assignment.get());
@@ -134,23 +137,35 @@ public class AssignmentServiceImpl implements AssignmentService {
                 } else {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.assetName").ascending());
                 }
-            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignTo")) {
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedTo")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignTo.username").descending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedTo.username").descending());
                 } else {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignTo.username").ascending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedTo.username").ascending());
                 }
-            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignBy")) {
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedBy")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignBy.username").descending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedBy.username").descending());
                 } else {
-                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignBy.username").ascending());
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedBy.username").ascending());
                 }
             } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("category")) {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.category.categoryName").descending());
                 } else {
                     return PageRequest.of(pageNum, numOfItems, Sort.by("asset.category.categoryName").ascending());
+                }
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("assignedDate")) {
+                if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending());
+                } else {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").ascending());
+                }
+            } else if (searchFilterSortAssignmentDTO.getSortField().equalsIgnoreCase("state")) {
+                if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("state").descending());
+                } else {
+                    return PageRequest.of(pageNum, numOfItems, Sort.by("state").ascending());
                 }
             } else {
                 if (searchFilterSortAssignmentDTO.getSortType().equalsIgnoreCase(SortType.DSC.toString())) {
@@ -319,18 +334,127 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) throws DataNotFoundException {
-        Optional<Asset> asset =assetRepository.findById(createAssignmentDTO.getAssetCode());
-        if(!asset.isPresent()){
+        Optional<Asset> asset = assetRepository.findById(createAssignmentDTO.getAssetCode());
+        if (!asset.isPresent()) {
             throw new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND);
-        }else if(asset.get().getState() != 1){
+        } else if (asset.get().getState() != 1) {
             throw new DataNotFoundException(ErrorCode.ASSET_IS_NOT_AVAILABLE);
         }
-        
+
         Assignment assignment = assignmentConverter.createDTOToEntity(createAssignmentDTO);
         // change state of asset
         assetRepository.updateStateWhenIsAssigned(createAssignmentDTO.getAssetCode());
 
-        return  assignmentRepository.save(assignment);
+        return assignmentRepository.save(assignment);
+    }
+
+    public ResponseDTO deleteAssetByAssignmentId(Long locationId, Long assignmentId)
+            throws DataNotFoundException, DeleteDataFailException {
+
+        ResponseDTO responseDto = new ResponseDTO();
+        Optional<Assignment> assignment;
+
+        assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId);
+        if (!assignment.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND);
+        }
+        Assignment assignmentSave = assignment.get();
+        if (assignmentSave.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE);
+        }
+        try {
+            assignmentSave.setIsDeleted(true);
+            assignmentSave.getAsset().setState(State.AVAILABLE);
+            assignmentRepository.save(assignmentSave);
+
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DELETE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException {
+        ResponseDTO responseDto = new ResponseDTO();
+        try {
+            Asset assetUp = assetRepository.findById(assetCode)
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
+
+            if (!assignment.getAsset().getAssetCode().equalsIgnoreCase(assetCode)) {
+                Asset assetCur = assignment.getAsset();
+                assetCur.setState(State.AVAILABLE);
+                assetRepository.save(assetCur);
+
+                assetUp.setState(State.ASSIGNED);
+                // assetRepository.save(assetUp);
+                assignment.setAsset(assetUp);
+            }
+
+            ViewAssignmentDTO viewAssignmentDTO = assignmentConverter
+                    .convertToViewDTO(assignmentRepository.save(assignment));
+
+            responseDto.setData(viewAssignmentDTO);
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_UPDATE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_UPDATE_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO acceptAssignment(Long locationId, Long assignmentId, String username)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        Assignment assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+
+        if (assignment.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED);
+        }
+
+        if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase(username)) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR);
+        }
+
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            assignment.setState(State.ACCEPTED);
+            assignmentRepository.save(assignment);
+
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_ACCEPTED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_ACCEPTED_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO declineAssignment(Long locationId, Long assignmentId, String username)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        Assignment assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+
+        if (assignment.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED);
+        }
+
+        if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase(username)) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR);
+        }
+
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            assignment.setState(State.DECLINED);
+            assignment.getAsset().setState(State.AVAILABLE);
+            assignmentRepository.save(assignment);
+
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_DECLINED_FAIL);
+        }
     }
 
 }

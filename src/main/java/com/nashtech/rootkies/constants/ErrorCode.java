@@ -56,11 +56,6 @@ public class ErrorCode {
     /** AUTHENTICATION - AUTHORIZATION **/
     public static final String ERR_USER_LOGIN_FAIL = "ERR_USER_LOGIN_FAIL";
 
-    /** ORGANIZATION **/
-    public static final String ERR_ORGANIZATION_EXISTED = "ERR_ORGANIZATION_EXISTED";
-    public static final String CREATE_ORGANIZATION_FAIL = "CREATE_ORGANIZATION_FAIL";
-    public static final String ERR_ORGANIZATION_NOT_FOUND = "ERR_ORGANIZATION_NOT_FOUND";
-
     /** ROLE **/
     public static final String ERR_GET_ALL_ROLE = "ERR_GET_ALL_ROLE";
 
@@ -72,9 +67,11 @@ public class ErrorCode {
     public static final String ERR_CREATE_ASSET_FAIL = "ERR_CREATE_ASSET_FAIL";
     public static final String ERR_ASSET_ALREADY_HAVE_ASSIGNMENT = "ERR_ASSET_ALREADY_HAVE_ASSIGNMENT";
     public static final String ERR_ASSET_DELETE_FAIL = "ERR_ASSET_DELETE_FAIL";
+    public static final String ERR_ASSET_NOT_AVAILABLE = "ERR_ASSET_NOT_AVAILABLE";
 
     /** LOCATION **/
     public static final String ERR_LOCATION_NOT_FAIL = "ERR_LOCATION_NOT_FAIL";
+    public static final String ERR_CHECK_VALID_ASSIGNMENT = "ERR_CHECK_VALID_ASSIGNMENT";
 
     // ASSIGNMENT
     public static final String ERR_COUNT_ASSIGNMENT_FAIL = "ERR_COUNT_ASSIGNMENT_FAIL";
@@ -86,8 +83,21 @@ public class ErrorCode {
     public static final String NOTE_IS_BLANK = "NOTE_IS_BLANK";
     public static final String ERR_CREATE_ASSIGNMENT = "ERR_CREATE_ASSIGNMENT";
     public static final String ERR_ASSIGNED_DATE_IN_PAST = "ERR_ASSIGNED_DATE_IN_PAST";
+    public static final String ERR_ASSIGNMENT_DELETE_FAIL = "ERR_ASSIGNMENT_DELETE_FAIL";
+    public static final String ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE = "ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE";
+    public static final String ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED = "ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED";
+    public static final String ERR_ASSIGNED_DATE_UPDATE_IS_EARLIER_THAN_CURRENT = "ERR_ASSIGNMENT_DATE_UPDATE_IS_EARLIER_THAN_CURRENT";
+    public static final String ERR_ASSIGNMENT_UPDATE_FAIL = "ERR_ASSIGNMENT_UPDATE_FAIL";
+    public static final String ERR_ASSIGNMENT_NOT_YOUR = "ERR_ASSIGNMENT_NOT_YOUR";
+    public static final String ERR_ASSIGNMENT_ACCEPTED_FAIL = "ERR_ASSIGNMENT_ACCEPTED_FAIL";
+    public static final String ERR_ASSIGNMENT_DECLINED_FAIL = "ERR_ASSIGNMENT_DECLINED_FAIL";
 
-    /** LOCATION **/
-    public static final String ERR_CHECK_VALID_ASSIGNMENT = "ERR_CHECK_VALID_ASSIGNMENT";
+
+
+    // REQUEST
+    public static final String ERR_REQUEST_NOT_FOUND = "ERR_REQUEST_NOT_FOUND";
+    public static final String ERR_REQUEST_ALREADY_COMPLETE = "ERR_REQUEST_ALREADY_COMPLETE";
+    public static final String ERR_REQUEST_CANCEL_FAIL = "ERR_REQUEST_CANCEL_FAIL";
+    public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
 
 }

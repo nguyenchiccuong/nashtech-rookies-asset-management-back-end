@@ -35,6 +35,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import javax.validation.Valid;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +44,7 @@ import java.util.regex.Pattern;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/asset")
+@Tag(name = "ASSET", description = "ASSET API")
 public class AssetController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AssetController.class);
@@ -50,7 +53,7 @@ public class AssetController {
 
     private final AssetConverter assetConverter;
 
-    LocationConverter locationConverter;
+    private final LocationConverter locationConverter;
 
     private final JwtUtils jwtUtils;
 
@@ -144,10 +147,11 @@ public class AssetController {
 
     // remeber to research valid only work when input or output
     // edit asset
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<ResponseDTO> editAsset(@PathVariable("id") String id,
+    @PutMapping("/edit/{assetcode}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> editAsset(@PathVariable("assetcode") String assetCode,
             @RequestBody EditAssetRequest editAssetRequest) {
-        EditAssetDTO editAssetDTO = assetService.editAsset(id, editAssetRequest);
+        EditAssetDTO editAssetDTO = assetService.editAsset(assetCode, editAssetRequest);
         ResponseDTO response = new ResponseDTO();
         response.setData(editAssetDTO);
         response.setSuccessCode(SuccessCode.ASSET_EDIT_SUCCESS);

@@ -4,6 +4,10 @@ import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
+import com.nashtech.rootkies.exception.InvalidRequestDataException;
+import com.nashtech.rootkies.exception.UpdateDataFailException;
+import com.nashtech.rootkies.model.Assignment;
 
 import com.nashtech.rootkies.model.Assignment;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +39,14 @@ public interface AssignmentService {
 
         Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) throws DataNotFoundException;
 
+        public ResponseDTO deleteAssetByAssignmentId(Long locationId, Long assignmentId)
+                        throws DataNotFoundException, DeleteDataFailException;
+
+        public ResponseDTO editAssignment(Assignment assignment, String AssetCode) throws UpdateDataFailException;
+
+        public ResponseDTO acceptAssignment(Long locationId, Long assignmentId, String username)
+                        throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException;
+
+        public ResponseDTO declineAssignment(Long locationId, Long assignmentId, String username)
+                        throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException;
 }

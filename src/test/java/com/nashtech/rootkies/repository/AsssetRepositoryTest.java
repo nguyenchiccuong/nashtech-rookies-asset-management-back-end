@@ -31,44 +31,44 @@ public class AsssetRepositoryTest {
     @Autowired
     private AssetRepository assetRepository;
 
-    /*@Test
-    public void AssetTest() {
-        Location location = new Location();
-        location.setAddress("121565");
+    // @Test
+    // public void AssetTest() {
+    //     Location location = new Location();
+    //     location.setAddress("test");
 
-        assertNotNull(locationRepository.save(location));
+    //     assertNotNull(locationRepository.save(location));
 
-        Category category = new Category();
-        category.setCategoryCode("TE");
-        category.setCategoryName("test");
+    //     Category category = new Category();
+    //     category.setCategoryCode("ZZZ");
+    //     category.setCategoryName("test");
 
-        assertNotNull(categoryRepository.save(category));
+    //     assertNotNull(categoryRepository.save(category));
 
-        Asset asset = new Asset();
-        asset.setAssetName("test");
-        asset.setCategory(category);
-        asset.setInstallDate(LocalDateTime.now());
-        asset.setIsDeleted(false);
-        asset.setLocation(location);
-        asset.setSpecification("hahah");
-        asset.setState(State.AVAILABLE);
+    //     Asset asset = new Asset();
+    //     asset.setAssetName("test");
+    //     asset.setCategory(category);
+    //     asset.setInstallDate(LocalDateTime.now());
+    //     asset.setIsDeleted(false);
+    //     asset.setLocation(location);
+    //     asset.setSpecification("test");
+    //     asset.setState(State.AVAILABLE);
 
-        Asset assetSave = assetRepository.save(asset);
+    //     Asset assetSave = assetRepository.save(asset);
 
-        assertNotNull(assetSave);
+    //     assertNotNull(assetSave);
 
-        assetRepository.deleteById(assetSave.getAssetCode());
+    //     assetRepository.deleteById(assetSave.getAssetCode());
 
-        assertTrue(!assetRepository.findById(assetSave.getAssetCode()).isPresent());
+    //     assertTrue(!assetRepository.findById(assetSave.getAssetCode()).isPresent());
 
-        locationRepository.deleteById(location.getLocationId());
+    //     locationRepository.deleteById(location.getLocationId());
 
-        assertTrue(!locationRepository.findById(location.getLocationId()).isPresent());
+    //     assertTrue(!locationRepository.findById(location.getLocationId()).isPresent());
 
-        categoryRepository.deleteById("TE");
+    //     categoryRepository.deleteById("ZZ");
 
-        assertTrue(!categoryRepository.findById("TE").isPresent());
-    }
+    //     assertTrue(!categoryRepository.findById("ZZ").isPresent());
+    // }
 
     @Test
     public void saveErrorTest() {
@@ -81,6 +81,6 @@ public class AsssetRepositoryTest {
         }
 
         assertNotNull(result);
-    }*/
+    }
 
 }

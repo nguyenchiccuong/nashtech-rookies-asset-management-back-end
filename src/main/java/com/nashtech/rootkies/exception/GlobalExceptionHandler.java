@@ -11,18 +11,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-// @ControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(ConverterUserException.class)
-    	public ResponseEntity convertUserFail(ConverterUserException ex, WebRequest request) {
-		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null , null);
+	@ExceptionHandler(ConvertEntityDTOException.class)
+	public ResponseEntity convertEntityDTOException(ConvertEntityDTOException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(DataNotFoundException.class)
-	public ResponseEntity getDataFail(ConverterUserException ex, WebRequest request) {
-		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null , null);
+	@ExceptionHandler(ConverterUserException.class)
+	public ResponseEntity converterUserException(ConverterUserException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CreateDataFailException.class)
+	public ResponseEntity createDataFailException(CreateDataFailException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
@@ -32,16 +37,28 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(CreateDataFailException.class)
-	public ResponseEntity createDataFailException(CreateDataFailException ex, WebRequest request) {
+	@ExceptionHandler(DeleteDataFailException.class)
+	public ResponseEntity deleteDataFailException(DeleteDataFailException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(DeleteDataFailException.class)
-	public ResponseEntity updateDataFailException(DeleteDataFailException ex, WebRequest request) {
+	@ExceptionHandler(DuplicateDataException.class)
+	public ResponseEntity duplicateDataException(DuplicateDataException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(InvalidRequestDataException.class)
+	public ResponseEntity invalidRequestDataException(InvalidRequestDataException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(UpdateDataFailException.class)
@@ -51,31 +68,25 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(UserAuthenticationException.class)
-	public ResponseEntity DuplicateDataException(UserAuthenticationException ex, WebRequest request) {
+	public ResponseEntity userAuthenticationException(UserAuthenticationException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
 	}
 
 	@ExceptionHandler(UserExistedException.class)
-	public ResponseEntity UserExistedException(UserExistedException ex, WebRequest request) {
-		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
-		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-	}
-
-	@ExceptionHandler(DuplicateDataException.class)
-	public ResponseEntity DuplicateDataException(DuplicateDataException ex, WebRequest request) {
+	public ResponseEntity userExistedException(UserExistedException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity UserNotFoundException(UserNotFoundException ex, WebRequest request) {
+	public ResponseEntity userNotFoundException(UserNotFoundException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(InvalidRequestDataException.class)
-	public ResponseEntity invalidRequestDataException(InvalidRequestDataException ex, WebRequest request) {
+	@ExceptionHandler(UserSignupException.class)
+	public ResponseEntity userSignupException(UserSignupException ex, WebRequest request) {
 		ResponseDTO errorResponse = new ResponseDTO(ex.getMessage(), null, null);
 		return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
