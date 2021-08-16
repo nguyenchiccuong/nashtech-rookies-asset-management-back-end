@@ -76,7 +76,7 @@ values('LA000002',
         '2021-07-06 14:25:05',
         false,
         'intel core i5',
-        1,
+        3,
         'LA',
         101
 );
@@ -116,7 +116,7 @@ values('LA000004',
         '2021-07-06 14:24:05',
         false,
         'intel core i3',
-        1,
+        3,
         'LA',
         102
 );
@@ -136,7 +136,7 @@ values('LA000005',
         '2021-07-06 14:25:05',
         false,
         'intel core i5',
-        1,
+        3,
         'LA',
         102
 );
@@ -176,7 +176,7 @@ values('PC000001',
         '2021-07-06 14:24:05',
         false,
         'intel core i3',
-        1,
+        3,
         'PC',
         101
 );
@@ -196,7 +196,7 @@ values('PC000002',
         '2021-07-06 14:25:05',
         false,
         'intel core i5',
-        1,
+        3,
         'PC',
         101
 );
@@ -307,7 +307,7 @@ VALUES
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
-    (1, true, NULL, 1, 'SD0002', 1, 'SD0001');
+    (1, true, NULL, 1, NULL, 1, 'SD0001');
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
@@ -315,4 +315,4 @@ VALUES
 INSERT INTO public.requests
     (requestid, isdeleted, returneddate, state, acceptedby, assignmentid, requestedby)
 VALUES
-    (3, false, NULL, 1, 'SD0002', 4, 'SD0001');
+    (3, false, NULL, 1, NULL, 4, 'SD0001');
