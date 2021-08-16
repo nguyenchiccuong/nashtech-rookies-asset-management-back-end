@@ -21,6 +21,7 @@ public class ErrorCode {
     public static final String STATE_INCORRECT_FORMAT = "STATE_INCORRECT_FORMAT";
     public static final String ERR_EDIT_ASSET = "ERR_EDIT_ASSET";
     public static final String ERR_GET_ALL_ASSET = "ERR_GET_ALL_ASSET";
+    public static final String ASSET_IS_NOT_AVAILABLE = "ASSET_IS_NOT_AVAILABLE";
 
     /** CATEGORY **/
     public static final String ERR_CATEGORY_NOT_FOUND = "ERR_CATEGORY_NOT_FOUND";

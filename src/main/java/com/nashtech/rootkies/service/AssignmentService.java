@@ -33,6 +33,6 @@ public interface AssignmentService {
                         SearchFilterSortAssignmentDTO searchFilterSortAssignmentDTO, Long locationId)
                         throws DataNotFoundException;
 
-        Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO);
+        Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) throws DataNotFoundException;
 
 }

@@ -13,7 +13,9 @@ import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.specs.AssignmentSpecification;
 import com.nashtech.rootkies.repository.specs.SearchCriteria;
@@ -35,10 +37,15 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentConverter assignmentConverter;
 
+    private final AssetRepository assetRepository;
+
     @Autowired
-    public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter) {
+    public AssignmentServiceImpl(AssignmentRepository assignmentRepository,
+                                 AssignmentConverter assignmentConverter,
+                                 AssetRepository assetRepository) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
+        this.assetRepository = assetRepository;
     }
 
     @Override
@@ -311,9 +318,17 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) {
+    public Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) throws DataNotFoundException {
+        Optional<Asset> asset =assetRepository.findById(createAssignmentDTO.getAssetCode());
+        if(!asset.isPresent()){
+            throw new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND);
+        }else if(asset.get().getState() != 1){
+            throw new DataNotFoundException(ErrorCode.ASSET_IS_NOT_AVAILABLE);
+        }
         
         Assignment assignment = assignmentConverter.createDTOToEntity(createAssignmentDTO);
+        // change state of asset
+        assetRepository.updateStateWhenIsAssigned(createAssignmentDTO.getAssetCode());
 
         return  assignmentRepository.save(assignment);
     }

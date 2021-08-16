@@ -79,7 +79,7 @@ public class AssignmentConverter {
                 .assignedBy(User.builder().staffCode(dto.getAssignedBy()).build())
                 .assignedTo(User.builder().staffCode(dto.getAssignedTo()).build())
                 .note(dto.getNote())
-                .state((short)1)
+                .state((short)2)
                 .asset(Asset.builder().assetCode(dto.getAssetCode()).build())
                 .isDeleted(false)
                 .assignedDate(LocalDateTime.parse(dto.getAssignedDate() , formatter))

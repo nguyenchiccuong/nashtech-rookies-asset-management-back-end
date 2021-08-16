@@ -249,6 +249,7 @@ public class UserServiceImpl implements UserService {
         }
 
         repository.disableUser(staffCode);
+        repository.disableUserRole(staffCode);
     }
 
     public boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException {

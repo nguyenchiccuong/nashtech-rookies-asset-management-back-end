@@ -122,7 +122,8 @@ public class AssignmentController {
         ResponseDTO response = new ResponseDTO();
         try{
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            if(LocalDateTime.parse(dto.getAssignedDate() , formatter).toLocalDate().isBefore(LocalDate.now()) ){
+            if(!(LocalDateTime.parse(dto.getAssignedDate() , formatter).toLocalDate().isEqual(LocalDate.now()) ||
+                    LocalDateTime.parse(dto.getAssignedDate() , formatter).toLocalDate().isAfter(LocalDate.now()))){
                 response.setErrorCode(ErrorCode.ERR_ASSIGNED_DATE_IN_PAST);
                 return ResponseEntity.badRequest().body(response);
             }

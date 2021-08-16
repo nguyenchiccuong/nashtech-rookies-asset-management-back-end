@@ -27,4 +27,9 @@ public interface UserRepository extends JpaRepository<User, String> , JpaSpecifi
 	@Transactional
 	@Query(value = "UPDATE users SET isdeleted = true WHERE staffcode =?1" , nativeQuery = true)
 	void disableUser(String staffCode);
+
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE users SET roleid = roleid + 2 where staffcode = ?1" , nativeQuery = true)
+	void disableUserRole(String staffCode);
 }
