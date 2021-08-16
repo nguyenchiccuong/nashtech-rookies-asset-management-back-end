@@ -14,6 +14,7 @@ import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
+import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
@@ -370,7 +371,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                 assetRepository.save(assetCur);
 
                 assetUp.setState(State.ASSIGNED);
-                //assetRepository.save(assetUp);
+                // assetRepository.save(assetUp);
                 assignment.setAsset(assetUp);
             }
 
@@ -382,6 +383,61 @@ public class AssignmentServiceImpl implements AssignmentService {
             return responseDto;
         } catch (Exception e) {
             throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_UPDATE_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO acceptAssignment(Long locationId, Long assignmentId, String username)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        Assignment assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+
+        if (assignment.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED);
+        }
+
+        if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase(username)) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR);
+        }
+
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            assignment.setState(State.ACCEPTED);
+            assignmentRepository.save(assignment);
+
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_ACCEPTED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_ACCEPTED_FAIL);
+        }
+    }
+
+    @Override
+    public ResponseDTO declineAssignment(Long locationId, Long assignmentId, String username)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        Assignment assignment = assignmentRepository.findByAssignmentId(locationId, assignmentId)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+
+        if (assignment.getState() != State.WAITING_FOR_ACCEPTANCE) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED);
+        }
+
+        if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase(username)) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR);
+        }
+
+        try {
+            ResponseDTO responseDto = new ResponseDTO();
+
+            assignment.setState(State.DECLINED);
+            assignment.getAsset().setState(State.AVAILABLE);
+            assignmentRepository.save(assignment);
+
+            responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_DECLINED_FAIL);
         }
     }
 

@@ -138,4 +138,26 @@ public class AssignmentController {
                 username);
         return ResponseEntity.ok(assignmentService.editAssignment(assignment, EditAssignmentDTO.getAssetCode()));
     }
+
+    @PutMapping("/accept/{assignmentId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> acceptAssignment(HttpServletRequest req,
+            @PathVariable("assignmentId") Long assignmentId)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        return ResponseEntity.ok(assignmentService.acceptAssignment(locationId, assignmentId , username));
+    }
+
+    @PutMapping("/decline/{assignmentId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> declineAssignment(HttpServletRequest req,
+            @PathVariable("assignmentId") Long assignmentId)
+            throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException {
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        return ResponseEntity.ok(assignmentService.declineAssignment(locationId, assignmentId , username));
+    }
 }
