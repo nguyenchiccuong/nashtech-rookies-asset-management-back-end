@@ -81,4 +81,11 @@ public class ErrorCode {
     public static final String ERR_ASSIGNED_DATE_UPDATE_IS_EARLIER_THAN_CURRENT = "ERR_ASSIGNMENT_DATE_UPDATE_IS_EARLIER_THAN_CURRENT";
     public static final String ERR_ASSIGNMENT_UPDATE_FAIL = "ERR_ASSIGNMENT_UPDATE_FAIL";
 
+
+    // REQUEST
+    public static final String ERR_REQUEST_NOT_FOUND = "ERR_REQUEST_NOT_FOUND";
+    public static final String ERR_REQUEST_ALREADY_COMPLETE = "ERR_REQUEST_ALREADY_COMPLETE";
+    public static final String ERR_REQUEST_CANCEL_FAIL = "ERR_REQUEST_CANCEL_FAIL";
+    public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
+
 }
