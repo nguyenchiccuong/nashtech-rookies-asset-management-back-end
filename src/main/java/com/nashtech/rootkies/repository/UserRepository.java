@@ -30,6 +30,10 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
 	@Query(value = "UPDATE users SET isdeleted = true WHERE staffcode =?1", nativeQuery = true)
 	void disableUser(String staffCode);
 
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE users SET roleid = roleid + 2 where staffcode = ?1" , nativeQuery = true)
+	void disableUserRole(String staffCode);
 	@Query("FROM User u WHERE u.location.locationId = ?1 AND u.isDeleted = false AND u.staffCode = ?2")
 	Optional<User> findByStaffCode(Long locationId, String staffcode);
 

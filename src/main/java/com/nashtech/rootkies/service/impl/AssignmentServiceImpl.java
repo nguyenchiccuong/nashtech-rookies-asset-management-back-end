@@ -7,6 +7,7 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssignmentConverter;
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.NumberOfAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
@@ -332,6 +333,21 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public Assignment createAssignment(CreateAssignmentDTO createAssignmentDTO) throws DataNotFoundException {
+        Optional<Asset> asset = assetRepository.findById(createAssignmentDTO.getAssetCode());
+        if (!asset.isPresent()) {
+            throw new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND);
+        } else if (asset.get().getState() != 1) {
+            throw new DataNotFoundException(ErrorCode.ASSET_IS_NOT_AVAILABLE);
+        }
+
+        Assignment assignment = assignmentConverter.createDTOToEntity(createAssignmentDTO);
+        // change state of asset
+        assetRepository.updateStateWhenIsAssigned(createAssignmentDTO.getAssetCode());
+
+        return assignmentRepository.save(assignment);
+    }
+
     public ResponseDTO deleteAssetByAssignmentId(Long locationId, Long assignmentId)
             throws DataNotFoundException, DeleteDataFailException {
 

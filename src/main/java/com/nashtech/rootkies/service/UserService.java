@@ -41,5 +41,6 @@ public interface UserService {
     User updateUser(String userId, User user) throws UserNotFoundException, ResourceNotFoundException;
     Optional<User> getUser(String staffCode) throws UserNotFoundException;
     List<User> retrieveUsers() throws UserNotFoundException;
+    PageDTO getAllUserInAssignment(Pageable pageable , Specification specification) throws DataNotFoundException;
     
 }

@@ -249,6 +249,7 @@ public class UserServiceImpl implements UserService {
         }
 
         repository.disableUser(staffCode);
+        repository.disableUserRole(staffCode);
     }
 
     public boolean checkAnyValidAssignment(String staffCode) throws DataNotFoundException {
@@ -259,6 +260,17 @@ public class UserServiceImpl implements UserService {
 
         // check user have any valid assignment or not
         return assignmentRepository.checkAnyValidAssignment(staffCode);
+    }
+
+    public PageDTO getAllUserInAssignment(Pageable pageable , Specification specification) throws DataNotFoundException {
+        try{
+            Page<User> page =  repository.findAll(specification , pageable);
+            PageDTO pageDTO= converter.entityToUserAssignmentDTO(page);
+            return  pageDTO;
+        }catch (Exception exception){
+            throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_USER);
+        }
+
     }
   
 }

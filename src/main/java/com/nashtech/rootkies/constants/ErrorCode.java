@@ -20,6 +20,8 @@ public class ErrorCode {
     public static final String DATE_INCORRECT_FORMAT = "DATE_INCORRECT_FORMAT";
     public static final String STATE_INCORRECT_FORMAT = "STATE_INCORRECT_FORMAT";
     public static final String ERR_EDIT_ASSET = "ERR_EDIT_ASSET";
+    public static final String ERR_GET_ALL_ASSET = "ERR_GET_ALL_ASSET";
+    public static final String ASSET_IS_NOT_AVAILABLE = "ASSET_IS_NOT_AVAILABLE";
 
     /** CATEGORY **/
     public static final String ERR_CATEGORY_NOT_FOUND = "ERR_CATEGORY_NOT_FOUND";
@@ -75,6 +77,12 @@ public class ErrorCode {
     public static final String ERR_COUNT_ASSIGNMENT_FAIL = "ERR_COUNT_ASSIGNMENT_FAIL";
     public static final String ERR_RETRIEVE_ASSIGNMENT_FAIL = "ERR_RETRIEVE_ASSIGNMENT_FAIL";
     public static final String ERR_ASSIGNMENT_ID_NOT_FOUND = "ERR_ASSIGNMENT_ID_NOT_FOUND";
+    public static final String STAFF_CODE_IS_BLANK = "STAFF_CODE_IS_BLANK";
+    public static final String ASSETCODE_IS_BLANK = "ASSETCODE_IS_BLANK";
+    public static final String ASSIGNED_DATE_IS_BLANK = "ASSIGNED_DATE_IS_BLANK";
+    public static final String NOTE_IS_BLANK = "NOTE_IS_BLANK";
+    public static final String ERR_CREATE_ASSIGNMENT = "ERR_CREATE_ASSIGNMENT";
+    public static final String ERR_ASSIGNED_DATE_IN_PAST = "ERR_ASSIGNED_DATE_IN_PAST";
     public static final String ERR_ASSIGNMENT_DELETE_FAIL = "ERR_ASSIGNMENT_DELETE_FAIL";
     public static final String ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE = "ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE";
     public static final String ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED = "ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED";

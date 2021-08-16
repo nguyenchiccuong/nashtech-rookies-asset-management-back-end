@@ -6,6 +6,7 @@ import com.nashtech.rootkies.repository.RoleRepository;
 import com.nashtech.rootkies.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDTO> getAllRole() {
-        return converter.entitiesToDto(repository.findAll()) ;
+        return converter.entitiesToDto(repository.findAll(Sort.by("roleName"))) ;
     }
 }

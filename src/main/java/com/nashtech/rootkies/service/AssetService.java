@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.service;
 
+import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
@@ -10,6 +11,7 @@ import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.model.Asset;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 public interface AssetService {
         // Asset list can be sorted by column titles (default: ascending)
@@ -39,5 +41,7 @@ public interface AssetService {
                         throws DataNotFoundException, DeleteDataFailException;
 
         public ResponseDTO checkDeleteAssetByAssetCode(Long locationId, String assetCode)
-                        throws DataNotFoundException, DeleteDataFailException;;
+                        throws DataNotFoundException, DeleteDataFailException;
+
+        PageDTO getAllAssetAvailable(Pageable pageable , Specification specification) throws DataNotFoundException;
 }

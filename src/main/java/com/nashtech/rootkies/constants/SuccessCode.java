@@ -21,6 +21,7 @@ public class SuccessCode {
     public static final String ASSET_CREATED_SUCCESS = "ASSET_CREATED_SUCCESS";
     public static final String ASSET_EDIT_SUCCESS = "ASSET_EDIT_SUCCESS";
     public static final String ASSET_ABLE_TO_DELETE = "ASSET_ABLE_TO_DELETE";
+    public static final String GET_ASSET_SUCCESS = "GET_ASSET_SUCCESS";
 
     /** USER **/
     public static final String GET_USER_SUCCESS = "GET_USER_SUCCESS";
@@ -33,6 +34,9 @@ public class SuccessCode {
 
     /** ASSIGNMENT **/
     public static final String CHECK_HAVE_ASSIGNMENT_SUCCESS = "CHECK_HAVE_ASSIGNMENT_SUCCESS";
+    public static final String CREATE_ASSIGNMENT_SUCCESS = "CREATE_ASSIGNMENT_SUCCESS";
+
+    // ASSIGNMENT
     public static final String ASSIGNMENT_COUNT_SUCCESS = "ASSIGNMENT_COUNT_SUCCESS";
     public static final String ASSIGNMENT_LOADED_SUCCESS = "ASSIGNMENT_LOADED_SUCCESS";
     public static final String ASSIGNMENT_DELETE_SUCCESS = "ASSIGNMENT_DELETE_SUCCESS";

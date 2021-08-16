@@ -1,6 +1,7 @@
 package com.nashtech.rootkies.converter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +11,10 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
+import com.nashtech.rootkies.dto.assignment.response.RequestDTO;
+import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
+import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.dto.assignment.request.EditAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.RequestDTO;
@@ -23,6 +28,7 @@ import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 
+import com.nashtech.rootkies.model.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -88,6 +94,19 @@ public class AssignmentConverter {
             e.printStackTrace();
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
+    }
+
+    public Assignment createDTOToEntity(CreateAssignmentDTO dto){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return Assignment.builder()
+                .assignedBy(User.builder().staffCode(dto.getAssignedBy()).build())
+                .assignedTo(User.builder().staffCode(dto.getAssignedTo()).build())
+                .note(dto.getNote())
+                .state((short)2)
+                .asset(Asset.builder().assetCode(dto.getAssetCode()).build())
+                .isDeleted(false)
+                .assignedDate(LocalDateTime.parse(dto.getAssignedDate() , formatter))
+                .build();
     }
 
     public Assignment convertEditAssignmentDTOToEntity(Long locationId, @Valid EditAssignmentDTO editAssignmentDTO,

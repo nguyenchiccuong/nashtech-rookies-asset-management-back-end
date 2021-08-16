@@ -4,12 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.rootkies.model.Asset;
+
+import javax.transaction.Transactional;
 
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecificationExecutor<Asset> {
@@ -24,4 +27,9 @@ public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecif
     Optional<Asset> findByAssetCode(Long locationId, String assetCode);
 
     public List<Asset> findByAssetCodeStartingWithOrderByAssetCodeDesc(String categoryCode);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update assets set state = 3 where assetcode =?1 " , nativeQuery = true)
+    void updateStateWhenIsAssigned(String assetCode);
 }

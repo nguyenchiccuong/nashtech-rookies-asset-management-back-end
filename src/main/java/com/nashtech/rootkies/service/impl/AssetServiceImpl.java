@@ -2,6 +2,7 @@
 package com.nashtech.rootkies.service.impl;
 
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
@@ -412,5 +413,19 @@ public class AssetServiceImpl implements AssetService {
             return responseDto;
         }
     }
+
+    @Override
+    public PageDTO getAllAssetAvailable(Pageable pageable, Specification specification) throws DataNotFoundException {
+
+        try{
+            return assetConverter.pageAssetToPageDTO(assetRepository.findAll(specification , pageable));
+
+        }catch (Exception exception){
+
+            throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_ASSET);
+        }
+    }
+
+
 
 }

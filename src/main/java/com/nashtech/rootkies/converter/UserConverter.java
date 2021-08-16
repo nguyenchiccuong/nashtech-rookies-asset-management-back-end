@@ -5,6 +5,7 @@ import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.auth.SignupDTO;
 import com.nashtech.rootkies.dto.user.UserDTO;
 import com.nashtech.rootkies.dto.user.UserDetailDTO;
+import com.nashtech.rootkies.dto.user.UserInAssignmentDTO;
 import com.nashtech.rootkies.dto.user.request.CreateUserDTO;
 import com.nashtech.rootkies.dto.user.request.EditUserDTO;
 import com.nashtech.rootkies.enums.ERole;
@@ -190,5 +191,29 @@ public class UserConverter {
         } catch (Exception ex) {
             throw new ConvertEntityDTOException(ErrorCode.ERR_CONVERT_DTO_ENTITY_FAIL);
         }
+    }
+
+    public UserInAssignmentDTO entityToUserAssignmentDTO(User user){
+        return UserInAssignmentDTO.builder()
+                .staffCode(user.getStaffCode())
+                .fullName(user.getFirstName() + " " + user.getLastName())
+                .role(user.getRole().getRoleName().toString().replace("ROLE_" , ""))
+                .build();
+    }
+
+    public PageDTO entityToUserAssignmentDTO(Page<User> page){
+
+
+            List<UserInAssignmentDTO> users = page.stream()
+                    .map(user -> entityToUserAssignmentDTO(user))
+                    .collect(Collectors.toList());
+
+            return PageDTO.builder()
+                    .totalPages(page.getTotalPages())
+                    .totalElements(page.getTotalElements())
+                    .data(users)
+                    .build();
+
+
     }
 }
