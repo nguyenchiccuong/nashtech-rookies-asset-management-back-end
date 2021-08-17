@@ -91,6 +91,7 @@ public class ErrorCode {
     public static final String ERR_ASSIGNMENT_NOT_YOUR = "ERR_ASSIGNMENT_NOT_YOUR";
     public static final String ERR_ASSIGNMENT_ACCEPTED_FAIL = "ERR_ASSIGNMENT_ACCEPTED_FAIL";
     public static final String ERR_ASSIGNMENT_DECLINED_FAIL = "ERR_ASSIGNMENT_DECLINED_FAIL";
+    public static final String ERR_CONVERT_ASSIGNMENT_TO_DTO = "ERR_CONVERT_ASSIGNMENT_TO_DTO";
 
 
 
