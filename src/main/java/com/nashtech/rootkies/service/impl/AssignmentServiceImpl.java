@@ -359,7 +359,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             throw new DataNotFoundException(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND);
         }
         Assignment assignmentSave = assignment.get();
-        if (assignmentSave.getState() != State.WAITING_FOR_ACCEPTANCE) {
+        if (assignmentSave.getState() != State.WAITING_FOR_ACCEPTANCE && assignmentSave.getState() != State.DECLINED) {
             throw new DeleteDataFailException(ErrorCode.ERR_ASSIGNMENT_DELETE_FAIL_DUE_TO_STATE);
         }
         try {
