@@ -55,21 +55,22 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssetRepository assetRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private OwnAssignmentResponseConverter responseConverter;
+    private final OwnAssignmentResponseConverter responseConverter;
 
-    @Autowired
-    private OwnAssignmentDetailConverter detailConverter;
+    private final OwnAssignmentDetailConverter detailConverter;
 
     @Autowired
     public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter,
-            AssetRepository assetRepository) {
+            AssetRepository assetRepository, UserRepository userRepository, 
+            OwnAssignmentResponseConverter responseConverter, OwnAssignmentDetailConverter detailConverter) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
         this.assetRepository = assetRepository;
+        this.userRepository = userRepository;
+        this.responseConverter = responseConverter;
+        this.detailConverter = detailConverter;
     }
 
     @Override
