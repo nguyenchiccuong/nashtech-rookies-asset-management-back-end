@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class CreateAssignmentDTO {
 
-    @NotBlank(message = ErrorCode.STAFF_CODE_IS_BLANK)
+
     private String assignedBy;
 
     @NotBlank(message = ErrorCode.STAFF_CODE_IS_BLANK)

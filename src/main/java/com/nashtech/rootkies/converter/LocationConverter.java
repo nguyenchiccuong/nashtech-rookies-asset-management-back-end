@@ -25,4 +25,11 @@ public class LocationConverter {
 
         return user.getLocation().getLocationId();
     }
+
+    public String getStaffCodeFromUsername(String username) throws DataNotFoundException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
+
+        return user.getStaffCode();
+    }
 }
