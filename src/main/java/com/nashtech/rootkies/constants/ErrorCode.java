@@ -91,6 +91,11 @@ public class ErrorCode {
     public static final String ERR_ASSIGNMENT_NOT_YOUR = "ERR_ASSIGNMENT_NOT_YOUR";
     public static final String ERR_ASSIGNMENT_ACCEPTED_FAIL = "ERR_ASSIGNMENT_ACCEPTED_FAIL";
     public static final String ERR_ASSIGNMENT_DECLINED_FAIL = "ERR_ASSIGNMENT_DECLINED_FAIL";
+    public static final String ERR_LOAD_OWN_ASSIGNMENT = "ERR_LOAD_OWN_ASSIGNMENT";
+    public static final String ASSIGNMENT_NOT_FOUND = "ASSIGNMENT_NOT_FOUND";
+    public static final String ASSIGNMENT_IS_DELETED = "ASSIGNMENT_IS_DELETED";
+    public static final String ASSIGNMENT_IS_DECLINED = "ASSIGNMENT_IS_DECLINED";
+    public static final String ERR_OWN_ASSIGNMENT_DETAIL = "ERR_OWN_ASSIGNMENT_DETAIL";
     public static final String ERR_CONVERT_ASSIGNMENT_TO_DTO = "ERR_CONVERT_ASSIGNMENT_TO_DTO";
 
 

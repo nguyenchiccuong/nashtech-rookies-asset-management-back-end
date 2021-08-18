@@ -1,10 +1,12 @@
 package com.nashtech.rootkies.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.model.User;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,4 +33,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long>, J
             + "FROM assignments a WHERE assignedby = ?1 or assignedto =?1 ", nativeQuery = true)
 
     Boolean checkAnyValidAssignment(String staffCode);
+
+    Page<Assignment> findByAssignedToAndStateNotAndAssignedDateLessThanAndIsDeleted(User assignedTo, 
+                    Short state, LocalDateTime current, Boolean isDeleted, Pageable pageable);
 }

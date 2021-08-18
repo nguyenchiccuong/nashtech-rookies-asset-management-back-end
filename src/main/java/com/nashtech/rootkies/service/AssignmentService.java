@@ -3,6 +3,9 @@ package com.nashtech.rootkies.service;
 import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.ownassignment.request.OwnAssignmentRequest;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentDetail;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentResponse;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
@@ -49,4 +52,10 @@ public interface AssignmentService {
 
         public ResponseDTO declineAssignment(Long locationId, Long assignmentId, String username)
                         throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException;
+        
+        //view own assignments
+        public OwnAssignmentResponse viewOwnAssignment(OwnAssignmentRequest request);
+
+        //own assignment detail
+        public OwnAssignmentDetail getOwnAssignmentDetail(Long assignmentId);
 }

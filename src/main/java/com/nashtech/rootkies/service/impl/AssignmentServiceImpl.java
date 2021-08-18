@@ -1,5 +1,9 @@
 package com.nashtech.rootkies.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,20 +11,28 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssignmentConverter;
+import com.nashtech.rootkies.converter.ownassignment.OwnAssignmentResponseConverter;
+import com.nashtech.rootkies.converter.ownassignment.OwnAssignmentDetailConverter;
 import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.NumberOfAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.ownassignment.request.OwnAssignmentRequest;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentDetail;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentResponse;
 import com.nashtech.rootkies.enums.SortType;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.AssignmentRepository;
+import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.repository.specs.AssignmentSpecification;
 import com.nashtech.rootkies.repository.specs.SearchCriteria;
 import com.nashtech.rootkies.repository.specs.SearchOperation;
@@ -43,12 +55,22 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssetRepository assetRepository;
 
+    private final UserRepository userRepository;
+
+    private final OwnAssignmentResponseConverter responseConverter;
+
+    private final OwnAssignmentDetailConverter detailConverter;
+
     @Autowired
     public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter,
-            AssetRepository assetRepository) {
+            AssetRepository assetRepository, UserRepository userRepository, 
+            OwnAssignmentResponseConverter responseConverter, OwnAssignmentDetailConverter detailConverter) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
         this.assetRepository = assetRepository;
+        this.userRepository = userRepository;
+        this.responseConverter = responseConverter;
+        this.detailConverter = detailConverter;
     }
 
     @Override
@@ -454,6 +476,99 @@ public class AssignmentServiceImpl implements AssignmentService {
             return responseDto;
         } catch (Exception e) {
             throw new UpdateDataFailException(ErrorCode.ERR_ASSIGNMENT_DECLINED_FAIL);
+        }
+    }
+
+    public LocalDateTime getTimeForComparing() {
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(date + " 23:59:59", formatter);
+        return dateTime;
+    }
+
+    @Override
+    public OwnAssignmentResponse viewOwnAssignment(OwnAssignmentRequest request) {
+        int pageNum = request.getPageNum();
+        int pageSize = request.getPageSize();
+        String staffCode = request.getStaffCode();
+        String orderBy = request.getOrderBy();
+        String typeOrder = request.getTypeOrder();
+
+        User assignedTo = userRepository.findById(staffCode)
+                .orElseThrow(() -> new ApiRequestException(ErrorCode.USER_NOT_FOUND));
+        if (assignedTo.getIsDeleted()) {
+            throw new ApiRequestException(ErrorCode.USER_IS_DISABLED);
+        }
+
+        try {
+            Pageable pageable;
+            if (typeOrder.equalsIgnoreCase("ASC")) {
+                switch (orderBy) {
+                    case "assetCode":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("asset.assetCode").ascending());
+                        break;
+                    case "assetName":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("asset.assetName").ascending());
+                        break;
+                    case "category":
+                        pageable = PageRequest.of(pageNum - 1, pageSize,
+                                Sort.by("asset.category.categoryName").ascending());
+                        break;
+                    case "state":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("state").ascending());
+                        break;
+                    default:
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("assignedDate").ascending());
+                }
+            } else {
+                switch (orderBy) {
+                    case "assetCode":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("asset.assetCode").descending());
+                        break;
+                    case "assetName":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("asset.assetName").descending());
+                        break;
+                    case "category":
+                        pageable = PageRequest.of(pageNum - 1, pageSize,
+                                Sort.by("asset.category.categoryName").descending());
+                        break;
+                    case "state":
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("state").descending());
+                        break;
+                    default:
+                        pageable = PageRequest.of(pageNum - 1, pageSize, Sort.by("assignedDate").descending());
+                }
+            }
+
+            LocalDateTime current = getTimeForComparing();
+
+            Page<Assignment> page = assignmentRepository.findByAssignedToAndStateNotAndAssignedDateLessThanAndIsDeleted(
+                    assignedTo, State.DECLINED, current, false, pageable);
+
+            return responseConverter.convert(pageNum, page);
+        } catch (Exception e) {
+            throw new ApiRequestException(ErrorCode.ERR_LOAD_OWN_ASSIGNMENT);
+        }
+    }
+
+    @Override
+    public OwnAssignmentDetail getOwnAssignmentDetail(Long assignmentId) {
+        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(
+            () -> new ApiRequestException(ErrorCode.ASSIGNMENT_NOT_FOUND)
+        );
+        if(assignment.getIsDeleted()){
+            throw new ApiRequestException(ErrorCode.ASSIGNMENT_IS_DELETED);
+        }
+        if(assignment.getState() == State.DECLINED){
+            throw new ApiRequestException(ErrorCode.ASSIGNMENT_IS_DECLINED);
+        }
+
+        try{
+            OwnAssignmentDetail detail = detailConverter.convert(assignment);
+            return detail;
+        }
+        catch(Exception e){
+            throw new ApiRequestException(ErrorCode.ERR_OWN_ASSIGNMENT_DETAIL);
         }
     }
 
