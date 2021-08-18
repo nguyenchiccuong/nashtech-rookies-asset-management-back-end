@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class ApiException {
    
-    private final String message;
+    private final String errorCode;
     private final HttpStatus httpsStatus;
     private final LocalDateTime time;
 }
