@@ -1,21 +1,11 @@
 package com.nashtech.rootkies.converter;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.dto.PageDTO;
-import com.nashtech.rootkies.dto.asset.response.AssetInAssignmentDTO;
 import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
-import com.nashtech.rootkies.dto.asset.response.AssignmentDTO;
-import com.nashtech.rootkies.dto.asset.response.CreateAssetResponseDTO;
-import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.RequestDTO;
-import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.*;
+import com.nashtech.rootkies.exception.AssetConvertException;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
@@ -23,11 +13,16 @@ import com.nashtech.rootkies.model.Category;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.repository.CategoryRepository;
 import com.nashtech.rootkies.repository.LocationRepository;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 public class AssetConverter {
@@ -161,5 +156,26 @@ public class AssetConverter {
                 .totalElements(page.getTotalElements())
                 .data(users)
                 .build();
+    }
+
+    public ReportDTO convertToReportDTO(List<Object[]> data) throws AssetConvertException {
+        try{
+            Object[] report = data.get(0);
+
+            ReportDTO reportDTO = ReportDTO.builder()
+                    .category((String) report[0])
+                    .available(((BigInteger) report[1]).intValue())
+                    .notAvailable(((BigInteger) report[2]).intValue())
+                    .assigned(((BigInteger) report[3]).intValue())
+                    .waitingForRecycle(((BigInteger) report[4]).intValue())
+                    .recycled(((BigInteger) report[5]).intValue())
+                    .build();
+            reportDTO.countTotal();
+
+            return reportDTO;
+        }catch (Exception ex){
+            throw new AssetConvertException(ErrorCode.ERR_CONVERT_REPORT);
+        }
+
     }
 }

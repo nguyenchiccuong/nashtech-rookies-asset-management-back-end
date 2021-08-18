@@ -4,7 +4,9 @@ import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.ReportDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.exception.AssetConvertException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
@@ -12,6 +14,8 @@ import com.nashtech.rootkies.model.Asset;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 public interface AssetService {
         // Asset list can be sorted by column titles (default: ascending)
@@ -44,4 +48,6 @@ public interface AssetService {
                         throws DataNotFoundException, DeleteDataFailException;
 
         PageDTO getAllAssetAvailable(Pageable pageable , Specification specification) throws DataNotFoundException;
+
+        List<ReportDTO> getAssetReport() throws AssetConvertException;
 }

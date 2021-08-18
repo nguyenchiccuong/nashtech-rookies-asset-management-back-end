@@ -22,6 +22,7 @@ public class SuccessCode {
     public static final String ASSET_EDIT_SUCCESS = "ASSET_EDIT_SUCCESS";
     public static final String ASSET_ABLE_TO_DELETE = "ASSET_ABLE_TO_DELETE";
     public static final String GET_ASSET_SUCCESS = "GET_ASSET_SUCCESS";
+    public static final String GET_REPORT_SUCCESS = "GET_REPORT_SUCCESS";
 
     /** USER **/
     public static final String GET_USER_SUCCESS = "GET_USER_SUCCESS";
