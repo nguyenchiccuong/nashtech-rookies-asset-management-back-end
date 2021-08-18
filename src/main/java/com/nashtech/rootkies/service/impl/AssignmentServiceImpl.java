@@ -469,8 +469,10 @@ public class AssignmentServiceImpl implements AssignmentService {
             ResponseDTO responseDto = new ResponseDTO();
 
             assignment.setState(State.DECLINED);
-            assignment.getAsset().setState(State.AVAILABLE);
+            Asset asset = assignment.getAsset();
+            asset.setState(State.AVAILABLE);
             assignmentRepository.save(assignment);
+            assetRepository.save(assignment.getAsset());
 
             responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
             return responseDto;
