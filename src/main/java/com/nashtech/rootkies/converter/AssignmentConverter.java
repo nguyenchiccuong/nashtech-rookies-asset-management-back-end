@@ -1,38 +1,34 @@
 package com.nashtech.rootkies.converter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
 import com.nashtech.rootkies.constants.ErrorCode;
-import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
-import com.nashtech.rootkies.dto.assignment.response.RequestDTO;
-import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
-import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.dto.assignment.request.CreateAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.EditAssignmentDTO;
+import com.nashtech.rootkies.dto.assignment.response.AssetDTO;
 import com.nashtech.rootkies.dto.assignment.response.RequestDTO;
+import com.nashtech.rootkies.dto.assignment.response.UserDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
+import com.nashtech.rootkies.exception.AssignmentConvertException;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
-import com.nashtech.rootkies.repository.AssignmentRepository;
-import com.nashtech.rootkies.repository.AssetRepository;
-import com.nashtech.rootkies.repository.UserRepository;
-
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.AssetRepository;
+import com.nashtech.rootkies.repository.AssignmentRepository;
+import com.nashtech.rootkies.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AssignmentConverter {
@@ -143,6 +139,30 @@ public class AssignmentConverter {
         assignment.setNote(editAssignmentDTO.getNote());
 
         return assignment;
+    }
+
+    public ViewAssignmentDTO entityToDTO(Assignment assignment) throws AssignmentConvertException {
+        try {
+            var asset = assetRepository.findById(assignment.getAsset().getAssetCode()).get();
+            var assignedBy = userRepository.findById(assignment.getAssignedBy().getStaffCode())
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+            var assignedTo = userRepository.findById(assignment.getAssignedTo().getStaffCode())
+                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
+            return ViewAssignmentDTO.builder()
+                    .assignmentId(assignment.getAssignmentId())
+                    .assignedTo(new UserDTO(assignedBy.getUsername()))
+                    .assignedBy(new UserDTO(assignedTo.getUsername()))
+                    .assignedDate(assignment.getAssignedDate())
+                    .state(assignment.getState())
+                    .note(assignment.getNote())
+                    .asset(new AssetDTO(asset.getAssetCode() , asset.getAssetName() , asset.getSpecification() , null ))
+                    .requests(null)
+                    .build();
+        }catch (Exception ex){
+            throw  new AssignmentConvertException(ErrorCode.ERR_CONVERT_ASSIGNMENT_TO_DTO);
+
+        }
+
     }
 
 }
