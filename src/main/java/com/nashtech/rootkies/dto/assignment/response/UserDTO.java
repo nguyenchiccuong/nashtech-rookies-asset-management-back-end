@@ -13,6 +13,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
+
+	private String staffCode;
+
 	private String username;
 
+	private String firstName;
+
+	private String lastName;
 }
