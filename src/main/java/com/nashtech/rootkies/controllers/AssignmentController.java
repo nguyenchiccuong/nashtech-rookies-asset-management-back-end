@@ -14,6 +14,9 @@ import com.nashtech.rootkies.dto.assignment.request.EditAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.request.SearchFilterSortAssignmentDTO;
 import com.nashtech.rootkies.dto.assignment.response.ViewAssignmentDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.ownassignment.request.OwnAssignmentRequest;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentDetail;
+import com.nashtech.rootkies.dto.ownassignment.response.OwnAssignmentResponse;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
@@ -193,5 +196,27 @@ public class AssignmentController {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity.ok(assignmentService.declineAssignment(locationId, assignmentId , username));
+    }
+
+    //view own assignment
+    @PostMapping("/own")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> viewOwnAssignment(@RequestBody OwnAssignmentRequest request){
+        OwnAssignmentResponse result = assignmentService.viewOwnAssignment(request);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(result);
+        response.setSuccessCode(SuccessCode.LOAD_OWN_ASSIGNMENT_SUCCESS);
+        return ResponseEntity.ok(response);
+    }
+
+    //own assignment detail
+    @GetMapping("/own/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> getOwnAssignmentDetail(@PathVariable("id") Long id){
+        OwnAssignmentDetail detail = assignmentService.getOwnAssignmentDetail(id);
+        ResponseDTO response = new ResponseDTO();
+        response.setData(detail);
+        response.setSuccessCode(SuccessCode.LOAD_OWN_ASSIGNMENT_DETAIL_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 }
