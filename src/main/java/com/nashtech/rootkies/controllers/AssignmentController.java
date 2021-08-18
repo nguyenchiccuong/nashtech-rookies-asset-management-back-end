@@ -110,10 +110,16 @@ public class AssignmentController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> createAssignment(@Valid @RequestBody CreateAssignmentDTO dto)
+    public ResponseEntity<ResponseDTO> createAssignment(@Valid @RequestBody CreateAssignmentDTO dto ,
+                                                        HttpServletRequest req)
             throws AssignmentConvertException, DataNotFoundException {
 
         ResponseDTO response = new ResponseDTO();
+
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        String assignedBy = locationConverter.getStaffCodeFromUsername(username);
+        dto.setAssignedBy(assignedBy);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         if (!(LocalDateTime.parse(dto.getAssignedDate(), formatter).toLocalDate().isEqual(LocalDate.now()) ||
