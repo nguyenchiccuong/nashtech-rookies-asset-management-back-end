@@ -436,7 +436,29 @@ public class AssetServiceImpl implements AssetService {
         for(var category : categoryList){
             var report = assetConverter.convertToReportDTO(
                     assetRepository.getAssetReportByCategoryCode(category.getCategoryCode()));
-            reportList.add(report);
+
+            // if category have no asset  ,will get no report from database
+            if(report != null){
+                reportList.add(report);
+            }
+
+        }
+
+        // because if category have no asset database will return no report
+        // so detect category have no asset and add it to reportList with data 0 0 0 0 0
+        if(categoryList.size() != reportList.size()){
+            for(var category : categoryList){
+                boolean isHaveAsset = false;
+                for(var report : reportList){
+                    if(category.getCategoryName().equals(report.getCategory())){
+                        isHaveAsset = true;
+                        break;
+                    }
+                }
+                if(isHaveAsset == false){
+                    reportList.add(new ReportDTO(category.getCategoryName() , 0 , 0, 0, 0, 0 ,0));
+                }
+            }
         }
 
         return reportList;
