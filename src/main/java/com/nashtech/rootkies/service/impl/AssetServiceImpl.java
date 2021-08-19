@@ -1,13 +1,30 @@
 
 package com.nashtech.rootkies.service.impl;
 
+import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.constants.SuccessCode;
+import com.nashtech.rootkies.converter.AssetConverter;
 import com.nashtech.rootkies.dto.PageDTO;
 import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
-import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
+import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
+import com.nashtech.rootkies.dto.asset.response.*;
+import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.enums.SortType;
+import com.nashtech.rootkies.exception.AssetConvertException;
+import com.nashtech.rootkies.exception.CreateDataFailException;
+import com.nashtech.rootkies.exception.DataNotFoundException;
+import com.nashtech.rootkies.exception.DeleteDataFailException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.AssignmentRepository;
+import com.nashtech.rootkies.repository.CategoryRepository;
+import com.nashtech.rootkies.repository.specs.AssetSpecification;
+import com.nashtech.rootkies.repository.specs.SearchCriteria;
+import com.nashtech.rootkies.repository.specs.SearchOperation;
+import com.nashtech.rootkies.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,27 +38,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.nashtech.rootkies.constants.ErrorCode;
-import com.nashtech.rootkies.constants.SuccessCode;
-import com.nashtech.rootkies.converter.AssetConverter;
-import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.DetailAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.NumberOfAssetDTO;
-import com.nashtech.rootkies.dto.asset.response.ViewAssetDTO;
-import com.nashtech.rootkies.dto.common.ResponseDTO;
-import com.nashtech.rootkies.enums.SortType;
-import com.nashtech.rootkies.exception.CreateDataFailException;
-import com.nashtech.rootkies.exception.DataNotFoundException;
-import com.nashtech.rootkies.exception.DeleteDataFailException;
-import com.nashtech.rootkies.model.Asset;
-import com.nashtech.rootkies.repository.AssetRepository;
-import com.nashtech.rootkies.repository.specs.AssetSpecification;
-import com.nashtech.rootkies.repository.specs.SearchCriteria;
-import com.nashtech.rootkies.repository.specs.SearchOperation;
-import com.nashtech.rootkies.service.AssetService;
 
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -52,12 +51,16 @@ public class AssetServiceImpl implements AssetService {
 
     private final AssignmentRepository assignmentRepository;
 
+    private final CategoryRepository categoryRepository;
+
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,
-            AssignmentRepository assignmentRepository) {
+                            AssignmentRepository assignmentRepository,
+                            CategoryRepository categoryRepository) {
         this.assetRepository = assetRepository;
         this.assetConverter = assetConverter;
         this.assignmentRepository = assignmentRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -426,6 +429,17 @@ public class AssetServiceImpl implements AssetService {
         }
     }
 
+    public List<ReportDTO> getAssetReport() throws AssetConvertException {
+        var reportList = new ArrayList<ReportDTO>();
+        var categoryList = categoryRepository.findAll();
 
+        for(var category : categoryList){
+            var report = assetConverter.convertToReportDTO(
+                    assetRepository.getAssetReportByCategoryCode(category.getCategoryCode()));
+            reportList.add(report);
+        }
+
+        return reportList;
+    }
 
 }

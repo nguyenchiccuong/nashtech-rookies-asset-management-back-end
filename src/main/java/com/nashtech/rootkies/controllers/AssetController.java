@@ -11,11 +11,7 @@ import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
-import com.nashtech.rootkies.exception.ConvertEntityDTOException;
-import com.nashtech.rootkies.exception.CreateDataFailException;
-import com.nashtech.rootkies.exception.DataNotFoundException;
-import com.nashtech.rootkies.exception.DeleteDataFailException;
-import com.nashtech.rootkies.exception.InvalidRequestDataException;
+import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.model.User;
@@ -200,5 +196,15 @@ public class AssetController {
             response.setErrorCode(ErrorCode.ERR_GET_ALL_ASSET);
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/report")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> reportAsset() throws AssetConvertException {
+        ResponseDTO response = new ResponseDTO();
+
+        response.setData(assetService.getAssetReport());
+        response.setSuccessCode(SuccessCode.GET_REPORT_SUCCESS);
+        return ResponseEntity.ok(response);
     }
 }

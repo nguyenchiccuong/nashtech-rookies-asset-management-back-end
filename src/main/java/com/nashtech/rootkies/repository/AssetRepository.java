@@ -32,4 +32,16 @@ public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecif
     @Transactional
     @Query(value = "update assets set state = 3 where assetcode =?1 " , nativeQuery = true)
     void updateStateWhenIsAssigned(String assetCode);
+
+    @Query(value = "SELECT  c.categoryname AS category  ," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND a2.state =1)AS available ," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =2)AS notavailable ," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =3)AS assigned," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =4)AS waitforecyvle," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =5)AS recycled " +
+            "FROM assets a  " +
+            "JOIN  categories c ON c.categorycode = a.categorycode " +
+            "WHERE a.categorycode =?1 " +
+            "GROUP BY c.categoryname LIMIT 1", nativeQuery = true)
+    List<Object[]> getAssetReportByCategoryCode(String categoryCode);
 }
