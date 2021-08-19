@@ -15,6 +15,7 @@ import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.model.Location;
 import com.nashtech.rootkies.repository.AssignmentRepository;
 
 import com.nashtech.rootkies.converter.AssignmentConverter;
@@ -25,6 +26,7 @@ import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssetRepository;
 import org.apache.coyote.Response;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -164,75 +166,93 @@ public class AssignmentServiceTest {
     }
 
     @Test
-    public void acceptAssignmentTest()  {
+    public void acceptAssignmentTest() throws DataNotFoundException, UpdateDataFailException, InvalidRequestDataException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        User user1 = User.builder()
+                .staffCode("SD0001")
+                .username("nhimh1")
+                .location(Location.builder().locationId(101L).build()).build();
+
+        User user2 = User.builder()
+                .staffCode("SD0002")
+                .username("nhimh2")
+                .location(Location.builder().locationId(101L).build()).build();
+
         Assignment assignment = Assignment.builder()
-                .assignedBy(User.builder().staffCode("SD0001").build())
-                .assignedTo(User.builder().staffCode("SD0002").build())
+                .assignedBy(user1)
+                .assignedTo(user2)
                 .note("test service")
-                .state((short)2)
                 .asset(Asset.builder().assetCode("LA00001").build())
                 .isDeleted(false)
                 .assignedDate(LocalDateTime.parse("2021-08-09 00:00" , formatter))
                 .build();
 
-        assignmentRepository.save(assignment);
+        when(assignmentRepository.save(assignment)).thenReturn(assignment);
+        when(assignmentRepository.findById(assignment.getAssignmentId())).thenReturn(Optional.of(assignment));
+        when(assignmentRepository.findByAssignmentId(user1.getLocation().getLocationId(), assignment.getAssignmentId()))
+                .thenReturn(Optional.of(assignment));
 
-        Short state = assignment.getState();
-        try {
-            ResponseDTO responseDTO = assignmentService.acceptAssignment(101L, assignment.getAssignmentId(), "nhimh");
-            assertEquals(2, assignment.getState().shortValue());
-            assertEquals(SuccessCode.ASSIGNMENT_ACCEPTED_SUCCESS, responseDTO.getSuccessCode());
-        } catch (Exception exception) {
-            if (!assignmentRepository.findById(assignment.getAssignmentId()).isPresent())
-                assertEquals(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND, exception.getMessage());
-            else {
-                switch (state) {
-                    case 1:
-                    case 3:
-                        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
-                        return;
-                }
-                if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase("nhimh"))
-                    assertEquals(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR, exception.getMessage());
-            }
-        }
+        //state = 1 or 3
+        assignment.setState((short) 1);
+        Exception exception = Assertions.assertThrows(Exception.class, () -> {
+            assignmentService.acceptAssignment(user1.getLocation().getLocationId(), assignment.getAssignmentId(), user2.getUsername());
+        });
+        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
+
+        //state = 2
+        assignment.setState((short) 2);
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccessCode(SuccessCode.ASSIGNMENT_ACCEPTED_SUCCESS);
+        assertEquals(responseDTO, assignmentService.acceptAssignment(user1.getLocation().getLocationId(), assignment.getAssignmentId(), user2.getUsername()));
     }
 
     @Test
-    public void declineAssignmentTest() {
+    public void declineAssignmentTest() throws DataNotFoundException, UpdateDataFailException, InvalidRequestDataException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        Assignment assignment = Assignment.builder()
-                .assignedBy(User.builder().staffCode("SD0001").build())
-                .assignedTo(User.builder().staffCode("SD0002").build())
-                .note("test service")
+
+        User user1 = User.builder()
+                .staffCode("SD0001")
+                .username("nhimh1")
+                .location(Location.builder().locationId(101L).build()).build();
+
+        User user2 = User.builder()
+                .staffCode("SD0002")
+                .username("nhimh2")
+                .location(Location.builder().locationId(101L).build()).build();
+
+        Asset asset= Asset.builder()
+                .assetCode("LA0001")
                 .state((short)1)
+                .build();
+
+        Assignment assignment = Assignment.builder()
+                .assignedBy(user1)
+                .assignedTo(user2)
+                .note("test service")
                 .asset(Asset.builder().assetCode("LA00001").build())
                 .isDeleted(false)
                 .assignedDate(LocalDateTime.parse("2021-08-09 00:00" , formatter))
                 .build();
 
-        assignmentRepository.save(assignment);
+        when(assignmentRepository.save(assignment)).thenReturn(assignment);
+        when(assignmentRepository.findById(assignment.getAssignmentId())).thenReturn(Optional.of(assignment));
+        when(assignmentRepository.findByAssignmentId(user1.getLocation().getLocationId(), assignment.getAssignmentId()))
+                .thenReturn(Optional.of(assignment));
+        when(assetRepository.save(assignment.getAsset())).thenReturn(asset);
 
-        Short state = assignment.getState();
-        try {
-            ResponseDTO responseDTO = assignmentService.acceptAssignment(101L, assignment.getAssignmentId(), "nhimh");
-            assertEquals(2, assignment.getState().shortValue());
-            assertEquals(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS, responseDTO.getSuccessCode());
-            assertEquals(State.AVAILABLE, assignment.getAsset().getAssetCode());
-        } catch (Exception exception) {
-            if (!assignmentRepository.findById(assignment.getAssignmentId()).isPresent())
-                assertEquals(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND, exception.getMessage());
-            else {
-                switch (state) {
-                    case 1:
-                    case 3:
-                        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
-                        return;
-                }
-                if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase("nhimh"))
-                    assertEquals(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR, exception.getMessage());
-            }
-        }
+        //state = 1 or 3
+        assignment.setState((short) 1);
+        Exception exception = Assertions.assertThrows(Exception.class, () -> {
+            assignmentService.declineAssignment(user1.getLocation().getLocationId(), assignment.getAssignmentId(), user2.getUsername());
+        });
+        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
+
+        //state = 2
+        assignment.setState((short) 2);
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
+        assertEquals(responseDTO, assignmentService.declineAssignment(user1.getLocation().getLocationId(), assignment.getAssignmentId(), user2.getUsername()));
+        assertEquals(State.AVAILABLE, assignment.getAsset().getState());
     }
 }

@@ -472,7 +472,7 @@ public class AssignmentServiceImpl implements AssignmentService {
             Asset asset = assignment.getAsset();
             asset.setState(State.AVAILABLE);
             assignmentRepository.save(assignment);
-            assetRepository.save(assignment.getAsset());
+            assetRepository.save(asset);
 
             responseDto.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
             return responseDto;
