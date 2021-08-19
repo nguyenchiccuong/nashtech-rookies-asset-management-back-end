@@ -397,12 +397,12 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException {
+    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException, DataNotFoundException {
         ResponseDTO responseDto = new ResponseDTO();
-        try {
+        
             Asset assetUp = assetRepository.findById(assetCode)
                     .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
-
+        try {
             if (!assignment.getAsset().getAssetCode().equalsIgnoreCase(assetCode)) {
                 Asset assetCur = assignment.getAsset();
                 assetCur.setState(State.AVAILABLE);
