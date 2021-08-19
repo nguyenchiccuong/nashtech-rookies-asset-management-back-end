@@ -160,6 +160,7 @@ public class AssetConverter {
 
     public ReportDTO convertToReportDTO(List<Object[]> data) throws AssetConvertException {
         try{
+            if(data.size() != 0){
             Object[] report = data.get(0);
 
             ReportDTO reportDTO = ReportDTO.builder()
@@ -173,6 +174,9 @@ public class AssetConverter {
             reportDTO.countTotal();
 
             return reportDTO;
+            }else{
+                return null;
+            }
         }catch (Exception ex){
             throw new AssetConvertException(ErrorCode.ERR_CONVERT_REPORT);
         }
