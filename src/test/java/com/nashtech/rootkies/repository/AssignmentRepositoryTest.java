@@ -1,6 +1,7 @@
 package com.nashtech.rootkies.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.model.User;
 
