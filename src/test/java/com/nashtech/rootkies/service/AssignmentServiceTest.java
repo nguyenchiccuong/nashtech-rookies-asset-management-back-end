@@ -9,6 +9,10 @@ import java.util.Optional;
 
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
+import com.nashtech.rootkies.constants.SuccessCode;
+import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.exception.InvalidRequestDataException;
+import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.repository.AssignmentRepository;
@@ -19,6 +23,7 @@ import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssetRepository;
+import org.apache.coyote.Response;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -158,4 +163,76 @@ public class AssignmentServiceTest {
 
     }
 
+    @Test
+    public void acceptAssignmentTest()  {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Assignment assignment = Assignment.builder()
+                .assignedBy(User.builder().staffCode("SD0001").build())
+                .assignedTo(User.builder().staffCode("SD0002").build())
+                .note("test service")
+                .state((short)2)
+                .asset(Asset.builder().assetCode("LA00001").build())
+                .isDeleted(false)
+                .assignedDate(LocalDateTime.parse("2021-08-09 00:00" , formatter))
+                .build();
+
+        assignmentRepository.save(assignment);
+
+        Short state = assignment.getState();
+        try {
+            ResponseDTO responseDTO = assignmentService.acceptAssignment(101L, assignment.getAssignmentId(), "nhimh");
+            assertEquals(2, assignment.getState().shortValue());
+            assertEquals(SuccessCode.ASSIGNMENT_ACCEPTED_SUCCESS, responseDTO.getSuccessCode());
+        } catch (Exception exception) {
+            if (!assignmentRepository.findById(assignment.getAssignmentId()).isPresent())
+                assertEquals(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND, exception.getMessage());
+            else {
+                switch (state) {
+                    case 1:
+                    case 3:
+                        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
+                        return;
+                }
+                if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase("nhimh"))
+                    assertEquals(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR, exception.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void declineAssignmentTest() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Assignment assignment = Assignment.builder()
+                .assignedBy(User.builder().staffCode("SD0001").build())
+                .assignedTo(User.builder().staffCode("SD0002").build())
+                .note("test service")
+                .state((short)1)
+                .asset(Asset.builder().assetCode("LA00001").build())
+                .isDeleted(false)
+                .assignedDate(LocalDateTime.parse("2021-08-09 00:00" , formatter))
+                .build();
+
+        assignmentRepository.save(assignment);
+
+        Short state = assignment.getState();
+        try {
+            ResponseDTO responseDTO = assignmentService.acceptAssignment(101L, assignment.getAssignmentId(), "nhimh");
+            assertEquals(2, assignment.getState().shortValue());
+            assertEquals(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS, responseDTO.getSuccessCode());
+            assertEquals(State.AVAILABLE, assignment.getAsset().getAssetCode());
+        } catch (Exception exception) {
+            if (!assignmentRepository.findById(assignment.getAssignmentId()).isPresent())
+                assertEquals(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND, exception.getMessage());
+            else {
+                switch (state) {
+                    case 1:
+                    case 3:
+                        assertEquals(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED, exception.getMessage());
+                        return;
+                }
+                if (!assignment.getAssignedTo().getUsername().equalsIgnoreCase("nhimh"))
+                    assertEquals(ErrorCode.ERR_ASSIGNMENT_NOT_YOUR, exception.getMessage());
+            }
+        }
+    }
 }
