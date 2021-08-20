@@ -4,11 +4,13 @@ import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
+import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.ConvertEntityDTOException;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.DeleteDataFailException;
+import com.nashtech.rootkies.exception.custom.ApiRequestException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.model.Category;
@@ -18,12 +20,16 @@ import com.nashtech.rootkies.repository.AssetRepository;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.runner.JUnitPlatform;
@@ -48,6 +54,9 @@ public class AssetServiceTest {
 
     @Autowired
     private AssetConverter assetConverter;
+
+    @Autowired
+    private AssignmentRepository assignmentRepository;
 
     @Test
     public void saveAssetSuccess() throws CreateDataFailException, ConvertEntityDTOException {
@@ -108,5 +117,107 @@ public class AssetServiceTest {
 
         // Then
         assertEquals(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT, exception.getMessage());
+    }
+    @Test
+    public void updateAssetFailByName() throws Exception{
+        EditAssetRequest editRequest=new EditAssetRequest();
+        editRequest.setName("");
+        editRequest.setSpecification("intel core i9");
+        editRequest.setInstallDate("2021/20/08");
+        editRequest.setState("available");
+
+        Location location = new Location();
+        location.setLocationId((long) 123456);
+        location.setAddress("test");
+
+        Category category = new Category();
+        category.setCategoryCode("TE");
+        category.setCategoryName("test");
+
+        Asset asset = new Asset();
+        asset.setAssetCode("test");
+        asset.setAssetName("test");
+        asset.setCategory(category);
+        asset.setInstallDate(LocalDateTime.now());
+        asset.setIsDeleted(false);
+        asset.setLocation(location);
+        asset.setSpecification("test");
+        asset.setState(State.AVAILABLE);
+
+        List<Assignment> assignments=new ArrayList<>();
+
+        when(assetRepository.findById(anyString())).thenReturn(Optional.of(asset));
+        ApiRequestException exception =assertThrows(ApiRequestException.class,()->{
+        assetService.editAsset("LA0002", editRequest);
+        });
+        assertEquals(ErrorCode.NAME_IS_EMPTY, exception.getMessage());
+    }
+    @Test
+    public void updateEditAssetFail() throws Exception {
+        EditAssetRequest editRequest = new EditAssetRequest();
+        editRequest.setName("Laptop");
+        editRequest.setSpecification("intel core i9");
+        editRequest.setInstallDate("2021-02-08");
+        editRequest.setState("available");
+
+        Location location = new Location();
+        location.setLocationId((long) 123456);
+        location.setAddress("test");
+
+        Category category = new Category();
+        category.setCategoryCode("TE");
+        category.setCategoryName("test");
+
+        Asset asset = new Asset();
+        asset.setAssetCode("test");
+        asset.setAssetName("test");
+        asset.setCategory(category);
+        asset.setInstallDate(LocalDateTime.now());
+        asset.setIsDeleted(false);
+        asset.setLocation(location);
+        asset.setSpecification("test");
+        asset.setState(State.AVAILABLE);
+
+        List<Assignment> assignments = new ArrayList<>();
+
+        when(assetRepository.findById(anyString())).thenReturn(Optional.of(asset));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            assetService.editAsset("LA0002", editRequest);
+        });
+        assertEquals(ErrorCode.ERR_EDIT_ASSET, exception.getMessage());
+    }
+    @Test
+    public void updateEditAssetFailState() throws Exception {
+        EditAssetRequest editRequest = new EditAssetRequest();
+        editRequest.setName("Laptop");
+        editRequest.setSpecification("intel core i9");
+        editRequest.setInstallDate("2021-02-08");
+        editRequest.setState("a");
+
+        Location location = new Location();
+        location.setLocationId((long) 123456);
+        location.setAddress("test");
+
+        Category category = new Category();
+        category.setCategoryCode("TE");
+        category.setCategoryName("test");
+
+        Asset asset = new Asset();
+        asset.setAssetCode("test");
+        asset.setAssetName("test");
+        asset.setCategory(category);
+        asset.setInstallDate(LocalDateTime.now());
+        asset.setIsDeleted(false);
+        asset.setLocation(location);
+        asset.setSpecification("test");
+        asset.setState(State.AVAILABLE);
+
+        List<Assignment> assignments = new ArrayList<>();
+
+        when(assetRepository.findById(anyString())).thenReturn(Optional.of(asset));
+        ApiRequestException exception = assertThrows(ApiRequestException.class, () -> {
+            assetService.editAsset("LA0002", editRequest);
+        });
+        assertEquals(ErrorCode.STATE_INCORRECT_FORMAT, exception.getMessage());
     }
 }
