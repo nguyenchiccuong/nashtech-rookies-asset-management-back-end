@@ -297,8 +297,8 @@ public class AssetServiceImpl implements AssetService {
             throw new ApiRequestException(ErrorCode.ASSET_IS_DELETED);
         }
 
-        List<Assignment> assignments = assignmentRepository.findByAsset(asset);
-        if (assignments.size() > 0) {
+        // List<Assignment> assignments = assignmentRepository.findByAsset(asset);
+        if (asset.getState() == State.ASSIGNED) {
             throw new ApiRequestException(ErrorCode.ASSET_ALREADY_ASSIGNED);
         }
 
