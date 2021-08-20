@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -254,5 +255,18 @@ public class AssignmentServiceTest {
         responseDTO.setSuccessCode(SuccessCode.ASSIGNMENT_DECLINED_SUCCESS);
         assertEquals(responseDTO, assignmentService.declineAssignment(user1.getLocation().getLocationId(), assignment.getAssignmentId(), user2.getUsername()));
         assertEquals(State.AVAILABLE, assignment.getAsset().getState());
+    }
+
+    @Test
+    public void EditAssignmentAssetNotFound(){
+        when(assetRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+
+        // When
+        Exception exception = assertThrows(Exception.class, () -> {
+            assignmentService.editAssignment(new Assignment(),"test");
+        });
+
+        // Then
+        assertEquals(ErrorCode.ASSET_NOT_FOUND, exception.getMessage());
     }
 }

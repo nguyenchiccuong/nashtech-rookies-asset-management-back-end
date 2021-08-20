@@ -1,6 +1,7 @@
 package com.nashtech.rootkies.controller;
 
 import com.nashtech.rootkies.constants.ErrorCode;
+import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.converter.LocationConverter;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.model.Asset;
@@ -83,5 +84,39 @@ public class AssignmentControllerTest {
                 .andExpect(status().is(400)).andReturn().getResolvedException().getMessage();
 
         assertTrue(error.contains(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED));
+    }
+
+    @Test
+    @WithMockUser(username = "test", roles = { "ADMIN" })
+    public void editAssignmentNotFoundAssignment() throws Exception {
+            when(jwtUtils.getUserNameFromJwtToken(Mockito.anyString())).thenReturn("test");
+            when(locationConverter.getLocationIdFromUsername(Mockito.anyString())).thenReturn((long) 1);
+            when(assignmentRepository.findByAssignmentId(Mockito.anyLong(), Mockito.anyLong()))
+                            .thenReturn(Optional.empty());
+
+            String editAssignmentRequest = "{\"assignmentId\": 14,\"assignedToUserId\": \"SD0001\",\"assignedDate\": \"2021-08-16T12:13:45\",\"note\": \"test12\",\"assetCode\": \"LA000002\"}";
+            String error = this.mockMvc.perform(put("/assignment").contentType(APPLICATION_JSON_UTF8)
+                            .content(editAssignmentRequest).header("Authorization",
+                                            "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaGltaCIsImlhdCI6MTYyODgyNjc0MCwiZXhwIjoxNjI4OTEzMTQwfQ.tbUR1aq0W1uiXL-HeLMqZ0PYH6Sc-o9-qmBMWTYe1iOvk5G1j5jTrfKWQ0xrvpI-jsVpIhlohp3-7HxUJn5Iig"))
+                            .andExpect(status().is(404)).andReturn().getResolvedException().getMessage();
+
+            assertTrue(error.contains(ErrorCode.ERR_ASSIGNMENT_ID_NOT_FOUND));
+    }
+
+    @Test
+    @WithMockUser(username = "test", roles = { "ADMIN" })
+    public void editAssignmentAssignmentStateNotAcceptance() throws Exception {
+            when(jwtUtils.getUserNameFromJwtToken(Mockito.anyString())).thenReturn("test");
+            when(locationConverter.getLocationIdFromUsername(Mockito.anyString())).thenReturn((long) 1);
+            when(assignmentRepository.findByAssignmentId(Mockito.anyLong(), Mockito.anyLong()))
+                            .thenReturn(Optional.of(Assignment.builder().state(State.ACCEPTED).build()));
+
+            String editAssignmentRequest = "{\"assignmentId\": 14,\"assignedToUserId\": \"SD0001\",\"assignedDate\": \"2021-08-16T12:13:45\",\"note\": \"test12\",\"assetCode\": \"LA000002\"}";
+            String error = this.mockMvc.perform(put("/assignment").contentType(APPLICATION_JSON_UTF8)
+                            .content(editAssignmentRequest).header("Authorization",
+                                            "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaGltaCIsImlhdCI6MTYyODgyNjc0MCwiZXhwIjoxNjI4OTEzMTQwfQ.tbUR1aq0W1uiXL-HeLMqZ0PYH6Sc-o9-qmBMWTYe1iOvk5G1j5jTrfKWQ0xrvpI-jsVpIhlohp3-7HxUJn5Iig"))
+                            .andExpect(status().is(400)).andReturn().getResolvedException().getMessage();
+
+            assertTrue(error.contains(ErrorCode.ERR_ASSIGNMENT_ALREADY_ACCEPTED_OR_DECLINED));
     }
 }
