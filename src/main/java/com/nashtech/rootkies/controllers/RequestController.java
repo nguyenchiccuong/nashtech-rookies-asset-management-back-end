@@ -80,7 +80,7 @@ public class RequestController {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
         Long locationId = locationConverter.getLocationIdFromUsername(username);
         return ResponseEntity.ok(requestService.retrieveRequests(
-                PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending()), locationId));
+                PageRequest.of(pageNum, numOfItems, Sort.by("assignment.assignedDate").descending()), locationId));
     }
 
     @GetMapping("/count")

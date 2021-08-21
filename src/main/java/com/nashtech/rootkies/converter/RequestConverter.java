@@ -20,7 +20,7 @@ public class RequestConverter {
 
     public List<ViewRequestDTO> convertToListDTO(Page<Request> requests) throws ConvertEntityDTOException {
         try {
-            return requests.stream().map(request -> modelMapper.map(requests, ViewRequestDTO.class))
+            return requests.stream().map(request -> modelMapper.map(request, ViewRequestDTO.class))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class RequestConverter {
 
     public List<ViewRequestDTO> convertToListDTO(List<Request> requests) throws ConvertEntityDTOException {
         try {
-            return requests.stream().map(request -> modelMapper.map(requests, ViewRequestDTO.class))
+            return requests.stream().map(request -> modelMapper.map(request, ViewRequestDTO.class))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
