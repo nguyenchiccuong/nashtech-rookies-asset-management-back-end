@@ -16,7 +16,7 @@ public interface RequestService {
         public ResponseDTO completeRequest(Long locationId, Long requestId, String username)
                         throws DataNotFoundException, InvalidRequestDataException, UpdateDataFailException;
 
-        public ResponseDTO retrieveRequests(PageRequest of, Long locationId) throws DataNotFoundException;
+        public ResponseDTO retrieveRequests(PageRequest page, Long locationId) throws DataNotFoundException;
 
         public ResponseDTO countRequest(Long locationId) throws DataNotFoundException;
 

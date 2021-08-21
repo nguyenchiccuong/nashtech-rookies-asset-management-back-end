@@ -50,4 +50,6 @@ public class SuccessCode {
     // REQUEST
     public static final String REQUEST_CANCEL_SUCCESS = "REQUEST_CANCEL_SUCCESS";
     public static final String REQUEST_COMPLETE_SUCCESS = "REQUEST_COMPLETE_SUCCESS";
+    public static final String REQUEST_LOADED_SUCCESS = "REQUEST_LOADED_SUCCESS";
+    public static final String REQUEST_COUNT_SUCCESS = "REQUEST_COUNT_SUCCESS";
 }

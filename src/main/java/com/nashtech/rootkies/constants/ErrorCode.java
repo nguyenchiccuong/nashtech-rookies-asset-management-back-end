@@ -106,5 +106,7 @@ public class ErrorCode {
     public static final String ERR_REQUEST_ALREADY_COMPLETE = "ERR_REQUEST_ALREADY_COMPLETE";
     public static final String ERR_REQUEST_CANCEL_FAIL = "ERR_REQUEST_CANCEL_FAIL";
     public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
+    public static final String ERR_COUNT_REQUEST_FAIL = "ERR_COUNT_REQUEST_FAIL";
+    public static final String ERR_RETRIEVE_REQUEST_FAIL = "ERR_RETRIEVE_REQUEST_FAIL";
 
 }
