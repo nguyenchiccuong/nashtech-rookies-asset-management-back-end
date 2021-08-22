@@ -108,5 +108,7 @@ public class ErrorCode {
     public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
     public static final String ERR_COUNT_REQUEST_FAIL = "ERR_COUNT_REQUEST_FAIL";
     public static final String ERR_RETRIEVE_REQUEST_FAIL = "ERR_RETRIEVE_REQUEST_FAIL";
-
+    public static final String ERR_CREATE_REQUEST_FAIL = "ERR_CREATE_REQUEST_FAIL";
+    public static final String ERR_REQUEST_ASSIGNMENT_NOT_ACCEPT = "ERR_REQUEST_ASSIGNMENT_NOT_ACCEPT";
+    public static final String ERR_CREATE_REQUEST_NOT_ALLOW = "ERR_CREATE_REQUEST_NOT_ALLOW";
 }

@@ -1,7 +1,9 @@
 package com.nashtech.rootkies.service;
 
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.request.request.CreateRequestDTO;
 import com.nashtech.rootkies.dto.request.request.SearchFilterSortRequestDTO;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
@@ -28,4 +30,6 @@ public interface RequestService {
 
         public ResponseDTO countRequestHavingFilterSearchSort(SearchFilterSortRequestDTO searchFilterSortRequestDTO,
                         Long locationId) throws DataNotFoundException;
+
+        public ResponseDTO createRequest(CreateRequestDTO createRequestDTO) throws CreateDataFailException;
 }

@@ -52,4 +52,5 @@ public class SuccessCode {
     public static final String REQUEST_COMPLETE_SUCCESS = "REQUEST_COMPLETE_SUCCESS";
     public static final String REQUEST_LOADED_SUCCESS = "REQUEST_LOADED_SUCCESS";
     public static final String REQUEST_COUNT_SUCCESS = "REQUEST_COUNT_SUCCESS";
+    public static final String REQUEST_CREATE_SUCCESS = "REQUEST_CREATE_SUCCESS";
 }
