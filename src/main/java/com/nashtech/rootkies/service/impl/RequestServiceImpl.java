@@ -8,12 +8,15 @@ import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.RequestConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.request.request.CreateRequestDTO;
 import com.nashtech.rootkies.dto.request.request.SearchFilterSortRequestDTO;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.Request;
 import com.nashtech.rootkies.model.User;
+import com.nashtech.rootkies.repository.AssignmentRepository;
 import com.nashtech.rootkies.repository.RequestRepository;
 import com.nashtech.rootkies.repository.UserRepository;
 import com.nashtech.rootkies.repository.specs.RequestSpecification;
@@ -39,13 +42,16 @@ public class RequestServiceImpl implements RequestService {
 
     private final UserRepository userRepository;
 
+    private final AssignmentRepository assignmentRepository;
+
     private final RequestConverter requestConverter;
 
     @Autowired
     public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
-            RequestConverter requestConverter) {
+                              AssignmentRepository assignmentRepository, RequestConverter requestConverter) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
+        this.assignmentRepository = assignmentRepository;
         this.requestConverter = requestConverter;
     }
 
@@ -369,4 +375,26 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
+    @Override
+    public ResponseDTO createRequest(CreateRequestDTO createRequestDTO) throws CreateDataFailException {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        Request request = requestConverter.convertCreateRequestDtoToEntity(createRequestDTO);
+
+        if (!request.getAssignment().getState().equals(State.ACCEPTED))
+            throw new CreateDataFailException(ErrorCode.ERR_REQUEST_ASSIGNMENT_NOT_ACCEPT);
+
+        if (request.getAssignment().getAssignedTo() != request.getRequestedBy())
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_REQUEST_NOT_ALLOW);
+
+        try {
+            Request saveRequest = requestRepository.save(request);
+            responseDTO.setSuccessCode(SuccessCode.REQUEST_CREATE_SUCCESS);
+            responseDTO.setData(requestConverter.convertToViewDTO(saveRequest));
+            return responseDTO;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CreateDataFailException(ErrorCode.ERR_CREATE_REQUEST_FAIL);
+        }
+    }
 }

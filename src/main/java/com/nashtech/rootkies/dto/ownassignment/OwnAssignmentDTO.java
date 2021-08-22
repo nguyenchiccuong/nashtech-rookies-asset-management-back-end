@@ -16,4 +16,5 @@ public class OwnAssignmentDTO {
     private String categoryName;
     private String assignedDate;
     private String state;
+    private Boolean isReturnRequest;
 }

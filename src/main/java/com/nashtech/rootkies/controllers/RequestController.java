@@ -1,10 +1,13 @@
 package com.nashtech.rootkies.controllers;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import com.nashtech.rootkies.converter.LocationConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
+import com.nashtech.rootkies.dto.request.request.CreateRequestDTO;
 import com.nashtech.rootkies.dto.request.request.SearchFilterSortRequestDTO;
+import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
@@ -127,4 +130,10 @@ public class RequestController {
                 .ok(requestService.countRequestHavingFilterSearchSort(searchFilterSortRequestDTO, locationId));
     }
 
+    @PostMapping(value = "/save")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<ResponseDTO> createRequest(@Valid @RequestBody CreateRequestDTO createRequestDTO) throws CreateDataFailException {
+        return ResponseEntity
+                .ok(requestService.createRequest(createRequestDTO));
+    }
 }

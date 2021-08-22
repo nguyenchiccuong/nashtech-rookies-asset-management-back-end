@@ -1,5 +1,6 @@
 package com.nashtech.rootkies.converter.ownassignment;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,10 +8,19 @@ import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.dto.ownassignment.OwnAssignmentDTO;
 import com.nashtech.rootkies.model.Assignment;
 
+import com.nashtech.rootkies.model.Request;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OwnAssignmentDTOConverter {
+
+    public Boolean checkIsReturnRequest(Assignment assignment) {
+        Collection<Request> requests = assignment.getRequests();
+        for (Request request : requests)
+            if (request.getState().equals(State.WAITING_FOR_RETURNING) && !request.getIsDeleted())
+                return true;
+        return false;
+    }
     
     public OwnAssignmentDTO toDTO(Assignment assignment) {
         OwnAssignmentDTO dto = new OwnAssignmentDTO();
@@ -25,6 +35,8 @@ public class OwnAssignmentDTOConverter {
         else if(assignment.getState() == State.WAITING_FOR_ACCEPTANCE){
             dto.setState("Waiting for acceptance");
         }
+
+        dto.setIsReturnRequest(checkIsReturnRequest(assignment));
         return dto;
     }
 
