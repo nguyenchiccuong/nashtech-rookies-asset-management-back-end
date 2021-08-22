@@ -14,7 +14,6 @@ import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.exception.UpdateDataFailException;
-import com.nashtech.rootkies.model.Assignment;
 import com.nashtech.rootkies.model.Request;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssignmentRepository;
@@ -43,16 +42,16 @@ public class RequestServiceImpl implements RequestService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
     private final RequestConverter requestConverter;
 
     @Autowired
     public RequestServiceImpl(RequestRepository requestRepository, UserRepository userRepository,
-            RequestConverter requestConverter) {
+                              AssignmentRepository assignmentRepository, RequestConverter requestConverter) {
         this.requestRepository = requestRepository;
         this.userRepository = userRepository;
+        this.assignmentRepository = assignmentRepository;
         this.requestConverter = requestConverter;
     }
 
