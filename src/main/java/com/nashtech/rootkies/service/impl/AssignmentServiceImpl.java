@@ -63,7 +63,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Autowired
     public AssignmentServiceImpl(AssignmentRepository assignmentRepository, AssignmentConverter assignmentConverter,
-            AssetRepository assetRepository, UserRepository userRepository, 
+            AssetRepository assetRepository, UserRepository userRepository,
             OwnAssignmentResponseConverter responseConverter, OwnAssignmentDetailConverter detailConverter) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentConverter = assignmentConverter;
@@ -198,9 +198,8 @@ public class AssignmentServiceImpl implements AssignmentService {
                             Sort.by(searchFilterSortAssignmentDTO.getSortField()).ascending());
                 }
             }
-        } else {
-            return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending());
         }
+        return PageRequest.of(pageNum, numOfItems, Sort.by("assignedDate").descending());
     }
 
     @Override
@@ -397,11 +396,12 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public ResponseDTO editAssignment(Assignment assignment, String assetCode) throws UpdateDataFailException, DataNotFoundException {
+    public ResponseDTO editAssignment(Assignment assignment, String assetCode)
+            throws UpdateDataFailException, DataNotFoundException {
         ResponseDTO responseDto = new ResponseDTO();
-        
-            Asset assetUp = assetRepository.findById(assetCode)
-                    .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
+
+        Asset assetUp = assetRepository.findById(assetCode)
+                .orElseThrow(() -> new DataNotFoundException(ErrorCode.ASSET_NOT_FOUND));
         try {
             if (!assignment.getAsset().getAssetCode().equalsIgnoreCase(assetCode)) {
                 Asset assetCur = assignment.getAsset();
@@ -555,21 +555,19 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public OwnAssignmentDetail getOwnAssignmentDetail(Long assignmentId) {
-        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(
-            () -> new ApiRequestException(ErrorCode.ASSIGNMENT_NOT_FOUND)
-        );
-        if(assignment.getIsDeleted()){
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new ApiRequestException(ErrorCode.ASSIGNMENT_NOT_FOUND));
+        if (assignment.getIsDeleted()) {
             throw new ApiRequestException(ErrorCode.ASSIGNMENT_IS_DELETED);
         }
-        if(assignment.getState() == State.DECLINED){
+        if (assignment.getState() == State.DECLINED) {
             throw new ApiRequestException(ErrorCode.ASSIGNMENT_IS_DECLINED);
         }
 
-        try{
+        try {
             OwnAssignmentDetail detail = detailConverter.convert(assignment);
             return detail;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new ApiRequestException(ErrorCode.ERR_OWN_ASSIGNMENT_DETAIL);
         }
     }
