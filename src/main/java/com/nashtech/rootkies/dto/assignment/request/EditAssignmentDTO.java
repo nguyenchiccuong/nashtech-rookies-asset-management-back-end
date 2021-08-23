@@ -18,7 +18,7 @@ public class EditAssignmentDTO {
     @NotNull
     private LocalDateTime assignedDate;
 
-    @NotBlank
+
     private String note;
 
     @NotBlank
