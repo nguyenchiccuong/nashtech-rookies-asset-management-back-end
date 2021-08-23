@@ -18,7 +18,6 @@ public class UserSpecification implements Specification<User> {
 
         if (criteria.getKey().equals("role")) {
             Join<User, Role> join = root.join("role");
-
             return builder.equal(join.<Long>get("id"), criteria.getValue());
 
 
