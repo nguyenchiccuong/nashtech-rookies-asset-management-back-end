@@ -24,7 +24,6 @@ public class CreateAssignmentDTO {
     @NotBlank(message = ErrorCode.ASSIGNED_DATE_IS_BLANK)
     private String assignedDate;
 
-    @NotBlank(message = ErrorCode.NOTE_IS_BLANK)
     private String note;
 
 }
