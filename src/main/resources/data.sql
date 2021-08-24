@@ -260,7 +260,7 @@ VALUES
 INSERT INTO public.assignments
     (assignmentid, assigneddate, isdeleted, note, state, assetcode, assignedby, assignedto)
 VALUES
-    (1, '2021-01-15 00:00:00', false, 'test', 1, 'LA000001', 'SD0001', 'SD0004');
+    (1, '2021-01-15 00:00:00', false, 'test', 4, 'LA000001', 'SD0001', 'SD0004');
 INSERT INTO public.assignments
     (assignmentid, assigneddate, isdeleted, note, state, assetcode, assignedby, assignedto)
 VALUES

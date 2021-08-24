@@ -221,6 +221,9 @@ public class AssignmentServiceImpl implements AssignmentService {
             assignmentLocation.add(new SearchCriteria("assignedBy", locationId, SearchOperation.EQUAL));
             AssignmentSpecification assignmentIsDeleted = new AssignmentSpecification();
             assignmentIsDeleted.add(new SearchCriteria("isDeleted", false, SearchOperation.EQUAL));
+            AssignmentSpecification assignmentHadCompletedAssetHadReturned = new AssignmentSpecification();
+            assignmentHadCompletedAssetHadReturned.add(new SearchCriteria("state",
+                    State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED, SearchOperation.NOT_EQUAL));
 
             if (!searchFilterSortAssignmentDTO.getStates().isEmpty()) {
                 state = new AssignmentSpecification();
@@ -244,8 +247,8 @@ public class AssignmentServiceImpl implements AssignmentService {
                 assignedTo.add(new SearchCriteria("assignedTo", searchFilterSortAssignmentDTO.getSearchKeyWord(),
                         SearchOperation.MATCH));
             }
-
-            Specification spec = Specification.where(assignmentLocation).and(assignmentIsDeleted);
+            
+            Specification spec = Specification.where(assignmentLocation).and(assignmentIsDeleted).and(assignmentHadCompletedAssetHadReturned);
 
             if (state != null) {
                 spec = spec.and(state);
@@ -294,6 +297,9 @@ public class AssignmentServiceImpl implements AssignmentService {
             assignmentLocation.add(new SearchCriteria("assignedBy", locationId, SearchOperation.EQUAL));
             AssignmentSpecification assignmentIsDeleted = new AssignmentSpecification();
             assignmentIsDeleted.add(new SearchCriteria("isDeleted", false, SearchOperation.EQUAL));
+            AssignmentSpecification assignmentHadCompletedAssetHadReturned = new AssignmentSpecification();
+            assignmentHadCompletedAssetHadReturned.add(new SearchCriteria("state",
+                    State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED, SearchOperation.NOT_EQUAL));
 
             if (!searchFilterSortAssignmentDTO.getStates().isEmpty()) {
                 state = new AssignmentSpecification();
@@ -318,7 +324,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                         SearchOperation.MATCH));
             }
 
-            Specification spec = Specification.where(assignmentLocation).and(assignmentIsDeleted);
+            Specification spec = Specification.where(assignmentLocation).and(assignmentIsDeleted).and(assignmentHadCompletedAssetHadReturned);
 
             if (state != null) {
                 spec = spec.and(state);
