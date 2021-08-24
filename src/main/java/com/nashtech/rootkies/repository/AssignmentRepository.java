@@ -34,6 +34,6 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long>, J
 
     Boolean checkAnyValidAssignment(String staffCode);
 
-    Page<Assignment> findByAssignedToAndStateNotAndAssignedDateLessThanAndIsDeleted(User assignedTo, 
-                    Short state, LocalDateTime current, Boolean isDeleted, Pageable pageable);
+    Page<Assignment> findByAssignedToAndStateNotAndStateNotAndAssignedDateLessThanAndIsDeleted(User assignedTo, 
+                    Short state1, Short state2, LocalDateTime current, Boolean isDeleted, Pageable pageable);
 }

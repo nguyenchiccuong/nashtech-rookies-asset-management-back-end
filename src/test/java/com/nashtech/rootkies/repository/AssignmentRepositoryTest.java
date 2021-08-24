@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import com.nashtech.rootkies.constants.State;
 import com.nashtech.rootkies.model.Asset;
@@ -41,10 +42,18 @@ public class AssignmentRepositoryTest {
         LocalDateTime dateTime = LocalDateTime.parse(date + " 23:59:59", formatter);
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<Assignment> page = assignmentRepository.findByAssignedToAndStateNotAndAssignedDateLessThanAndIsDeleted(
-            assignedTo, State.DECLINED, dateTime, false, pageable);
+        Page<Assignment> page = assignmentRepository.findByAssignedToAndStateNotAndStateNotAndAssignedDateLessThanAndIsDeleted(
+            assignedTo, State.DECLINED, State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED, dateTime, false, pageable);
         
-        long totalElements = page.getTotalElements();
-        assertEquals(2L, totalElements);
+        List<Assignment> assignments = page.getContent();
+        Boolean checkState = false;
+        for (Assignment assignment : assignments) {
+            if(assignment.getState() == State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED || 
+               assignment.getState() == State.DECLINED)
+            {
+                checkState = true;
+            }
+        }
+        assertEquals(false, checkState);
     }
 }

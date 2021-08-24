@@ -550,8 +550,8 @@ public class AssignmentServiceImpl implements AssignmentService {
 
             LocalDateTime current = getTimeForComparing();
 
-            Page<Assignment> page = assignmentRepository.findByAssignedToAndStateNotAndAssignedDateLessThanAndIsDeleted(
-                    assignedTo, State.DECLINED, current, false, pageable);
+            Page<Assignment> page = assignmentRepository.findByAssignedToAndStateNotAndStateNotAndAssignedDateLessThanAndIsDeleted(
+                    assignedTo, State.DECLINED, State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED, current, false, pageable);
 
             return responseConverter.convert(pageNum, page);
         } catch (Exception e) {
@@ -568,6 +568,9 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         if (assignment.getState() == State.DECLINED) {
             throw new ApiRequestException(ErrorCode.ASSIGNMENT_IS_DECLINED);
+        }
+        if(assignment.getState() == State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED){
+            throw new ApiRequestException(ErrorCode.ASSIGNMENT_ALREADY_COMPLETE_RETURN);
         }
 
         try {
