@@ -97,6 +97,7 @@ public class RequestServiceImpl implements RequestService {
             request.setState(State.COMPLETED);
             request.setAcceptedBy(admin);
             request.getAssignment().getAsset().setState(State.AVAILABLE);
+            request.getAssignment().setState(State.ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED);
             LocalDateTime currentTime = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
             request.setReturnedDate(currentTime);
             requestRepository.save(request);

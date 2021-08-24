@@ -12,6 +12,7 @@ public class State {
     public static final Short ACCEPTED = 1;
     public static final Short WAITING_FOR_ACCEPTANCE = 2;
     public static final Short DECLINED = 3;
+    public static final Short ASSIGNMENT_HAD_COMPLETED_ASSET_HAD_RETURNED = 4;
 
     // Request
     public static final Short WAITING_FOR_RETURNING = 1;
