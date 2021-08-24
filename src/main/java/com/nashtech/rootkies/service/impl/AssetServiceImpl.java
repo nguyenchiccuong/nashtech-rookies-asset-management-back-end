@@ -41,6 +41,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -55,8 +56,7 @@ public class AssetServiceImpl implements AssetService {
 
     @Autowired
     public AssetServiceImpl(AssetRepository assetRepository, AssetConverter assetConverter,
-                            AssignmentRepository assignmentRepository,
-                            CategoryRepository categoryRepository) {
+            AssignmentRepository assignmentRepository, CategoryRepository categoryRepository) {
         this.assetRepository = assetRepository;
         this.assetConverter = assetConverter;
         this.assignmentRepository = assignmentRepository;
@@ -380,20 +380,29 @@ public class AssetServiceImpl implements AssetService {
         if (!asset.isPresent()) {
             throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
         }
+        Asset assetSave = asset.get();
 
-        if (asset.get().getAssignments().size() > 0) {
-            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
-        } else {
-            try {
-                Asset assetSave = asset.get();
-                assetSave.setIsDeleted(true);
-                assetRepository.save(assetSave);
-                responseDto.setSuccessCode(SuccessCode.ASSET_DELETE_SUCCESS);
-                return responseDto;
-            } catch (Exception e) {
-                throw new DeleteDataFailException(ErrorCode.ERR_ASSET_DELETE_FAIL);
+        List<Assignment> assignemntList = assetSave.getAssignments().stream().collect(Collectors.toList());
+        if (assignemntList.size() > 0) {
+            for (int i = 0; i < assignemntList.size(); i++) {
+                if (assignemntList.get(i).getState() == State.ACCEPTED
+                        || assignemntList.get(i).getState() == State.DECLINED) {
+                    throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+                }
+                if (assignemntList.get(i).getState() == State.WAITING_FOR_ACCEPTANCE
+                        && assignemntList.get(i).getIsDeleted() == false) {
+                    throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+                }
             }
+        }
 
+        try {
+            assetSave.setIsDeleted(true);
+            assetRepository.save(assetSave);
+            responseDto.setSuccessCode(SuccessCode.ASSET_DELETE_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_DELETE_FAIL);
         }
 
     }
@@ -408,22 +417,33 @@ public class AssetServiceImpl implements AssetService {
         if (!asset.isPresent()) {
             throw new DataNotFoundException(ErrorCode.ERR_ASSETCODE_NOT_FOUND);
         }
+        Asset assetCheck = asset.get();
 
-        if (asset.get().getAssignments().size() > 0) {
-            throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
-        } else {
-            responseDto.setSuccessCode(SuccessCode.ASSET_ABLE_TO_DELETE);
-            return responseDto;
+        List<Assignment> assignemntList = assetCheck.getAssignments().stream().collect(Collectors.toList());
+        if (assignemntList.size() > 0) {
+            for (int i = 0; i < assignemntList.size(); i++) {
+                if (assignemntList.get(i).getState() == State.ACCEPTED
+                        || assignemntList.get(i).getState() == State.DECLINED) {
+                    throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+                }
+                if (assignemntList.get(i).getState() == State.WAITING_FOR_ACCEPTANCE
+                        && assignemntList.get(i).getIsDeleted() == false) {
+                    throw new DeleteDataFailException(ErrorCode.ERR_ASSET_ALREADY_HAVE_ASSIGNMENT);
+                }
+            }
         }
+
+        responseDto.setSuccessCode(SuccessCode.ASSET_ABLE_TO_DELETE);
+        return responseDto;
     }
 
     @Override
     public PageDTO getAllAssetAvailable(Pageable pageable, Specification specification) throws DataNotFoundException {
 
-        try{
-            return assetConverter.pageAssetToPageDTO(assetRepository.findAll(specification , pageable));
+        try {
+            return assetConverter.pageAssetToPageDTO(assetRepository.findAll(specification, pageable));
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
 
             throw new DataNotFoundException(ErrorCode.ERR_GET_ALL_ASSET);
         }
@@ -433,12 +453,12 @@ public class AssetServiceImpl implements AssetService {
         var reportList = new ArrayList<ReportDTO>();
         var categoryList = categoryRepository.findAll();
 
-        for(var category : categoryList){
-            var report = assetConverter.convertToReportDTO(
-                    assetRepository.getAssetReportByCategoryCode(category.getCategoryCode()));
+        for (var category : categoryList) {
+            var report = assetConverter
+                    .convertToReportDTO(assetRepository.getAssetReportByCategoryCode(category.getCategoryCode()));
 
-            // if category have no asset  ,will get no report from database
-            if(report != null){
+            // if category have no asset ,will get no report from database
+            if (report != null) {
                 reportList.add(report);
             }
 
@@ -446,17 +466,17 @@ public class AssetServiceImpl implements AssetService {
 
         // because if category have no asset database will return no report
         // so detect category have no asset and add it to reportList with data 0 0 0 0 0
-        if(categoryList.size() != reportList.size()){
-            for(var category : categoryList){
+        if (categoryList.size() != reportList.size()) {
+            for (var category : categoryList) {
                 boolean isHaveAsset = false;
-                for(var report : reportList){
-                    if(category.getCategoryName().equals(report.getCategory())){
+                for (var report : reportList) {
+                    if (category.getCategoryName().equals(report.getCategory())) {
                         isHaveAsset = true;
                         break;
                     }
                 }
-                if(isHaveAsset == false){
-                    reportList.add(new ReportDTO(category.getCategoryName() , 0 , 0, 0, 0, 0 ,0));
+                if (isHaveAsset == false) {
+                    reportList.add(new ReportDTO(category.getCategoryName(), 0, 0, 0, 0, 0, 0));
                 }
             }
         }
