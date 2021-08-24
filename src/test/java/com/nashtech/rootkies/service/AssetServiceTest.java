@@ -101,6 +101,7 @@ public class AssetServiceTest {
         // Given
         String assetCode = "test";
         Assignment asignment1 = new Assignment();
+        asignment1.setState(State.ASSIGNED);
         Assignment asignment2 = new Assignment();
         List<Assignment> assignments = new ArrayList<Assignment>();
         assignments.add(asignment1);
