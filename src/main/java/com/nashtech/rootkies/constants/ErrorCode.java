@@ -105,6 +105,7 @@ public class ErrorCode {
     // REQUEST
     public static final String ERR_REQUEST_NOT_FOUND = "ERR_REQUEST_NOT_FOUND";
     public static final String ERR_REQUEST_ALREADY_COMPLETE = "ERR_REQUEST_ALREADY_COMPLETE";
+    public static final String ERR_REQUEST_IS_DELETED = "ERR_REQUEST_IS_DELETED";
     public static final String ERR_REQUEST_CANCEL_FAIL = "ERR_REQUEST_CANCEL_FAIL";
     public static final String ERR_REQUEST_COMPLETE_FAIL = "ERR_REQUEST_COMPLETE_FAIL";
     public static final String ERR_COUNT_REQUEST_FAIL = "ERR_COUNT_REQUEST_FAIL";

@@ -89,6 +89,9 @@ public class RequestServiceImpl implements RequestService {
         if (request.getState() != State.WAITING_FOR_RETURNING) {
             throw new InvalidRequestDataException(ErrorCode.ERR_REQUEST_ALREADY_COMPLETE);
         }
+        if(request.getIsDeleted() == true) {
+            throw new InvalidRequestDataException(ErrorCode.ERR_REQUEST_IS_DELETED);
+        }
         User admin = userRepository.findByUsername(locationId, username)
                 .orElseThrow(() -> new DataNotFoundException(ErrorCode.ERR_USER_NOT_FOUND));
 
