@@ -10,6 +10,7 @@ import com.nashtech.rootkies.converter.RequestConverter;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.dto.request.request.CreateRequestDTO;
 import com.nashtech.rootkies.dto.request.request.SearchFilterSortRequestDTO;
+import com.nashtech.rootkies.enums.ERole;
 import com.nashtech.rootkies.exception.CreateDataFailException;
 import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
@@ -32,6 +33,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -384,8 +387,11 @@ public class RequestServiceImpl implements RequestService {
         if (!request.getAssignment().getState().equals(State.ACCEPTED))
             throw new CreateDataFailException(ErrorCode.ERR_REQUEST_ASSIGNMENT_NOT_ACCEPT);
 
-        if (request.getAssignment().getAssignedTo() != request.getRequestedBy())
-            throw new CreateDataFailException(ErrorCode.ERR_CREATE_REQUEST_NOT_ALLOW);
+        User user = request.getRequestedBy();
+        if (user.getRole().getRoleName().equals(ERole.ROLE_USER)) {
+            if (request.getAssignment().getAssignedTo() != user)
+                throw new CreateDataFailException(ErrorCode.ERR_CREATE_REQUEST_NOT_ALLOW);
+        }
 
         try {
             Request saveRequest = requestRepository.save(request);

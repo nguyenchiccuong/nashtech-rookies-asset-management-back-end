@@ -29,5 +29,7 @@ public class ViewAssignmentDTO {
 
     private AssetDTO asset;
 
+    private Boolean isReturnRequest;
+
     private Collection<RequestDTO> requests;
 }
