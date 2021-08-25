@@ -23,6 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.validation.constraints.Null;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -113,4 +115,24 @@ public class RequestServiceTest {
 
         assertEquals(ErrorCode.ERR_REQUEST_IS_DELETED, exception.getMessage());
     }
+    @Test
+    public void CancelRequestFail() {
+        User user = new User();
+        user.setStaffCode("SD0001");
+
+        Request request = new Request();
+        request.setRequestId(1L);
+        request.setRequestedBy(user);
+        request.setState(State.COMPLETED);
+
+        when(requestRepository.findByRequestId(anyLong(), anyLong())).thenReturn(Optional.of(request));
+        when(userRepository.findByUsername(anyLong(), anyString())).thenReturn(Optional.of(user));
+
+        Exception exception = assertThrows(InvalidRequestDataException.class, () -> {
+            requestService.cancelRequest(1L, 1L, "abc");
+        });
+
+        assertEquals(ErrorCode.ERR_REQUEST_ALREADY_COMPLETE, exception.getMessage());
+    }
+
 }
