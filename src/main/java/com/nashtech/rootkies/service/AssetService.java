@@ -49,5 +49,5 @@ public interface AssetService {
 
         PageDTO getAllAssetAvailable(Pageable pageable , Specification specification) throws DataNotFoundException;
 
-        List<ReportDTO> getAssetReport() throws AssetConvertException;
+        List<ReportDTO> getAssetReport(Long locationId) throws AssetConvertException;
 }

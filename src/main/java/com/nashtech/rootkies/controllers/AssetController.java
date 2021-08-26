@@ -3,23 +3,18 @@ package com.nashtech.rootkies.controllers;
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.AssetConverter;
-import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import com.nashtech.rootkies.converter.LocationConverter;
+import com.nashtech.rootkies.dto.asset.request.CreateAssetRequestDTO;
 import com.nashtech.rootkies.dto.asset.request.EditAssetRequest;
 import com.nashtech.rootkies.dto.asset.request.SearchFilterSortAssetDTO;
 import com.nashtech.rootkies.dto.asset.response.EditAssetDTO;
 import com.nashtech.rootkies.dto.common.ResponseDTO;
 import com.nashtech.rootkies.exception.*;
 import com.nashtech.rootkies.model.Asset;
-import com.nashtech.rootkies.model.Location;
-import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.AssetsSpecificationBuilder;
-import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
 import com.nashtech.rootkies.security.jwt.JwtUtils;
 import com.nashtech.rootkies.service.AssetService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -200,10 +194,15 @@ public class AssetController {
 
     @GetMapping("/report")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> reportAsset() throws AssetConvertException {
+    public ResponseEntity<ResponseDTO> reportAsset(HttpServletRequest req) throws AssetConvertException
+                                                                                            ,DataNotFoundException {
+
         ResponseDTO response = new ResponseDTO();
 
-        response.setData(assetService.getAssetReport());
+        String jwt = req.getHeader("Authorization").substring(7, req.getHeader("Authorization").length());
+        String username = jwtUtils.getUserNameFromJwtToken(jwt);
+        Long locationId = locationConverter.getLocationIdFromUsername(username);
+        response.setData(assetService.getAssetReport(locationId));
         response.setSuccessCode(SuccessCode.GET_REPORT_SUCCESS);
         return ResponseEntity.ok(response);
     }
