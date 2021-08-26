@@ -1,5 +1,25 @@
 package com.nashtech.rootkies.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.nashtech.rootkies.constants.ErrorCode;
 import com.nashtech.rootkies.constants.SuccessCode;
 import com.nashtech.rootkies.converter.UserConverter;
@@ -16,27 +36,11 @@ import com.nashtech.rootkies.exception.UpdateDataFailException;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.specs.UserSpecificationBuilder;
 import com.nashtech.rootkies.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
-@Tag(name = "CATEGORY", description = "CATEGORY API")
+@Tag(name = "USER", description = "USER API")
 public class UserController {
 
     @Autowired
@@ -45,6 +49,14 @@ public class UserController {
     @Autowired
     UserConverter userConverter;
 
+    @Operation(summary = "Test call api", description = "", tags = { "USER" }, security = {
+         @SecurityRequirement(name = "bearer-key-user") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @GetMapping("/home")
     @PreAuthorize("hasRole('USER')")
     public String getHome() {
@@ -53,12 +65,18 @@ public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
+    @Operation(summary = "Get all user", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page,
-                                                  @RequestParam Integer size,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String search) throws DataNotFoundException {
+    public ResponseEntity<ResponseDTO> getAllUser(@RequestParam Integer page, @RequestParam Integer size,
+            @RequestParam String sort, @RequestParam String search) throws DataNotFoundException {
         ResponseDTO response = new ResponseDTO();
 
         Pageable pageable = null;
@@ -84,6 +102,14 @@ public class UserController {
 
     }
 
+    @Operation(summary = "User change password first login", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-user") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @PutMapping("/password/first")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePasswordFirstLogin(@RequestBody PasswordRequest passwordRequest) {
@@ -95,6 +121,14 @@ public class UserController {
     }
 
     // changepssword
+    @Operation(summary = "User change password", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-user") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @PutMapping("/password/{username}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ResponseDTO> changePassword(@PathVariable("username") String username,
@@ -106,6 +140,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Check any valid assigment", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @GetMapping("/checkHaveAssignment/{staffCode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> checkAnyValidAssignment(@PathVariable String staffCode) {
@@ -123,7 +165,16 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Disable user", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @DeleteMapping("/{staffCode}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> disableUser(@PathVariable String staffCode) {
         ResponseDTO response = new ResponseDTO();
 
@@ -139,6 +190,14 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Find user", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @GetMapping("/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> findUser(@PathVariable("staffcode") String staffCode)
@@ -155,6 +214,14 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @Operation(summary = "Create user", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @PostMapping(value = "/save")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> createNewUser(@Valid @RequestBody CreateUserDTO createUserDTO)
@@ -167,6 +234,14 @@ public class UserController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    @Operation(summary = "Update user", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @PutMapping("/update/{staffcode}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> updateUser(@PathVariable(value = "staffcode") String staffcode,
@@ -183,12 +258,18 @@ public class UserController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @Operation(summary = "Get all user assignemnt", description = "", tags = { "USER" }, security = {
+            @SecurityRequirement(name = "bearer-key-admin") })
+    @ApiResponses(value = { @ApiResponse(responseCode = "2xx", description = "Successfull"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error") })
     @GetMapping("/assignment")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> getAllUserAssignment(@RequestParam Integer page,
-                                                            @RequestParam Integer size,
-                                                            @RequestParam String sort,
-                                                            @RequestParam String search) throws DataNotFoundException {
+    public ResponseEntity<ResponseDTO> getAllUserAssignment(@RequestParam Integer page, @RequestParam Integer size,
+            @RequestParam String sort, @RequestParam String search) throws DataNotFoundException {
         ResponseDTO response = new ResponseDTO();
 
         Pageable pageable = null;
