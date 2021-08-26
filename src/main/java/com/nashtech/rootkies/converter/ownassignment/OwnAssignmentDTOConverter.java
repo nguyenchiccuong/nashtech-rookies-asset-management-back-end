@@ -17,7 +17,7 @@ public class OwnAssignmentDTOConverter {
     public Boolean checkIsReturnRequest(Assignment assignment) {
         Collection<Request> requests = assignment.getRequests();
         for (Request request : requests)
-            if (request.getState().equals(State.WAITING_FOR_RETURNING) && !request.getIsDeleted())
+            if (!request.getIsDeleted())
                 return true;
         return false;
     }

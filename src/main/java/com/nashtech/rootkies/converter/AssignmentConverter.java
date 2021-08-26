@@ -46,22 +46,10 @@ public class AssignmentConverter {
     @Autowired
     UserRepository userRepository;
 
-    public Boolean checkIsReturnRequest(Assignment assignment) {
-        Collection<Request> requests = assignment.getRequests();
-        for (Request request : requests)
-            if (request.getState().equals(State.WAITING_FOR_RETURNING) && !request.getIsDeleted())
-                return true;
-        return false;
-    }
-
     public List<ViewAssignmentDTO> convertToListDTO(Page<Assignment> assignments) throws ConvertEntityDTOException {
         try {
             List<ViewAssignmentDTO> listViewAssignmentDTO = assignments.stream()
-                    .map(assignment -> {
-                        ViewAssignmentDTO viewAssignmentDTO = modelMapper.map(assignment, ViewAssignmentDTO.class);
-                        viewAssignmentDTO.setIsReturnRequest(checkIsReturnRequest(assignment));
-                        return viewAssignmentDTO;
-                    })
+                    .map(assignment -> modelMapper.map(assignment, ViewAssignmentDTO.class))
                     .collect(Collectors.toList());
             listViewAssignmentDTO.forEach(e -> {
                 Collection<RequestDTO> filteredCollection = e.getRequests().stream().filter(e1 -> !e1.getIsDeleted())
@@ -78,11 +66,7 @@ public class AssignmentConverter {
     public List<ViewAssignmentDTO> convertToListDTO(List<Assignment> assignments) throws ConvertEntityDTOException {
         try {
             List<ViewAssignmentDTO> listViewAssignmentDTO = assignments.stream()
-                    .map(assignment -> {
-                        ViewAssignmentDTO viewAssignmentDTO = modelMapper.map(assignment, ViewAssignmentDTO.class);
-                        viewAssignmentDTO.setIsReturnRequest(checkIsReturnRequest(assignment));
-                        return viewAssignmentDTO;
-                    })
+                    .map(assignment -> modelMapper.map(assignment, ViewAssignmentDTO.class))
                     .collect(Collectors.toList());
             listViewAssignmentDTO.forEach(e -> {
                 Collection<RequestDTO> filteredCollection = e.getRequests().stream().filter(e1 -> !e1.getIsDeleted())
@@ -99,7 +83,6 @@ public class AssignmentConverter {
     public ViewAssignmentDTO convertToViewDTO(Assignment assignment) throws ConvertEntityDTOException {
         try {
             ViewAssignmentDTO viewAssignmentDTO = modelMapper.map(assignment, ViewAssignmentDTO.class);
-            viewAssignmentDTO.setIsReturnRequest(checkIsReturnRequest(assignment));
             Collection<RequestDTO> filteredCollection = viewAssignmentDTO.getRequests().stream()
                     .filter(e -> !e.getIsDeleted()).collect(Collectors.toList());
             viewAssignmentDTO.setRequests(filteredCollection);
@@ -174,7 +157,6 @@ public class AssignmentConverter {
                     .state(assignment.getState())
                     .note(assignment.getNote())
                     .asset(new AssetDTO(asset.getAssetCode() , asset.getAssetName() , asset.getSpecification() , null ))
-                    .isReturnRequest(checkIsReturnRequest(assignment))
                     .requests(null)
                     .build();
         }catch (Exception ex){
