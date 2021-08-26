@@ -449,13 +449,14 @@ public class AssetServiceImpl implements AssetService {
         }
     }
 
-    public List<ReportDTO> getAssetReport() throws AssetConvertException {
+    public List<ReportDTO> getAssetReport(Long locationId) throws AssetConvertException {
         var reportList = new ArrayList<ReportDTO>();
         var categoryList = categoryRepository.findAll();
 
         for (var category : categoryList) {
             var report = assetConverter
-                    .convertToReportDTO(assetRepository.getAssetReportByCategoryCode(category.getCategoryCode()));
+                    .convertToReportDTO(assetRepository.getAssetReportByCategoryCode(
+                            category.getCategoryCode(), locationId));
 
             // if category have no asset ,will get no report from database
             if (report != null) {

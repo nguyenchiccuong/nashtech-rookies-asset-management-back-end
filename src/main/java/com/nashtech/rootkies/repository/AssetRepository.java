@@ -41,7 +41,7 @@ public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecif
             "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =5)AS recycled " +
             "FROM assets a  " +
             "JOIN  categories c ON c.categorycode = a.categorycode " +
-            "WHERE a.categorycode =?1 " +
+            "WHERE a.categorycode =?1  AND a.isdeleted = FALSE AND a.locationId = ?2 " +
             "GROUP BY c.categoryname LIMIT 1", nativeQuery = true)
-    List<Object[]> getAssetReportByCategoryCode(String categoryCode);
+    List<Object[]> getAssetReportByCategoryCode(String categoryCode , Long locationId);
 }
