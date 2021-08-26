@@ -14,6 +14,7 @@ import com.nashtech.rootkies.exception.DataNotFoundException;
 import com.nashtech.rootkies.exception.InvalidRequestDataException;
 import com.nashtech.rootkies.model.Asset;
 import com.nashtech.rootkies.model.Assignment;
+import com.nashtech.rootkies.model.Request;
 import com.nashtech.rootkies.model.User;
 import com.nashtech.rootkies.repository.AssetRepository;
 import com.nashtech.rootkies.repository.AssignmentRepository;
