@@ -34,11 +34,16 @@ public interface AssetRepository extends JpaRepository<Asset, String>, JpaSpecif
     void updateStateWhenIsAssigned(String assetCode);
 
     @Query(value = "SELECT  c.categoryname AS category  ," +
-            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND a2.state =1)AS available ," +
-            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =2)AS notavailable ," +
-            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =3)AS assigned," +
-            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =4)AS waitforecyvle," +
-            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =5)AS recycled " +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND a2.state =1 " +
+            "AND a2.isdeleted = FALSE AND a2.locationId = ?2)AS available ," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =2 " +
+            "AND a2.isdeleted = FALSE AND a2.locationId = ?2)AS notavailable ," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =3 " +
+            "AND a2.isdeleted = FALSE AND a2.locationId = ?2)AS assigned," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =4 " +
+            "AND a2.isdeleted = FALSE AND a2.locationId = ?2)AS waitforecyvle," +
+            "(SELECT count(a2.assetcode) FROM assets a2 WHERE a2.categorycode =?1 AND  a2.state =5 " +
+            "AND a2.isdeleted = FALSE AND a2.locationId = ?2)AS recycled " +
             "FROM assets a  " +
             "JOIN  categories c ON c.categorycode = a.categorycode " +
             "WHERE a.categorycode =?1  AND a.isdeleted = FALSE AND a.locationId = ?2 " +
