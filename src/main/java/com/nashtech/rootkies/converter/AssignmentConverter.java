@@ -150,8 +150,8 @@ public class AssignmentConverter {
                     .orElseThrow(() -> new DataNotFoundException(ErrorCode.USER_NOT_FOUND));
             return ViewAssignmentDTO.builder()
                     .assignmentId(assignment.getAssignmentId())
-                    .assignedTo(new UserDTO(assignedBy.getStaffCode(),assignedBy.getUsername(),assignedBy.getFirstName(),assignedBy.getLastName()))
-                    .assignedBy(new UserDTO(assignedTo.getStaffCode(),assignedTo.getUsername(),assignedTo.getFirstName(),assignedTo.getLastName()))
+                    .assignedTo(new UserDTO(assignedTo.getStaffCode(),assignedBy.getUsername(),assignedBy.getFirstName(),assignedBy.getLastName()))
+                    .assignedBy(new UserDTO(assignedBy.getStaffCode(),assignedTo.getUsername(),assignedTo.getFirstName(),assignedTo.getLastName()))
                     .assignedDate(assignment.getAssignedDate())
                     .state(assignment.getState())
                     .note(assignment.getNote())
