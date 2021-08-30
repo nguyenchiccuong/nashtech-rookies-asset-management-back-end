@@ -34,7 +34,7 @@ public class SwaggerConfig {
                                 // config list of server to test
                                 .servers(Arrays.asList(new Server().url("http://localhost:9994/asset-management/"),
                                                 new Server().url(
-                                                                "https://java-backend-group3-test.azurewebsites.net/asset-management/"),
+                                                                "https://java-backend-group03-test.azurewebsites.net/asset-management/"),
                                                 new Server().url(
                                                                 "https://java-web-group03-prod.azurewebsites.net/asset-management/")))
                                 // info
