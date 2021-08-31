@@ -1,29 +1,23 @@
 package com.nashtech.rootkies.config;
 
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
-
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import java.util.Collections;
 
 @Configuration
 public class SwaggerConfig {
         @Bean
         public OpenAPI customOpenAPI() {
                 return new OpenAPI()
-                                // config auth
+                                // config auth new Components().addHeaders("Access-Control-Allow-Origin", new Header().example("*"))
                                 .components(new Components()
                                                 .addSecuritySchemes("bearer-key-admin",
                                                                 new SecurityScheme().type(SecurityScheme.Type.HTTP)
