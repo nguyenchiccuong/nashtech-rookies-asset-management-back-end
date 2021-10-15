@@ -3,6 +3,8 @@ package com.nashtech.rootkies.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -26,27 +28,33 @@ public class Assignment {
     @Column(name = "assignmentid")
     private Long assignmentId;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "assignedto", referencedColumnName = "staffcode", nullable = false)
+    @JoinColumn(name = "assignedto", referencedColumnName = "staffcode")
     private User assignedTo;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "assignedby", referencedColumnName = "staffcode", nullable = false)
+    @JoinColumn(name = "assignedby", referencedColumnName = "staffcode")
     private User assignedBy;
 
+    @NotNull
     @Column(name = "assigneddate")
     private LocalDateTime assignedDate;
 
+    @NotNull
     @Column(name = "state")
     private Short state;
 
     @Column(name = "note")
     private String note;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "assetcode", nullable = false)
+    @JoinColumn(name = "assetcode")
     private Asset asset;
 
+    @NotNull
     @Column(name = "isdeleted")
     private Boolean isDeleted;
 

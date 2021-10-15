@@ -8,6 +8,8 @@ import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 
@@ -48,33 +50,42 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
+	@NotBlank
 	@Column(name = "firstname")
 	private String firstName;
 
+	@NotBlank
 	@Column(name = "lastname")
 	private String lastName;
 
+	@NotNull
 	@Column(name = "dateofbirth")
 	private LocalDateTime dateOfBirth;
 
+	@NotNull
 	@Column(name = "joineddate")
 	private LocalDateTime joinedDate;
 
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
 	private Gender gender;
 
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "locationid" )
 	private Location location;
 
+	@NotNull
 	@ManyToOne
-	@JoinColumn(name = "roleid", nullable = false)
+	@JoinColumn(name = "roleid")
 	private Role role;
 
+	@NotNull
 	@Column(name = "firstlogin")
 	private Boolean firstLogin;
 
+	@NotNull
 	@Column(name = "isdeleted")
 	private Boolean isDeleted;
 

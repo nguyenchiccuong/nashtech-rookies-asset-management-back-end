@@ -3,6 +3,8 @@ package com.nashtech.rootkies.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,8 +27,9 @@ public class Request {
     @Column(name = "requestid")
     private Long requestId;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "requestedby", referencedColumnName = "staffcode", nullable = false)
+    @JoinColumn(name = "requestedby", referencedColumnName = "staffcode")
     private User requestedBy;
 
     @ManyToOne
@@ -36,13 +39,16 @@ public class Request {
     @Column(name = "returneddate")
     private LocalDateTime returnedDate;
 
+    @NotNull
     @Column(name = "state")
     private Short state;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "assignmentid", nullable = false)
+    @JoinColumn(name = "assignmentid")
     private Assignment assignment;
 
+    @NotNull
     @Column(name = "isdeleted")
     private Boolean isDeleted;
 }
